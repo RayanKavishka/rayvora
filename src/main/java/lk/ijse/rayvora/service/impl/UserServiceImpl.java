@@ -27,6 +27,16 @@ public class UserServiceImpl implements UserService {
     public void saveUser(UserDTO userDTO) {
         log.info("Execute saveUser() dto {}", userDTO);
         try {
+            if (userRepository.existsByUserName(userDTO.getUsername())) {
+                throw new RayvoraException(409, "Username already exists");
+            }
+            if (userRepository.existsByEmail(userDTO.getEmail())) {
+                throw new RayvoraException(409, "Email already exists");
+            }
+            if (userRepository.existsByContact(userDTO.getContact())) {
+                throw new RayvoraException(409, "Contact already exists");
+            }
+
             User user = new User();
             user.setUserName(userDTO.getUsername());
             user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
@@ -39,6 +49,10 @@ public class UserServiceImpl implements UserService {
             User savedUser = userRepository.save(user);
 
             if (userDTO.getUserRoles().equals("SELLER")) {
+                if (addressRepository.existsByContact(userDTO.getAddress().getContact())) {
+                    throw new RayvoraException(409, "Contact already exists in other business");
+                }
+
                 Address businessAddress = new Address();
                 businessAddress.setFullName(userDTO.getAddress().getFullName());
                 businessAddress.setContact(userDTO.getAddress().getContact());
