@@ -104,6 +104,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public void updateUser(UserDTO userDTO) {
         log.info("Execute updateUser() dto {}", userDTO);
         try {

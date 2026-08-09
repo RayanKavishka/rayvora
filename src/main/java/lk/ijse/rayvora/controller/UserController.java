@@ -48,4 +48,33 @@ public class UserController {
                 ResponseMessage.SUCCESS_MESSAGE
         );
     }
+
+    // Only admin
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public CommonResponse getAllUsers() {
+        return new CommonResponse(
+                ResponseCode.OPERATION_SUCCESS,
+                userService.getAllUsers(),
+                ResponseMessage.SUCCESS_MESSAGE
+        );
+    }
+
+    @GetMapping(value = "/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public CommonResponse getUserById(@PathVariable long userId) {
+        return new CommonResponse(
+                ResponseCode.OPERATION_SUCCESS,
+                userService.getUserById(userId),
+                ResponseMessage.SUCCESS_MESSAGE
+        );
+    }
+
+    // Only admin
+    @DeleteMapping(value = "/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public CommonResponse updateActiveStatus(@PathVariable long userId) {
+        userService.updateActiveStatus(userId);
+        return new CommonResponse(
+                ResponseCode.OPERATION_SUCCESS,
+                ResponseMessage.SUCCESS_MESSAGE
+        );
+    }
 }
