@@ -47,12 +47,12 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Status status = Status.ACTIVE;
 
-    @OneToMany(
+    @OneToOne(
             mappedBy = "user",
             cascade = CascadeType.ALL,
             fetch = FetchType.LAZY
     )
-    private List<Address> addresses;
+    private Address address;
 
     @OneToMany(
             mappedBy = "user",
