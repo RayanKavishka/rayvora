@@ -11,10 +11,7 @@ import lk.ijse.rayvora.security.JwtUtil;
 import lk.ijse.rayvora.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "/api/v1/users")
@@ -22,6 +19,17 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
     private final UserService userService;
     private final JwtUtil jwtUtil;
+
+    @PostMapping(value = "/signin", produces = MediaType.APPLICATION_JSON_VALUE)
+    public CommonResponse signInUser(@Valid @RequestBody AuthDTO authDTO) {
+        UserDTO userDetails = userService.getUserDetails(authDTO.getUsername(), authDTO.getPassword());
+        String token = jwtUtil.generateToken(userDetails);
+        return new CommonResponse(
+                ResponseCode.OPERATION_SUCCESS,
+                new UserDataDTO(userDetails.getUserId(), token),
+                ResponseMessage.JWT_TOKEN
+        );
+    }
 
     @PostMapping(value = "/signup", produces = MediaType.APPLICATION_JSON_VALUE)
     public CommonResponse signUpUser(@Valid @RequestBody UserDTO userDTO) {
@@ -32,14 +40,12 @@ public class UserController {
         );
     }
 
-    @PostMapping(value = "/signin", produces = MediaType.APPLICATION_JSON_VALUE)
-    public CommonResponse signInUser(@Valid @RequestBody AuthDTO authDTO) {
-        UserDTO userDetails = userService.getUserDetails(authDTO.getUsername(), authDTO.getPassword());
-        String token = jwtUtil.generateToken(userDetails);
+    @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public CommonResponse updateUser(@Valid @RequestBody UserDTO userDTO) {
+        userService.updateUser(userDTO);
         return new CommonResponse(
                 ResponseCode.OPERATION_SUCCESS,
-                new UserDataDTO(userDetails.getUserId(), token),
-                ResponseMessage.JWT_TOKEN
+                ResponseMessage.SUCCESS_MESSAGE
         );
     }
 }
