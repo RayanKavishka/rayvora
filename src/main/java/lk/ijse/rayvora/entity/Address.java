@@ -1,7 +1,6 @@
 package lk.ijse.rayvora.entity;
 
 import jakarta.persistence.*;
-import lk.ijse.rayvora.enumeration.Status;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -40,9 +39,6 @@ public class Address {
 
     @Column(nullable = false, length = 100)
     private String country;
-
-    @Enumerated(EnumType.STRING)
-    private Status status = Status.ACTIVE;
 
     @OneToOne
     @JoinColumn(name = "user_id")

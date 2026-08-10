@@ -1,7 +1,9 @@
 package lk.ijse.rayvora.service.impl;
 
+import lk.ijse.rayvora.dto.AddressDTO;
 import lk.ijse.rayvora.dto.UserDTO;
 import lk.ijse.rayvora.dto.request.ChangePasswordDTO;
+import lk.ijse.rayvora.dto.request.UpdateUserDTO;
 import lk.ijse.rayvora.entity.Address;
 import lk.ijse.rayvora.entity.User;
 import lk.ijse.rayvora.enumeration.Status;
@@ -15,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -79,19 +82,19 @@ public class UserServiceImpl implements UserService {
             User savedUser = userRepository.save(user);
 
             if (userDTO.getUserRoles().equals("SELLER")) {
-                if (addressRepository.existsByContact(userDTO.getAddress().getContact())) {
+                if (addressRepository.existsByContact(userDTO.getAddressDTO().getContact())) {
                     throw new RayvoraException(409, "Contact already exists in other business");
                 }
 
                 Address businessAddress = new Address();
-                businessAddress.setFullName(userDTO.getAddress().getFullName());
-                businessAddress.setContact(userDTO.getAddress().getContact());
-                businessAddress.setStreet(userDTO.getAddress().getStreet());
-                businessAddress.setCity(userDTO.getAddress().getCity());
-                businessAddress.setDistrict(userDTO.getAddress().getDistrict());
-                businessAddress.setProvince(userDTO.getAddress().getProvince());
-                businessAddress.setZipCode(userDTO.getAddress().getZipCode());
-                businessAddress.setCountry(userDTO.getAddress().getCountry());
+                businessAddress.setFullName(userDTO.getAddressDTO().getFullName());
+                businessAddress.setContact(userDTO.getAddressDTO().getContact());
+                businessAddress.setStreet(userDTO.getAddressDTO().getStreet());
+                businessAddress.setCity(userDTO.getAddressDTO().getCity());
+                businessAddress.setDistrict(userDTO.getAddressDTO().getDistrict());
+                businessAddress.setProvince(userDTO.getAddressDTO().getProvince());
+                businessAddress.setZipCode(userDTO.getAddressDTO().getZipCode());
+                businessAddress.setCountry(userDTO.getAddressDTO().getCountry());
 
                 businessAddress.setUser(savedUser);
 
@@ -106,52 +109,50 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void updateUser(UserDTO userDTO) {
-        log.info("Execute updateUser() dto {}", userDTO);
+    public void updateUser(UpdateUserDTO updateUserDTO) {
+        log.info("Execute updateUser() dto {}", updateUserDTO);
         try {
-            if (userRepository.existsByUserName(userDTO.getUsername())) {
+            if (userRepository.existsByUserName(updateUserDTO.getUsername())) {
                 throw new RayvoraException(409, "Username already exists");
             }
-            if (userRepository.existsByEmail(userDTO.getEmail())) {
+            if (userRepository.existsByEmail(updateUserDTO.getEmail())) {
                 throw new RayvoraException(409, "Email already exists");
             }
-            if (userRepository.existsByContact(userDTO.getContact())) {
+            if (userRepository.existsByContact(updateUserDTO.getContact())) {
                 throw new RayvoraException(409, "Contact already exists");
             }
 
-            Optional<User> optionalUser = userRepository.findById(userDTO.getUserId());
+            Optional<User> optionalUser = userRepository.findById(updateUserDTO.getUserId());
             if (optionalUser.isEmpty())
                 throw new RayvoraException(404, "Sorry, related user is not found!");
 
             User user = optionalUser.get();
-            user.setUserName(userDTO.getUsername());
-            user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-            user.setUserRoles(userDTO.getUserRoles());
-            user.setFirstName(userDTO.getFirstName());
-            user.setLastName(userDTO.getLastName());
-            user.setEmail(userDTO.getEmail());
-            user.setContact(userDTO.getContact());
+            user.setUserName(updateUserDTO.getUsername());
+            user.setFirstName(updateUserDTO.getFirstName());
+            user.setLastName(updateUserDTO.getLastName());
+            user.setEmail(updateUserDTO.getEmail());
+            user.setContact(updateUserDTO.getContact());
 
             User savedUser = userRepository.save(user);
 
-            if (userDTO.getUserRoles().equals("SELLER")) {
-                if (addressRepository.existsByContact(userDTO.getAddress().getContact())) {
+            if (updateUserDTO.getUserRoles().equals("SELLER")) {
+                if (addressRepository.existsByContact(updateUserDTO.getAddressDTO().getContact())) {
                     throw new RayvoraException(409, "Contact already exists in other business");
                 }
 
-                Optional<Address> optionalAddress = addressRepository.findById(userDTO.getAddress().getAddressId());
+                Optional<Address> optionalAddress = addressRepository.findById(updateUserDTO.getAddressDTO().getAddressId());
                 if (optionalAddress.isEmpty())
                     throw new RayvoraException(404, "Sorry, related address is not found!");
 
                 Address businessAddress = optionalAddress.get();
-                businessAddress.setFullName(userDTO.getAddress().getFullName());
-                businessAddress.setContact(userDTO.getAddress().getContact());
-                businessAddress.setStreet(userDTO.getAddress().getStreet());
-                businessAddress.setCity(userDTO.getAddress().getCity());
-                businessAddress.setDistrict(userDTO.getAddress().getDistrict());
-                businessAddress.setProvince(userDTO.getAddress().getProvince());
-                businessAddress.setZipCode(userDTO.getAddress().getZipCode());
-                businessAddress.setCountry(userDTO.getAddress().getCountry());
+                businessAddress.setFullName(updateUserDTO.getAddressDTO().getFullName());
+                businessAddress.setContact(updateUserDTO.getAddressDTO().getContact());
+                businessAddress.setStreet(updateUserDTO.getAddressDTO().getStreet());
+                businessAddress.setCity(updateUserDTO.getAddressDTO().getCity());
+                businessAddress.setDistrict(updateUserDTO.getAddressDTO().getDistrict());
+                businessAddress.setProvince(updateUserDTO.getAddressDTO().getProvince());
+                businessAddress.setZipCode(updateUserDTO.getAddressDTO().getZipCode());
+                businessAddress.setCountry(updateUserDTO.getAddressDTO().getCountry());
 
                 businessAddress.setUser(savedUser);
 
@@ -190,6 +191,21 @@ public class UserServiceImpl implements UserService {
             if (optionalUser.isEmpty())
                 throw new RayvoraException(404, "Sorry, related user is not found!");
 
+            AddressDTO addressDTO = new AddressDTO();
+            if (optionalUser.get().getAddress() != null) {
+                Address address = optionalUser.get().getAddress();
+                addressDTO.setAddressId(address.getAddressId());
+                addressDTO.setFullName(address.getFullName());
+                addressDTO.setContact(address.getContact());
+                addressDTO.setStreet(address.getStreet());
+                addressDTO.setCity(address.getCity());
+                addressDTO.setDistrict(address.getDistrict());
+                addressDTO.setProvince(address.getProvince());
+                addressDTO.setZipCode(address.getZipCode());
+                addressDTO.setCountry(address.getCountry());
+                addressDTO.setUserId(address.getUser().getUserId());
+            }
+
             return new UserDTO(
                     optionalUser.get().getUserId(),
                     optionalUser.get().getUserName(),
@@ -201,7 +217,7 @@ public class UserServiceImpl implements UserService {
                     optionalUser.get().getContact(),
                     optionalUser.get().getCreatedAt(),
                     optionalUser.get().getStatus(),
-                    optionalUser.get().getAddress()
+                    addressDTO
             );
 
         } catch (Exception e) {
@@ -214,7 +230,46 @@ public class UserServiceImpl implements UserService {
     public List<UserDTO> getAllUsers() {
         log.info("Execute getAllUsers()");
         try {
-            return userRepository.getAllUsers();
+            List<User> users = userRepository.findAll();
+            List<UserDTO> userDTOList = new ArrayList<>();
+
+            for (User user : users) {
+                UserDTO userDTO = new UserDTO();
+
+                userDTO.setUserId(user.getUserId());
+                userDTO.setUsername(user.getUserName());
+                userDTO.setPassword(user.getPassword());
+                userDTO.setUserRoles(user.getUserRoles());
+                userDTO.setFirstName(user.getFirstName());
+                userDTO.setLastName(user.getLastName());
+                userDTO.setEmail(user.getEmail());
+                userDTO.setContact(user.getContact());
+                userDTO.setCreatedAt(user.getCreatedAt());
+                userDTO.setStatus(user.getStatus());
+
+                if (user.getAddress() != null) {
+                    Address address = user.getAddress();
+
+                    AddressDTO addressDTO = new AddressDTO();
+
+                    addressDTO.setAddressId(address.getAddressId());
+                    addressDTO.setFullName(address.getFullName());
+                    addressDTO.setContact(address.getContact());
+                    addressDTO.setStreet(address.getStreet());
+                    addressDTO.setCity(address.getCity());
+                    addressDTO.setDistrict(address.getDistrict());
+                    addressDTO.setProvince(address.getProvince());
+                    addressDTO.setZipCode(address.getZipCode());
+                    addressDTO.setCountry(address.getCountry());
+                    addressDTO.setUserId(user.getUserId());
+
+                    userDTO.setAddressDTO(addressDTO);
+                }
+
+                userDTOList.add(userDTO);
+            }
+
+            return userDTOList;
 
         } catch (Exception e) {
             log.error("Error in getAllUsers() : " + e.getMessage());
