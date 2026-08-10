@@ -13,22 +13,4 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Boolean existsByUserName(String userName);
     Boolean existsByEmail(String email);
     Boolean existsByContact(String contact);
-
-    @Query(value = """
-        SELECT new lk.ijse.rayvora.dto.UserDTO(
-            u.userId,
-            u.userName,
-            u.password,
-            u.userRoles,
-            u.firstName,
-            u.lastName,
-            u.email,
-            u.contact,
-            u.createdAt,
-            u.status,
-            u.address
-        )
-        FROM User u
-    """)
-    List<UserDTO> getAllUsers();
 }

@@ -7,6 +7,7 @@ import lk.ijse.rayvora.constant.ResponseMessage;
 import lk.ijse.rayvora.dto.UserDTO;
 import lk.ijse.rayvora.dto.request.AuthDTO;
 import lk.ijse.rayvora.dto.request.ChangePasswordDTO;
+import lk.ijse.rayvora.dto.request.UpdateUserDTO;
 import lk.ijse.rayvora.dto.response.UserDataDTO;
 import lk.ijse.rayvora.security.JwtUtil;
 import lk.ijse.rayvora.service.UserService;
@@ -41,7 +42,7 @@ public class UserController {
         );
     }
 
-    @PostMapping(value = "/change-password", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PatchMapping(value = "/change-password", produces = MediaType.APPLICATION_JSON_VALUE)
     public CommonResponse changePassword(@Valid @RequestBody ChangePasswordDTO changePasswordDTO) {
         userService.changePassword(changePasswordDTO);
         return new CommonResponse(
@@ -51,8 +52,8 @@ public class UserController {
     }
 
     @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public CommonResponse updateUser(@Valid @RequestBody UserDTO userDTO) {
-        userService.updateUser(userDTO);
+    public CommonResponse updateUser(@Valid @RequestBody UpdateUserDTO updateUserDTO) {
+        userService.updateUser(updateUserDTO);
         return new CommonResponse(
                 ResponseCode.OPERATION_SUCCESS,
                 ResponseMessage.SUCCESS_MESSAGE

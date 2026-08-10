@@ -49,7 +49,6 @@ public class AddressDTO {
     @Size(max = 100, message = "Country must not exceed 100 characters")
     private String country;
 
-    private Status status = Status.ACTIVE;
-
-
+    @NotNull(message = "Customer ID is required")
+    private Long userId;
 }

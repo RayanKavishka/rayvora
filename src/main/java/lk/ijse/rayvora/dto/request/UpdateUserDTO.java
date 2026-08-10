@@ -1,30 +1,23 @@
-package lk.ijse.rayvora.dto;
+package lk.ijse.rayvora.dto.request;
 
-import lk.ijse.rayvora.entity.Address;
-import lk.ijse.rayvora.enumeration.Status;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-
-import java.time.LocalDateTime;
+import lk.ijse.rayvora.dto.AddressDTO;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDTO {
+public class UpdateUserDTO {
     private Long userId;
 
     @NotBlank(message = "Username is required")
     @Size(min = 5, max = 50, message = "Username must be between 3 and 50 characters")
     private String username;
-
-    @NotBlank(message = "Password is required")
-    @Size(min = 8, max = 150, message = "Password must be between 8 and 150 characters")
-    private String password;
 
     @NotBlank(message = "User role is required")
     private String userRoles;
@@ -49,15 +42,5 @@ public class UserDTO {
     )
     private String contact;
 
-    private LocalDateTime createdAt;
-    private Status status;
-
     private AddressDTO addressDTO;
-
-    public UserDTO(Long userId, String username, String password, String userRoles) {
-        this.userId = userId;
-        this.username = username;
-        this.password = password;
-        this.userRoles = userRoles;
-    }
 }
