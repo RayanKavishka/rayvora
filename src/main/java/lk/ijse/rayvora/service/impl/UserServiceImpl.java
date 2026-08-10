@@ -1,6 +1,7 @@
 package lk.ijse.rayvora.service.impl;
 
 import lk.ijse.rayvora.dto.UserDTO;
+import lk.ijse.rayvora.dto.request.ChangePasswordDTO;
 import lk.ijse.rayvora.entity.Address;
 import lk.ijse.rayvora.entity.User;
 import lk.ijse.rayvora.enumeration.Status;
@@ -217,6 +218,28 @@ public class UserServiceImpl implements UserService {
 
         } catch (Exception e) {
             log.error("Error in getAllUsers() : " + e.getMessage());
+            throw e;
+        }
+    }
+
+    @Override
+    public void changePassword(ChangePasswordDTO changePasswordDTO) {
+        log.info("Execute changePassword() dto {}", changePasswordDTO);
+        try {
+            Optional<User> optionalUser = userRepository.findById(changePasswordDTO.getUserId());
+            if (optionalUser.isEmpty())
+                throw new RayvoraException(404, "Sorry, related user is not found!");
+
+            User user = optionalUser.get();
+            if (!passwordEncoder.matches(changePasswordDTO.getCurrentPassword(), user.getPassword())) {
+                throw new RayvoraException(401, "Current password is incorrect");
+            }
+
+            user.setPassword(passwordEncoder.encode(changePasswordDTO.getNewPassword()));
+            userRepository.save(user);
+
+        } catch (Exception e) {
+            log.error("Error in changePassword() : " + e.getMessage());
             throw e;
         }
     }

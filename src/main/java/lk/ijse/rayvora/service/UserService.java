@@ -1,6 +1,8 @@
 package lk.ijse.rayvora.service;
 
 import lk.ijse.rayvora.dto.UserDTO;
+import lk.ijse.rayvora.dto.request.ChangePasswordDTO;
+
 import java.util.List;
 
 public interface UserService {
@@ -10,4 +12,5 @@ public interface UserService {
     void updateActiveStatus(Long userId);
     UserDTO getUserById(Long userId);
     List<UserDTO> getAllUsers();
+    void changePassword(ChangePasswordDTO changePasswordDTO);
 }
