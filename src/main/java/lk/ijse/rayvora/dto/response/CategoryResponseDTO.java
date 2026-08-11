@@ -1,4 +1,4 @@
-package lk.ijse.rayvora.dto;
+package lk.ijse.rayvora.dto.response;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -6,14 +6,11 @@ import lk.ijse.rayvora.enumeration.Status;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CategoryDTO {
+public class CategoryResponseDTO {
     private Long categoryId;
 
     @NotBlank(message = "Category name is required")
@@ -24,5 +21,7 @@ public class CategoryDTO {
     @Size(max = 500, message = "Description must not exceed 500 characters")
     private String description;
 
-    private MultipartFile image;
+    private String imageUrl;
+
+    private Status status;
 }
