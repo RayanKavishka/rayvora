@@ -3,6 +3,8 @@ import {checkRole} from "./app.js";
 
 const API_BASE_URL = "http://localhost:8080/api/v1";
 
+
+// Users
 const getUserRolesById = async (userId) => {
     try {
         const response = await $.ajax({
@@ -164,7 +166,7 @@ const signUpSeller = (object) => {
 };
 
 const registerAdmin = (object) => {
-    $.ajax({
+    return $.ajax({
         url: API_BASE_URL + "/users/signup",
         type: 'POST',
         contentType: 'application/json',
@@ -201,4 +203,118 @@ const registerAdmin = (object) => {
     });
 };
 
-export {getUserRolesById, userSignIn, signUpCustomer, signUpSeller, registerAdmin}
+const getAllUsers = async (role) => {
+    const queryParam = $.param({
+        "role": role
+    });
+
+    try {
+        const response = await $.ajax({
+            url: API_BASE_URL + "/users?" + queryParam,
+            type: 'GET',
+            contentType: 'application/json',
+            headers: {
+                'Authorization': 'Bearer ' + auth.getJWT()
+            }
+        });
+
+        if (response.status === 500) {
+            alert(response.message);
+            return null;
+        }
+
+        if (response.status === 0) {
+            return response.body;
+        }
+
+    } catch (error) {
+        alert("Something went wrong. Please try again.");
+        return null;
+    }
+};
+
+const updateAdmin = (object) => {
+    return $.ajax({
+        url: API_BASE_URL + "/users",
+        type: 'PUT',
+        contentType: 'application/json',
+        data: JSON.stringify(object),
+        headers: {
+            'Authorization': 'Bearer ' + auth.getJWT()
+        },
+
+        success: function(response) {
+            if (response.status === 400) {
+                alert(response.message);
+            }
+
+            if (response.status === 409) {
+                alert(response.message);
+            }
+
+            if (response.status === 500) {
+                alert(response.message);
+            }
+
+            if (response.status === 0) {
+                $('#regUsername').val("");
+                $('#regFirstName').val("");
+                $('#regLastName').val("");
+                $('#regEmail').val("");
+                $('#regContact').val("");
+
+                $('#updateAdminBtn').css({display: "none"});
+                $('#btnSubmitAdminRegister').css({display: "block"});
+                $('#regPassword').prop('disabled', false);
+
+                alert("Admin is updated successfully!");
+            }
+        },
+
+        error: function (response) {
+            alert("Something went wrong. Please try again.");
+        }
+    });
+};
+
+// Remove admin
+const removeAdmin = (userId) => {
+    return $.ajax({
+        url: API_BASE_URL + "/users/"+userId,
+        type: 'DELETE',
+        contentType: 'application/json',
+        headers: {
+            'Authorization': 'Bearer ' + auth.getJWT()
+        },
+
+        success: function (response) {
+            if (response.status === 404) {
+                alert(response.message);
+            }
+
+            if (response.status === 500) {
+                alert(response.message);
+            }
+
+            if (response.status === 0) {
+                alert("Admin is removed successfully!");
+            }
+        },
+
+        error: function (response) {
+            alert("Something went wrong. Please try again.");
+        }
+    });
+};
+
+
+export {
+    getUserRolesById,
+    userSignIn,
+    signUpCustomer,
+    signUpSeller,
+    registerAdmin,
+    getAllUsers,
+    updateAdmin,
+    removeAdmin
+}
