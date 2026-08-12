@@ -338,6 +338,109 @@ const removeUser = (userId) => {
 };
 
 
+// Categories
+const getAllCategories = async () => {
+    try {
+        const response = await $.ajax({
+            url: API_BASE_URL + "/categories",
+            type: 'GET',
+            contentType: 'application/json',
+            headers: {
+                'Authorization': 'Bearer ' + auth.getJWT()
+            }
+        });
+
+        if (response.status === 500) {
+            alert(response.message);
+            return null;
+        }
+
+        if (response.status === 0) {
+            return response.body;
+        }
+
+    } catch (error) {
+        alert("Something went wrong. Please try again.");
+        return null;
+    }
+};
+
+
+const addCategory = (form) => {
+    const formData = new FormData(form);
+
+    return $.ajax({
+        url: API_BASE_URL + "/categories",
+        type: 'POST',
+        contentType: false,
+        processData: false,
+        data: formData,
+        headers: {
+            'Authorization': 'Bearer ' + auth.getJWT()
+        },
+
+        success: function (response) {
+            if (response.status === 400) {
+                alert(response.message);
+            }
+
+            if (response.status === 500) {
+                alert(response.message);
+            }
+
+            if (response.status === 0) {
+                $('#categoryForm')[0].reset();
+
+                $('#categoryImagePreview')
+                    .attr('src', '')
+                    .hide();
+
+                $('#fileUploadPlaceholder').show();
+
+                alert("Category is added successfully!");
+            }
+        },
+
+        error: function (response) {
+            alert("Something went wrong. Please try again.");
+        }
+    });
+};
+
+
+const removeCategory = (categoryId) => {
+    return $.ajax({
+        url: API_BASE_URL + "/categories/"+categoryId,
+        type: 'DELETE',
+        contentType: 'application/json',
+        headers: {
+            'Authorization': 'Bearer ' + auth.getJWT()
+        },
+
+        success: function (response) {
+            if (response.status === 404) {
+                alert(response.message);
+            }
+
+            if (response.status === 500) {
+                alert(response.message);
+            }
+
+            if (response.status === 0) {
+                alert("Category is removed successfully!");
+            }
+        },
+
+        error: function (response) {
+            alert("Something went wrong. Please try again.");
+        }
+    });
+};
+
+
+
+
+
 export {
     getUserRolesById,
     userSignIn,
@@ -347,5 +450,8 @@ export {
     getAllUsers,
     updateAdmin,
     removeUser,
-    searchUserByEmail
+    searchUserByEmail,
+    getAllCategories,
+    addCategory,
+    removeCategory
 }

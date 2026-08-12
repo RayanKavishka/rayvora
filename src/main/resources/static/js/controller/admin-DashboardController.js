@@ -1,5 +1,13 @@
 import {router} from "../router.js";
-import {registerAdmin, getAllUsers, updateAdmin, removeUser, searchUserByEmail, getUserRolesById} from "../api.js";
+import {
+    registerAdmin,
+    getAllUsers,
+    updateAdmin,
+    removeUser,
+    searchUserByEmail,
+    getUserRolesById,
+    getAllCategories, addCategory, removeCategory
+} from "../api.js";
 
 // Overview & Analytics
 $(document).on('click', '#defaultAdminDashboard', function(e) {
@@ -8,6 +16,7 @@ $(document).on('click', '#defaultAdminDashboard', function(e) {
 });
 
 // =====================================================================================================================
+
 
 // Manage Admins
 $(document).on('click', '#manageAdmins', async function(e) {
@@ -180,6 +189,7 @@ $(document).on('click', '#btnSubmitAdminRegister', async function (e) {
 
 // =====================================================================================================================
 
+
 // Manage Customers
 $(document).on('click', '#manageCustomers', async function(e) {
     e.preventDefault();
@@ -270,6 +280,7 @@ $(document).on('click', '#refreshCustomers', async function (e) {
 
 // =====================================================================================================================
 
+
 // Manage Sellers
 $(document).on('click', '#manageSellers', async function(e) {
     e.preventDefault();
@@ -358,3 +369,82 @@ $(document).on('click', '#refreshSellers', async function (e) {
 });
 
 
+// =====================================================================================================================
+
+
+// Manage Categories
+$(document).on('click', '#manageCategories', async function(e) {
+    e.preventDefault();
+    await router("admin/manage-categories.html");
+    await loadAllCategories();
+});
+
+
+// Load all categories
+const loadAllCategories = async () => {
+    const response = await getAllCategories();
+
+    $('#categoriesGrid').html("");
+
+    let categories = '';
+
+    response.forEach((category) => {
+        categories += `
+            <div class="category-card">
+                <div class="category-card-image">
+                    <img src="${category.imageUrl}" alt="">
+                </div>
+                <div class="category-card-body">
+                    <h4 class="category-card-title">${category.categoryName}</h4>
+                    <p class="category-card-desc">${category.description}</p>
+                </div>
+                <div class="category-card-actions">
+                    <button onclick="handleDeleteCategory(${category.categoryId})" class="btn btn-sm btn-orange"><i class="fa-solid fa-trash"></i> Delete</button>
+                </div>
+            </div>
+        `;
+    });
+
+    $('#categoriesGrid').html(categories);
+};
+
+
+// Add new category
+$(document).on('click', '#btnSubmitCategory', async function (e) {
+    e.preventDefault();
+
+    const form = $('#categoryForm')[0];
+    await addCategory(form);
+    await loadAllCategories();
+});
+
+$(document).on('change', '#categoryImageInput', function () {
+    const file = this.files[0];
+
+    if (!file) {
+        $('#categoryImagePreview').hide();
+        $('#fileUploadPlaceholder').show();
+        return;
+    }
+
+    if (!file.type.startsWith('image/')) {
+        alert('Please select an image file.');
+        this.value = '';
+        return;
+    }
+
+    const imageUrl = URL.createObjectURL(file);
+
+    $('#categoryImagePreview')
+        .attr('src', imageUrl)
+        .show();
+
+    $('#fileUploadPlaceholder').hide();
+});
+
+
+// Set status as inactive
+window.handleDeleteCategory = async function (categoryId) {
+    await removeCategory(categoryId);
+    await loadAllCategories();
+};
