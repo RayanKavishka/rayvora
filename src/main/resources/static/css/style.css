@@ -81,6 +81,11 @@ body, [data-theme="light"], .theme-light {
   --topbar-text: #D1D5DB;
 }
 
+/* Customs CSS */
+#updateAdminBtn {
+  display: none;
+}
+
 /* Box Sizing & Reset */
 *, *::before, *::after {
   box-sizing: border-box;

@@ -12,6 +12,6 @@ public interface UserService {
     void updateUser(UpdateUserDTO updateUserDTO);
     void updateActiveStatus(Long userId);
     UserDTO getUserById(Long userId);
-    List<UserDTO> getAllUsers();
+    List<UserDTO> getAllUsers(String role);
     void changePassword(ChangePasswordDTO changePasswordDTO);
 }

@@ -227,46 +227,53 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserDTO> getAllUsers() {
+    public List<UserDTO> getAllUsers(String role) {
         log.info("Execute getAllUsers()");
         try {
             List<User> users = userRepository.findAll();
             List<UserDTO> userDTOList = new ArrayList<>();
 
             for (User user : users) {
-                UserDTO userDTO = new UserDTO();
+                if (user.getStatus().equals(Status.ACTIVE)) {
 
-                userDTO.setUserId(user.getUserId());
-                userDTO.setUsername(user.getUserName());
-                userDTO.setPassword(user.getPassword());
-                userDTO.setUserRoles(user.getUserRoles());
-                userDTO.setFirstName(user.getFirstName());
-                userDTO.setLastName(user.getLastName());
-                userDTO.setEmail(user.getEmail());
-                userDTO.setContact(user.getContact());
-                userDTO.setCreatedAt(user.getCreatedAt());
-                userDTO.setStatus(user.getStatus());
+                    String mainUserRole = user.getUserRoles().split(", ")[0];
+                    if (mainUserRole.equals(role)) {
 
-                if (user.getAddress() != null) {
-                    Address address = user.getAddress();
+                        UserDTO userDTO = new UserDTO();
 
-                    AddressDTO addressDTO = new AddressDTO();
+                        userDTO.setUserId(user.getUserId());
+                        userDTO.setUsername(user.getUserName());
+                        userDTO.setPassword(user.getPassword());
+                        userDTO.setUserRoles(user.getUserRoles());
+                        userDTO.setFirstName(user.getFirstName());
+                        userDTO.setLastName(user.getLastName());
+                        userDTO.setEmail(user.getEmail());
+                        userDTO.setContact(user.getContact());
+                        userDTO.setCreatedAt(user.getCreatedAt());
+                        userDTO.setStatus(user.getStatus());
 
-                    addressDTO.setAddressId(address.getAddressId());
-                    addressDTO.setFullName(address.getFullName());
-                    addressDTO.setContact(address.getContact());
-                    addressDTO.setStreet(address.getStreet());
-                    addressDTO.setCity(address.getCity());
-                    addressDTO.setDistrict(address.getDistrict());
-                    addressDTO.setProvince(address.getProvince());
-                    addressDTO.setZipCode(address.getZipCode());
-                    addressDTO.setCountry(address.getCountry());
-                    addressDTO.setUserId(user.getUserId());
+                        if (user.getAddress() != null) {
+                            Address address = user.getAddress();
 
-                    userDTO.setAddressDTO(addressDTO);
+                            AddressDTO addressDTO = new AddressDTO();
+
+                            addressDTO.setAddressId(address.getAddressId());
+                            addressDTO.setFullName(address.getFullName());
+                            addressDTO.setContact(address.getContact());
+                            addressDTO.setStreet(address.getStreet());
+                            addressDTO.setCity(address.getCity());
+                            addressDTO.setDistrict(address.getDistrict());
+                            addressDTO.setProvince(address.getProvince());
+                            addressDTO.setZipCode(address.getZipCode());
+                            addressDTO.setCountry(address.getCountry());
+                            addressDTO.setUserId(user.getUserId());
+
+                            userDTO.setAddressDTO(addressDTO);
+                        }
+
+                        userDTOList.add(userDTO);
+                    }
                 }
-
-                userDTOList.add(userDTO);
             }
 
             return userDTOList;

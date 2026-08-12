@@ -62,10 +62,10 @@ public class UserController {
 
     // Only admin
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public CommonResponse getAllUsers() {
+    public CommonResponse getAllUsers(@RequestParam(value = "role") String role) {
         return new CommonResponse(
                 ResponseCode.OPERATION_SUCCESS,
-                userService.getAllUsers(),
+                userService.getAllUsers(role),
                 ResponseMessage.SUCCESS_MESSAGE
         );
     }
