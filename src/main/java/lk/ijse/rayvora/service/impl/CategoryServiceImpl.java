@@ -137,14 +137,17 @@ public class CategoryServiceImpl implements CategoryService {
             List<CategoryResponseDTO> categoryDTOS =  new ArrayList<>();
 
             for (Category category : categories) {
-                CategoryResponseDTO categoryDTO = new CategoryResponseDTO();
-                categoryDTO.setCategoryId(category.getCategoryId());
-                categoryDTO.setCategoryName(category.getCategoryName());
-                categoryDTO.setDescription(category.getDescription());
-                categoryDTO.setImageUrl(category.getImageUrl());
-                categoryDTO.setStatus(category.getStatus());
+                if (category.getStatus().equals(Status.ACTIVE)) {
 
-                categoryDTOS.add(categoryDTO);
+                    CategoryResponseDTO categoryDTO = new CategoryResponseDTO();
+                    categoryDTO.setCategoryId(category.getCategoryId());
+                    categoryDTO.setCategoryName(category.getCategoryName());
+                    categoryDTO.setDescription(category.getDescription());
+                    categoryDTO.setImageUrl(category.getImageUrl());
+                    categoryDTO.setStatus(category.getStatus());
+
+                    categoryDTOS.add(categoryDTO);
+                }
             }
             return categoryDTOS;
 

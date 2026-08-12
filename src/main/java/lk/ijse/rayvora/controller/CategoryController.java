@@ -1,5 +1,6 @@
 package lk.ijse.rayvora.controller;
 
+import jakarta.validation.Valid;
 import lk.ijse.rayvora.constant.CommonResponse;
 import lk.ijse.rayvora.constant.ResponseCode;
 import lk.ijse.rayvora.constant.ResponseMessage;
@@ -19,7 +20,7 @@ public class CategoryController {
     @PostMapping(
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public CommonResponse saveCategory(@ModelAttribute CategoryDTO categoryDTO) {
+    public CommonResponse saveCategory(@Valid @ModelAttribute CategoryDTO categoryDTO) {
         categoryService.saveCategory(categoryDTO);
         return new CommonResponse(
                 ResponseCode.OPERATION_SUCCESS,
@@ -31,7 +32,7 @@ public class CategoryController {
     @PutMapping(
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public CommonResponse updateCategory(@ModelAttribute CategoryDTO categoryDTO) {
+    public CommonResponse updateCategory(@Valid @ModelAttribute CategoryDTO categoryDTO) {
         categoryService.updateCategory(categoryDTO);
         return new CommonResponse(
                 ResponseCode.OPERATION_SUCCESS,
