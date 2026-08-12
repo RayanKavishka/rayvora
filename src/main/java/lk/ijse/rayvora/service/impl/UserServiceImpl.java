@@ -35,10 +35,10 @@ public class UserServiceImpl implements UserService {
         try {
             Optional<User> optionalUser = userRepository.findByUserName(username);
             if (optionalUser.isEmpty())
-                throw new RayvoraException(404, "Sorry, related user is not found!");
+                throw new RayvoraException(404, "Invalid username or password");
 
             User user = optionalUser.get();
-            if (!passwordEncoder.matches(password, user.getPassword()) && password.isBlank()) {
+            if (!passwordEncoder.matches(password, user.getPassword()) || password.isBlank()) {
                 throw new RayvoraException(401, "Invalid username or password");
             }
 

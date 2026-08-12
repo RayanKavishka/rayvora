@@ -1,0 +1,155 @@
+<div class="dashboard-container">
+    <!-- Sidebar Navigation -->
+    <aside class="dashboard-sidebar">
+        <div class="brand-logo" style="margin-bottom: 1.5rem; padding: 0 0.5rem;">
+            <div class="logo-icon"><i class="fa-solid fa-user-shield"></i></div>
+            <span>Admin<span class="accent">Portal</span></span>
+        </div>
+        <ul class="sidebar-menu">
+            <li id="defaultAdminDashboard" class="sidebar-item active"><a href=""><i class="fa-solid fa-chart-pie"></i> Overview & Analytics</a></li>
+            <li id="manageAdmins" class="sidebar-item"><a href=""><i class="fa-solid fa-user-gear"></i> Manage Admins</a></li>
+            <li id="manageCustomers" class="sidebar-item"><a href=""><i class="fa-solid fa-users"></i> Manage Customers</a></li>
+            <li id="manageSellers" class="sidebar-item"><a href=""><i class="fa-solid fa-store"></i> Manage Sellers</a></li>
+            <li id="manageCategories" class="sidebar-item"><a href=""><i class="fa-solid fa-layer-group"></i> Manage Categories</a></li>
+            <li id="monitorOrders" class="sidebar-item"><a href=""><i class="fa-solid fa-receipt"></i> Monitor Orders</a></li>
+            <li id="PaymentRecords" class="sidebar-item"><a href=""><i class="fa-solid fa-credit-card"></i> Payment Records</a></li>
+            <li id="inventoryLevels" class="sidebar-item"><a href=""><i class="fa-solid fa-boxes-stacked"></i> Inventory Levels</a></li>
+            <li id="ReportsAndExport" class="sidebar-item"><a href=""><i class="fa-solid fa-file-export"></i> Reports & Export</a></li>
+            <li id="backupScheduling" class="sidebar-item"><a href=""><i class="fa-solid fa-database"></i> Backup Scheduling</a></li>
+        </ul>
+    </aside>
+
+    <!-- Main Content Panel -->
+    <main class="dashboard-main-content">
+        <div class="section-header">
+            <div>
+                <h1 class="section-title"><i class="fa-solid fa-shield-halved" style="color: var(--c-primary);"></i> Admin Operations Control</h1>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">Real-time system telemetry, CRUD management, revenue & backup controls</p>
+            </div>
+            <div style="display: flex; gap: 0.5rem; align-items: center;">
+                <button class="btn btn-orange btn-sm" id="btnAdminGenerateReport">
+                    <i class="fa-solid fa-file-pdf"></i> Generate System Report
+                </button>
+                <button type="button" id="logoutBtn" class="btn btn-outline btn-sm" style="color: var(--c-orange); border-color: var(--c-orange);">
+                    <i class="fa-solid fa-right-from-bracket"></i> Logout
+                </button>
+            </div>
+        </div>
+
+        <!-- Key Metrics Cards -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon primary"><i class="fa-solid fa-users"></i></div>
+                <div>
+                    <div class="stat-number">14,290</div>
+                    <div class="stat-label">Registered Customers</div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon orange"><i class="fa-solid fa-store"></i></div>
+                <div>
+                    <div class="stat-number">842</div>
+                    <div class="stat-label">Active Sellers</div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon sky"><i class="fa-solid fa-money-bill-wave"></i></div>
+                <div>
+                    <div class="stat-number">LKR 374,670,000</div>
+                    <div class="stat-label">Total Revenue Volume</div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon mint"><i class="fa-solid fa-database"></i></div>
+                <div>
+                    <div class="stat-number">Daily @ 02:00</div>
+                    <div class="stat-label">Automated Backup Schedule</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Monthly Revenue Analytics -->
+        <div class="data-table-card">
+            <div class="section-header" style="margin-bottom: 0.75rem; flex-wrap: wrap; gap: 0.75rem;">
+                <div>
+                    <h3 style="font-size: 1.1rem; font-weight: 800;"><i class="fa-solid fa-chart-column" style="color: var(--c-primary-dark); margin-right: 0.4rem;"></i>Monthly Revenue Overview</h3>
+                    <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 0.2rem;">Platform-wide gross revenue across the last 12 months (LKR, millions)</p>
+                </div>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <span class="badge badge-mint"><i class="fa-solid fa-arrow-trend-up"></i> +18.4% YoY</span>
+                    <span class="badge badge-orange"><i class="fa-solid fa-crown"></i> Peak: Nov LKR 46.9M</span>
+                </div>
+            </div>
+
+            <div class="revenue-chart">
+                <div class="revenue-chart-yaxis">
+                    <span>50M</span>
+                    <span>40M</span>
+                    <span>30M</span>
+                    <span>20M</span>
+                    <span>10M</span>
+                    <span>0</span>
+                </div>
+                <div class="revenue-chart-body">
+                    <div class="revenue-chart-bars">
+                        <div class="revenue-bar" style="--bar-h: 48%;">
+                            <span class="revenue-bar-val">24.1M</span>
+                            <div class="revenue-bar-fill"></div>
+                        </div>
+                        <div class="revenue-bar" style="--bar-h: 46%;">
+                            <span class="revenue-bar-val">22.8M</span>
+                            <div class="revenue-bar-fill"></div>
+                        </div>
+                        <div class="revenue-bar" style="--bar-h: 53%;">
+                            <span class="revenue-bar-val">26.4M</span>
+                            <div class="revenue-bar-fill"></div>
+                        </div>
+                        <div class="revenue-bar" style="--bar-h: 59%;">
+                            <span class="revenue-bar-val">29.7M</span>
+                            <div class="revenue-bar-fill"></div>
+                        </div>
+                        <div class="revenue-bar" style="--bar-h: 62%;">
+                            <span class="revenue-bar-val">31.2M</span>
+                            <div class="revenue-bar-fill"></div>
+                        </div>
+                        <div class="revenue-bar" style="--bar-h: 58%;">
+                            <span class="revenue-bar-val">28.9M</span>
+                            <div class="revenue-bar-fill"></div>
+                        </div>
+                        <div class="revenue-bar" style="--bar-h: 67%;">
+                            <span class="revenue-bar-val">33.5M</span>
+                            <div class="revenue-bar-fill"></div>
+                        </div>
+                        <div class="revenue-bar" style="--bar-h: 60%;">
+                            <span class="revenue-bar-val">30.1M</span>
+                            <div class="revenue-bar-fill"></div>
+                        </div>
+                        <div class="revenue-bar" style="--bar-h: 70%;">
+                            <span class="revenue-bar-val">34.8M</span>
+                            <div class="revenue-bar-fill"></div>
+                        </div>
+                        <div class="revenue-bar" style="--bar-h: 76%;">
+                            <span class="revenue-bar-val">38.2M</span>
+                            <div class="revenue-bar-fill"></div>
+                        </div>
+                        <div class="revenue-bar peak" style="--bar-h: 94%;">
+                            <span class="revenue-bar-val">46.9M</span>
+                            <div class="revenue-bar-fill"></div>
+                        </div>
+                        <div class="revenue-bar" style="--bar-h: 84%;">
+                            <span class="revenue-bar-val">42.0M</span>
+                            <div class="revenue-bar-fill"></div>
+                        </div>
+                    </div>
+                    <div class="revenue-chart-xaxis">
+                        <span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span>
+                        <span>Jul</span><span>Aug</span><span>Sep</span><span>Oct</span><span>Nov</span><span>Dec</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
