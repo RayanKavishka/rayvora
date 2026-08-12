@@ -70,6 +70,19 @@ public class UserController {
         );
     }
 
+    // Only admin
+    @GetMapping(value = "/filter-email", produces = MediaType.APPLICATION_JSON_VALUE)
+    public CommonResponse getAllUsersByEmail(
+            @RequestParam(value = "role") String role,
+            @RequestParam(value = "email") String email
+    ) {
+        return new CommonResponse(
+                ResponseCode.OPERATION_SUCCESS,
+                userService.getAllUsersByEmail(role, email),
+                ResponseMessage.SUCCESS_MESSAGE
+        );
+    }
+
     @GetMapping(value = "/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public CommonResponse getUserById(@PathVariable long userId) {
         return new CommonResponse(

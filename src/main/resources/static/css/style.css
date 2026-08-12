@@ -86,6 +86,10 @@ body, [data-theme="light"], .theme-light {
   display: none;
 }
 
+#updateCategoryBtn {
+  display: none;
+}
+
 /* Box Sizing & Reset */
 *, *::before, *::after {
   box-sizing: border-box;
@@ -1466,6 +1470,171 @@ img {
   .revenue-chart-xaxis span { font-size: 0.58rem; }
 }
 
+/* --------------------------------------------------------------------------
+   4. MANAGE CATEGORIES (Card Grid & Image Upload)
+   -------------------------------------------------------------------------- */
+
+.auth-error-msg {
+  color: var(--c-orange);
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-top: 0.75rem;
+  text-align: center;
+}
+
+/* Category Cards Grid */
+.category-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1.25rem;
+}
+
+.category-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-lg);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-speed);
+}
+
+.category-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--card-hover-shadow);
+  border-color: var(--c-primary-light);
+}
+
+.category-card-image {
+  width: 100%;
+  height: 150px;
+  overflow: hidden;
+  background: var(--bg-subtle);
+}
+
+.category-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.category-card:hover .category-card-image img {
+  transform: scale(1.08);
+}
+
+.category-card-body {
+  padding: 1rem 1.1rem 0.25rem;
+  flex: 1;
+}
+
+.category-card-title {
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--text-main);
+  margin-bottom: 0.35rem;
+}
+
+.category-card-desc {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.category-card-actions {
+  display: flex;
+  gap: 0.5rem;
+  padding: 1rem 1.1rem;
+}
+
+.category-card-actions .btn {
+  flex: 1;
+}
+
+/* File Upload Box (Category Image) */
+.file-upload-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 170px;
+  width: 100%;
+  border: 1.5px dashed var(--border-color);
+  border-radius: var(--border-radius-md);
+  background-color: var(--input-bg);
+  cursor: pointer;
+  overflow: hidden;
+  transition: all var(--transition-speed);
+}
+
+.file-upload-box:hover {
+  border-color: var(--c-primary);
+  background-color: var(--bg-subtle);
+}
+
+.file-upload-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  color: var(--text-muted);
+  text-align: center;
+  padding: 1rem;
+}
+
+.file-upload-placeholder i {
+  font-size: 1.6rem;
+  color: var(--c-primary);
+  margin-bottom: 0.15rem;
+}
+
+.file-upload-placeholder span {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.file-upload-placeholder small {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.file-upload-preview {
+  display: none;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.remove-image-btn {
+  display: none;
+  position: absolute;
+  top: 0.6rem;
+  right: 0.6rem;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: rgba(43, 36, 28, 0.65);
+  color: #FFFFFF;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  z-index: 3;
+  transition: background var(--transition-speed);
+}
+
+.remove-image-btn:hover {
+  background: var(--c-orange);
+}
+
 /* Responsive Media Query Breakpoints */
 @media (max-width: 1024px) {
   .hero-grid { grid-template-columns: 1fr; }
@@ -1499,6 +1668,7 @@ img {
 @media (max-width: 640px) {
   .form-grid-2col { grid-template-columns: 1fr; }
   .products-grid { grid-template-columns: repeat(2, 1fr); gap: 0.75rem; }
+  .category-cards-grid { grid-template-columns: repeat(2, 1fr); gap: 0.75rem; }
   .product-thumb { height: 150px; }
   .product-details { padding: 0.75rem; }
   .product-title { font-size: 0.85rem; }

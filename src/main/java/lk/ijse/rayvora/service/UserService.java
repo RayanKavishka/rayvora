@@ -13,5 +13,6 @@ public interface UserService {
     void updateActiveStatus(Long userId);
     UserDTO getUserById(Long userId);
     List<UserDTO> getAllUsers(String role);
+    List<UserDTO> getAllUsersByEmail(String role, String email);
     void changePassword(ChangePasswordDTO changePasswordDTO);
 }

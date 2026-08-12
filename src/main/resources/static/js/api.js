@@ -233,6 +233,37 @@ const getAllUsers = async (role) => {
     }
 };
 
+const searchUserByEmail = async (role, email) => {
+    const queryParam = $.param({
+        "role": role,
+        "email": email
+    });
+
+    try {
+        const response = await $.ajax({
+            url: API_BASE_URL + "/users/filter-email?" + queryParam,
+            type: 'GET',
+            contentType: 'application/json',
+            headers: {
+                'Authorization': 'Bearer ' + auth.getJWT()
+            }
+        });
+
+        if (response.status === 500) {
+            alert(response.message);
+            return null;
+        }
+
+        if (response.status === 0) {
+            return response.body;
+        }
+
+    } catch (error) {
+        alert("Something went wrong. Please try again.");
+        return null;
+    }
+};
+
 const updateAdmin = (object) => {
     return $.ajax({
         url: API_BASE_URL + "/users",
@@ -277,8 +308,7 @@ const updateAdmin = (object) => {
     });
 };
 
-// Remove admin
-const removeAdmin = (userId) => {
+const removeUser = (userId) => {
     return $.ajax({
         url: API_BASE_URL + "/users/"+userId,
         type: 'DELETE',
@@ -297,7 +327,7 @@ const removeAdmin = (userId) => {
             }
 
             if (response.status === 0) {
-                alert("Admin is removed successfully!");
+                alert("User is removed successfully!");
             }
         },
 
@@ -316,5 +346,6 @@ export {
     registerAdmin,
     getAllUsers,
     updateAdmin,
-    removeAdmin
+    removeUser,
+    searchUserByEmail
 }
