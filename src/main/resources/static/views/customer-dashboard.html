@@ -1,0 +1,413 @@
+<div class="customer-dashboard-wrapper">
+    <!-- Top Announcement Bar -->
+    <div class="top-bar">
+        <div class="container top-bar-flex">
+            <div class="top-bar-notice">
+                <span class="tag-sale"><i class="fa-solid fa-bolt"></i> Mega Sale</span>
+                <span>Get up to 60% OFF on premium electronics! Free shipping over LKR 5,000</span>
+            </div>
+            <div class="top-bar-links">
+                <!-- Dark / Light Theme Toggle Switch Button -->
+                <button type="button" class="theme-toggle-btn" id="themeToggleBtn" title="Toggle Light/Dark Theme">
+                    <i class="fa-solid fa-sun theme-toggle-icon" id="themeIcon"></i>
+                    <span id="themeLabel">Light</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Navigation Header -->
+    <header class="main-header">
+        <div class="container navbar">
+            <!-- Brand Logo -->
+            <a href="views/login.html" class="brand-logo">
+                <div class="logo-icon">
+                    <i class="fa-solid fa-bag-shopping"></i>
+                </div>
+                <span>Rayvora<span class="accent">.</span></span>
+            </a>
+
+            <!-- Search Bar -->
+            <div class="header-search">
+                <select class="category-select" id="headerCategoryFilter">
+                    <option value="all">All Categories</option>
+                    <option value="electronics">Electronics</option>
+                    <option value="fashion">Fashion & Apparel</option>
+                    <option value="home">Home & Living</option>
+                    <option value="beauty">Beauty & Health</option>
+                    <option value="gaming">Gaming & Audio</option>
+                </select>
+                <input type="text" class="search-input" id="searchInput" placeholder="Search wireless earbuds, smartwatches, sneakers...">
+                <button type="button" class="search-btn" id="btnSearch">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+            </div>
+
+            <!-- Header Action Controls -->
+            <div class="header-actions">
+                <a href="#cart" class="nav-icon-btn" id="cartNavBtn" title="Shopping Cart">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <span>Cart</span>
+                    <span class="badge-count">3</span>
+                </a>
+
+                <!-- User Profile Icon Trigger -->
+                <a href="views/login.html" class="user-menu-trigger" id="userAccountNavBtn" title="Sign In / Account">
+                    <div class="avatar-circle">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                    <div class="user-text-block" style="text-align: left; line-height: 1.2;">
+                        <span style="font-size: 0.72rem; color: var(--text-muted); display: block;">Hello,</span>
+                        <span style="font-size: 0.82rem; font-weight: 700; color: var(--text-main);">My Account <i class="fa-solid fa-chevron-down" style="font-size: 0.68rem;"></i></span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Marketplace Container -->
+    <main class="container">
+
+        <!-- Hero Carousel & Categories Section -->
+        <section class="hero-section">
+            <div class="hero-grid">
+                <!-- Category Sidebar (Horizontal Pill Slider on Mobile) -->
+                <aside class="category-sidebar">
+                    <div class="category-menu-title"><i class="fa-solid fa-bars"></i> Explore Categories</div>
+                    <ul class="category-list">
+                        <li class="category-item"><a href="#cat-electronics"><i class="fa-solid fa-laptop"></i> Tech</a></li>
+                        <li class="category-item"><a href="#cat-mobile"><i class="fa-solid fa-mobile-screen-button"></i> Mobile</a></li>
+                        <li class="category-item"><a href="#cat-audio"><i class="fa-solid fa-headphones"></i> Audio</a></li>
+                        <li class="category-item"><a href="#cat-fashion"><i class="fa-solid fa-shirt"></i> Fashion</a></li>
+                        <li class="category-item"><a href="#cat-home"><i class="fa-solid fa-couch"></i> Home</a></li>
+                        <li class="category-item"><a href="#cat-watches"><i class="fa-solid fa-stopwatch"></i> Gear</a></li>
+                        <li class="category-item"><a href="#cat-beauty"><i class="fa-solid fa-wand-magic-sparkles"></i> Beauty</a></li>
+                        <li class="category-item"><a href="#cat-sports"><i class="fa-solid fa-person-running"></i> Sports</a></li>
+                    </ul>
+                </aside>
+
+                <!-- Hero Banner Main Carousel -->
+                <div class="hero-banner-main" id="heroBanner">
+                    <div class="hero-content">
+                        <span class="hero-tag"><i class="fa-solid fa-fire"></i> Exclusive Launch</span>
+                        <h2 class="hero-title">Next-Gen Wireless Headphones</h2>
+                        <p class="hero-subtitle">Experience lossless spatial audio with active noise cancellation. Up to 40 hours continuous playback.</p>
+                        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+                            <a href="#shop-now" class="btn btn-orange btn-sm"><i class="fa-solid fa-bag-shopping"></i> Shop Now</a>
+                            <a href="#view-details" class="btn btn-outline btn-sm" style="color: #FFF; border-color: rgba(255,255,255,0.4);"><i class="fa-solid fa-circle-info"></i> Learn More</a>
+                        </div>
+                    </div>
+                    <div class="hero-bg-decoration"></div>
+                </div>
+
+                <!-- Side Highlight Promo Cards -->
+                <div class="hero-side-cards">
+                    <div class="promo-card mint-theme">
+                        <div>
+                            <span class="badge badge-mint"><i class="fa-solid fa-truck-fast"></i> Express</span>
+                            <h4 style="margin-top: 0.4rem;">Free Super Fast Delivery</h4>
+                            <p>On all orders above LKR 5,000</p>
+                        </div>
+                        <a href="#shipping" class="btn btn-sm btn-mint" style="align-self: flex-start;">Check Locations</a>
+                    </div>
+
+                    <div class="promo-card sky-theme">
+                        <div>
+                            <span class="badge badge-sky"><i class="fa-solid fa-shield-check"></i> Protection</span>
+                            <h4 style="margin-top: 0.4rem;">100% Refund Guarantee</h4>
+                            <p>Full refund if items fail delivery</p>
+                        </div>
+                        <a href="#guarantee" class="btn btn-sm btn-sky" style="align-self: flex-start;">Learn Protection</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Flash Sale Bar with Live Countdown -->
+        <section class="flash-sale-bar">
+            <div class="flash-sale-title">
+                <i class="fa-solid fa-bolt-lightning"></i>
+                <span>FLASH DEALS - UP TO 70% OFF</span>
+            </div>
+
+            <div class="countdown-timer">
+                <span style="font-size: 0.8rem; text-transform: uppercase; font-weight: 700; opacity: 0.85; margin-right: 0.35rem;">Ends In:</span>
+                <div class="timer-box" id="timerHours">04</div>
+                <span>:</span>
+                <div class="timer-box" id="timerMinutes">38</div>
+                <span>:</span>
+                <div class="timer-box" id="timerSeconds">22</div>
+            </div>
+        </section>
+
+        <!-- Main Product Marketplace Layout -->
+        <section class="shop-layout">
+
+            <!-- Filter Controls Sidebar -->
+            <aside class="filter-card">
+                <div class="section-title" style="font-size: 1.1rem; margin-bottom: 1rem;">
+                    <i class="fa-solid fa-filter" style="color: var(--c-primary);"></i> Filter Products
+                </div>
+
+                <!-- Category Checkbox Filter -->
+                <div class="filter-group">
+                    <div class="filter-group-title">Categories</div>
+                    <ul class="filter-options-list">
+                        <li class="filter-option">
+                            <input type="checkbox" id="filterCatTech" checked>
+                            <label for="filterCatTech">Tech & Gadgets (124)</label>
+                        </li>
+                        <li class="filter-option">
+                            <input type="checkbox" id="filterCatAudio">
+                            <label for="filterCatAudio">Audio & Sound (86)</label>
+                        </li>
+                        <li class="filter-option">
+                            <input type="checkbox" id="filterCatFashion">
+                            <label for="filterCatFashion">Fashion Wear (210)</label>
+                        </li>
+                        <li class="filter-option">
+                            <input type="checkbox" id="filterCatSmart">
+                            <label for="filterCatSmart">Smart Appliances (54)</label>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Price Range Filter -->
+                <div class="filter-group">
+                    <div class="filter-group-title">Price Range (LKR)</div>
+                    <div class="price-range-inputs">
+                        <input type="number" class="price-input" id="minPrice" placeholder="Min" value="1000">
+                        <span style="color: var(--text-muted);">-</span>
+                        <input type="number" class="price-input" id="maxPrice" placeholder="Max" value="150000">
+                    </div>
+                </div>
+
+                <!-- Rating Filter -->
+                <div class="filter-group">
+                    <div class="filter-group-title">Customer Rating</div>
+                    <ul class="filter-options-list">
+                        <li class="filter-option">
+                            <input type="radio" name="ratingFilter" id="rating4Star" checked>
+                            <label for="rating4Star">
+                                <span style="color: #F59E0B;"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-regular fa-star"></i></span> & Up
+                            </label>
+                        </li>
+                        <li class="filter-option">
+                            <input type="radio" name="ratingFilter" id="rating5Star">
+                            <label for="rating5Star">
+                                <span style="color: #F59E0B;"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></span> 5 Stars
+                            </label>
+                        </li>
+                    </ul>
+                </div>
+
+                <button type="button" class="btn btn-primary btn-block btn-sm" id="btnApplyFilter">
+                    <i class="fa-solid fa-sliders"></i> Apply Filters
+                </button>
+            </aside>
+
+            <!-- Product Grid Content Area -->
+            <div>
+                <!-- Products Grid Toolbar -->
+                <div class="products-grid-header">
+                    <span style="font-weight: 700; color: var(--text-main); font-size: 0.85rem;">Showing <strong>12</strong> Products</span>
+
+                    <div class="sort-dropdown">
+                        <label for="sortProducts" style="font-size: 0.8rem; font-weight: 600; margin-right: 0.35rem; color: var(--text-muted);">Sort:</label>
+                        <select id="sortProducts">
+                            <option value="featured">Featured Deals</option>
+                            <option value="low-high">Price: Low to High</option>
+                            <option value="high-low">Price: High to Low</option>
+                            <option value="newest">Newest Products</option>
+                            <option value="ratings">Highest Rating</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Product Grid (2-Column Mobile App Layout) -->
+                <div class="products-grid" id="productContainer">
+
+                    <!-- Product Item 1 -->
+                    <div class="product-card">
+                        <div class="discount-tag">-35%</div>
+                        <div class="product-thumb">
+                            <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80" alt="Wireless Noise Cancelling Headphones">
+                        </div>
+                        <div class="product-details">
+                            <span class="product-category-tag">Audio Tech</span>
+                            <h3 class="product-title">Rayvora SonicPro Active Noise Cancelling Headphones</h3>
+                            <div class="rating-stars">
+                                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star-half-stroke"></i>
+                                <span class="rating-count">(4.8)</span>
+                            </div>
+                            <div class="product-price-row">
+                                <span class="current-price">LKR 26,990</span>
+                                <span class="old-price">LKR 41,990</span>
+                            </div>
+                            <button class="add-cart-btn"><i class="fa-solid fa-cart-plus"></i> Add to Cart</button>
+                        </div>
+                    </div>
+
+                    <!-- Product Item 2 -->
+                    <div class="product-card">
+                        <div class="discount-tag">-20%</div>
+                        <div class="product-thumb">
+                            <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80" alt="Smartwatch Minimalist Edition">
+                        </div>
+                        <div class="product-details">
+                            <span class="product-category-tag">Wearables</span>
+                            <h3 class="product-title">UltraFit OLED Smartwatch with Heart Rate & GPS Tracker</h3>
+                            <div class="rating-stars">
+                                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                                <span class="rating-count">(5.0)</span>
+                            </div>
+                            <div class="product-price-row">
+                                <span class="current-price">LKR 19,350</span>
+                                <span class="old-price">LKR 23,990</span>
+                            </div>
+                            <button class="add-cart-btn"><i class="fa-solid fa-cart-plus"></i> Add to Cart</button>
+                        </div>
+                    </div>
+
+                    <!-- Product Item 3 -->
+                    <div class="product-card">
+                        <div class="discount-tag">-45%</div>
+                        <div class="product-thumb">
+                            <img src="https://images.unsplash.com/photo-1546868871-7041f2a55e12?auto=format&fit=crop&w=600&q=80" alt="Smart Watch Series X">
+                        </div>
+                        <div class="product-details">
+                            <span class="product-category-tag">Wearables</span>
+                            <h3 class="product-title">Titan Chrono Sport Watch Water Resistant 50M</h3>
+                            <div class="rating-stars">
+                                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-regular fa-star"></i>
+                                <span class="rating-count">(4.2)</span>
+                            </div>
+                            <div class="product-price-row">
+                                <span class="current-price">LKR 33,000</span>
+                                <span class="old-price">LKR 59,990</span>
+                            </div>
+                            <button class="add-cart-btn"><i class="fa-solid fa-cart-plus"></i> Add to Cart</button>
+                        </div>
+                    </div>
+
+                    <!-- Product Item 4 -->
+                    <div class="product-card">
+                        <div class="discount-tag">-15%</div>
+                        <div class="product-thumb">
+                            <img src="https://images.unsplash.com/photo-1560343090-f0409e92791a?auto=format&fit=crop&w=600&q=80" alt="Leather Sneaker Footwear">
+                        </div>
+                        <div class="product-details">
+                            <span class="product-category-tag">Footwear</span>
+                            <h3 class="product-title">AeroComfort Modern Leather Athletic Sneakers</h3>
+                            <div class="rating-stars">
+                                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                                <span class="rating-count">(4.9)</span>
+                            </div>
+                            <div class="product-price-row">
+                                <span class="current-price">LKR 22,490</span>
+                                <span class="old-price">LKR 26,400</span>
+                            </div>
+                            <button class="add-cart-btn"><i class="fa-solid fa-cart-plus"></i> Add to Cart</button>
+                        </div>
+                    </div>
+
+                    <!-- Product Item 5 -->
+                    <div class="product-card">
+                        <div class="discount-tag">-50%</div>
+                        <div class="product-thumb">
+                            <img src="https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&w=600&q=80" alt="Gaming Headset Studio">
+                        </div>
+                        <div class="product-details">
+                            <span class="product-category-tag">Gaming</span>
+                            <h3 class="product-title">HyperBass RGB 7.1 Surround Gaming Headset</h3>
+                            <div class="rating-stars">
+                                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star-half-stroke"></i>
+                                <span class="rating-count">(4.7)</span>
+                            </div>
+                            <div class="product-price-row">
+                                <span class="current-price">LKR 14,990</span>
+                                <span class="old-price">LKR 29,990</span>
+                            </div>
+                            <button class="add-cart-btn"><i class="fa-solid fa-cart-plus"></i> Add to Cart</button>
+                        </div>
+                    </div>
+
+                    <!-- Product Item 6 -->
+                    <div class="product-card">
+                        <div class="discount-tag">-10%</div>
+                        <div class="product-thumb">
+                            <img src="https://images.unsplash.com/photo-1608231387042-66d1773070a5?auto=format&fit=crop&w=600&q=80" alt="Puma Shoes">
+                        </div>
+                        <div class="product-details">
+                            <span class="product-category-tag">Sportswear</span>
+                            <h3 class="product-title">ProRun Lightweight Cushion Running Shoes</h3>
+                            <div class="rating-stars">
+                                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-regular fa-star"></i>
+                                <span class="rating-count">(4.4)</span>
+                            </div>
+                            <div class="product-price-row">
+                                <span class="current-price">LKR 17,700</span>
+                                <span class="old-price">LKR 19,500</span>
+                            </div>
+                            <button class="add-cart-btn"><i class="fa-solid fa-cart-plus"></i> Add to Cart</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-brand">
+                <a href="#dashboard" class="brand-logo">
+                    <div class="logo-icon"><i class="fa-solid fa-bag-shopping"></i></div>
+                    <span>Rayvora<span class="accent">.</span></span>
+                </a>
+                <p>Your ultimate destination for global flash deals, top-tier tech, and verified seller products with buyer protection.</p>
+                <div class="payment-methods">
+                    <i class="fa-brands fa-cc-visa"></i>
+                    <i class="fa-brands fa-cc-mastercard"></i>
+                    <i class="fa-brands fa-cc-paypal"></i>
+                    <i class="fa-brands fa-cc-apple-pay"></i>
+                </div>
+            </div>
+
+            <div>
+                <h4 class="footer-heading">Customer Care</h4>
+                <ul class="footer-links">
+                    <li><a href="#help">Help Center & FAQ</a></li>
+                    <li><a href="#orders">Track Order Status</a></li>
+                    <li><a href="#returns">Returns & Refunds</a></li>
+                    <li><a href="#shipping">Shipping Policy</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="footer-heading">Merchant Options</h4>
+                <ul class="footer-links">
+                    <li><a href="views/signup-seller.html">Become a Merchant</a></li>
+                    <li><a href="#fulfillment">Fulfillment Services</a></li>
+                    <li><a href="#policy">Merchant Guidelines</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="footer-heading">Legal & Policy</h4>
+                <ul class="footer-links">
+                    <li><a href="#privacy">Privacy Policy</a></li>
+                    <li><a href="#terms">Terms of Service</a></li>
+                    <li><a href="#contact">Contact Support</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="container footer-bottom">
+            <p>&copy; 2026 Rayvora E-Commerce Inc. All Rights Reserved.</p>
+            <p>Designed with High-Performance GSAP Animation Capabilities.</p>
+        </div>
+    </footer>
+</div>

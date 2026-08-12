@@ -1,0 +1,267 @@
+<div class="auth-wrapper">
+    <div class="signup-container" id="sellerSignupCard" style="max-width: 680px;">
+        <div class="auth-header">
+            <h1>Register as Rayvora Seller</h1>
+            <p>Start selling your products to millions of active buyers worldwide</p>
+        </div>
+
+        <form id="sellerSignupForm" class="auth-form">
+            
+            <!-- Section 1: Owner Information -->
+            <div style="margin-bottom: 0.5rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;">
+                <h3 style="font-size: 1.05rem; font-weight: 800; color: var(--c-orange);">
+                    <i class="fa-solid fa-user-tie"></i> Owner Personal Account
+                </h3>
+            </div>
+
+            <!-- First Name & Last Name -->
+            <div class="form-grid-2col">
+                <div class="form-group">
+                    <label for="firstNameSeller">First Name</label>
+                    <div class="input-with-icon">
+                        <i class="fa-solid fa-user"></i>
+                        <input 
+                            type="text" 
+                            id="firstNameSeller"
+                            name="firstName"
+                            placeholder="Jane" 
+                            required
+                        >
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="lastNameSeller">Last Name</label>
+                    <div class="input-with-icon">
+                        <i class="fa-solid fa-user"></i>
+                        <input 
+                            type="text" 
+                            id="lastNameSeller"
+                            name="lastName"
+                            placeholder="Smith" 
+                            required
+                        >
+                    </div>
+                </div>
+            </div>
+
+            <!-- Email & Contact Number -->
+            <div class="form-grid-2col">
+                <div class="form-group">
+                    <label for="emailSeller">Business Email</label>
+                    <div class="input-with-icon">
+                        <i class="fa-solid fa-envelope"></i>
+                        <input 
+                            type="email" 
+                            id="emailSeller"
+                            name="email"
+                            placeholder="sales@techzone.com" 
+                            required
+                        >
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="contactSeller">Contact Number</label>
+                    <div class="input-with-icon">
+                        <i class="fa-solid fa-phone"></i>
+                        <input 
+                            type="tel" 
+                            id="contactSeller"
+                            name="contact"
+                            placeholder="+1 (555) 987-6543" 
+                            required
+                        >
+                    </div>
+                </div>
+            </div>
+
+            <!-- Username -->
+            <div class="form-group">
+                <label for="usernameSeller">Username</label>
+                <div class="input-with-icon">
+                    <i class="fa-solid fa-at"></i>
+                    <input 
+                        type="text" 
+                        id="usernameSeller"
+                        name="username"
+                        placeholder="techzone_official" 
+                        required
+                    >
+                </div>
+            </div>
+
+            <!-- Password & Confirm Password -->
+            <div class="form-grid-2col">
+                <div class="form-group">
+                    <label for="passwordSeller">Password</label>
+                    <div class="input-with-icon">
+                        <i class="fa-solid fa-lock"></i>
+                        <input 
+                            type="password" 
+                            id="passwordSeller"
+                            name="password"
+                            placeholder="••••••••••••" 
+                            required
+                        >
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmPasswordSeller">Confirm Password</label>
+                    <div class="input-with-icon">
+                        <i class="fa-solid fa-shield-halved"></i>
+                        <input 
+                            type="password" 
+                            id="confirmPasswordSeller"
+                            name="confirmPassword"
+                            placeholder="••••••••••••" 
+                            required
+                        >
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Section 2: Business Address & Store Profile -->
+            <div style="margin-top: 1rem; margin-bottom: 0.5rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;">
+                <h3 style="font-size: 1.05rem; font-weight: 800; color: var(--c-primary-dark);">
+                    <i class="fa-solid fa-location-dot"></i> Add Business Address
+                </h3>
+            </div>
+
+            <!-- Business Full Name & Business Contact -->
+            <div class="form-grid-2col">
+                <div class="form-group">
+                    <label for="businessFullName">Business / Store Full Name</label>
+                    <div class="input-with-icon">
+                        <i class="fa-solid fa-store"></i>
+                        <input 
+                            type="text" 
+                            id="businessFullName" 
+                            name="fullName"
+                            placeholder="TechZone Official Store LLC" 
+                            required
+                        >
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="businessContact">Business Contact Phone</label>
+                    <div class="input-with-icon">
+                        <i class="fa-solid fa-phone-volume"></i>
+                        <input 
+                            type="tel" 
+                            id="businessContact" 
+                            name="businessContact"
+                            placeholder="+1 (800) 555-0199" 
+                            required
+                        >
+                    </div>
+                </div>
+            </div>
+
+            <!-- Street Address -->
+            <div class="form-group">
+                <label for="street">Street Address</label>
+                <div class="input-with-icon">
+                    <i class="fa-solid fa-road"></i>
+                    <input 
+                        type="text" 
+                        id="street" 
+                        name="street"
+                        placeholder="123 Commerce Avenue, Suite 400" 
+                        required
+                    >
+                </div>
+            </div>
+
+            <!-- City & District -->
+            <div class="form-grid-2col">
+                <div class="form-group">
+                    <label for="city">City</label>
+                    <div class="input-with-icon">
+                        <i class="fa-solid fa-city"></i>
+                        <input 
+                            type="text" 
+                            id="city" 
+                            name="city"
+                            placeholder="New York" 
+                            required
+                        >
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="district">District</label>
+                    <div class="input-with-icon">
+                        <i class="fa-solid fa-map-pin"></i>
+                        <input 
+                            type="text" 
+                            id="district" 
+                            name="district"
+                            placeholder="Manhattan" 
+                            required
+                        >
+                    </div>
+                </div>
+            </div>
+
+            <!-- Province & Zip Code -->
+            <div class="form-grid-2col">
+                <div class="form-group">
+                    <label for="province">Province / State</label>
+                    <div class="input-with-icon">
+                        <i class="fa-solid fa-landmark"></i>
+                        <input 
+                            type="text" 
+                            id="province" 
+                            name="province"
+                            placeholder="NY" 
+                            required
+                        >
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="zipCode">ZIP Code / Postal Code</label>
+                    <div class="input-with-icon">
+                        <i class="fa-solid fa-mail-bulk"></i>
+                        <input 
+                            type="text" 
+                            id="zipCode" 
+                            name="zipCode"
+                            placeholder="10001" 
+                            required
+                        >
+                    </div>
+                </div>
+            </div>
+
+            <!-- Country -->
+            <div class="form-group">
+                <label for="country">Country</label>
+                <div class="input-with-icon">
+                    <i class="fa-solid fa-globe"></i>
+                    <input 
+                        type="text" 
+                        id="country" 
+                        name="country"
+                        placeholder="United States" 
+                        required
+                    >
+                </div>
+            </div>
+
+            <button type="button" class="btn btn-orange btn-block" id="btnSubmitSellerSignup" style="margin-top: 0.5rem;">
+                <i class="fa-solid fa-store"></i> Complete Seller Registration
+            </button>
+        </form>
+
+        <p id="sellerSignupError" class="auth-error-msg"></p>
+
+        <div class="auth-footer">
+            <p>Already a registered merchant? <button id="linkToLogin" style="color: var(--c-orange); background: transparent">Sign In</button></p>
+        </div>
+    </div>
+</div>
