@@ -285,6 +285,64 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<UserDTO> getAllUsersByEmail(String role, String email) {
+        log.info("Execute getAllUsersByEmail()");
+        try {
+            List<User> users = userRepository.findByEmail(email);
+            List<UserDTO> userDTOList = new ArrayList<>();
+
+            for (User user : users) {
+                if (user.getStatus().equals(Status.ACTIVE)) {
+
+                    String mainUserRole = user.getUserRoles().split(", ")[0];
+                    if (mainUserRole.equals(role)) {
+
+                        UserDTO userDTO = new UserDTO();
+
+                        userDTO.setUserId(user.getUserId());
+                        userDTO.setUsername(user.getUserName());
+                        userDTO.setPassword(user.getPassword());
+                        userDTO.setUserRoles(user.getUserRoles());
+                        userDTO.setFirstName(user.getFirstName());
+                        userDTO.setLastName(user.getLastName());
+                        userDTO.setEmail(user.getEmail());
+                        userDTO.setContact(user.getContact());
+                        userDTO.setCreatedAt(user.getCreatedAt());
+                        userDTO.setStatus(user.getStatus());
+
+                        if (user.getAddress() != null) {
+                            Address address = user.getAddress();
+
+                            AddressDTO addressDTO = new AddressDTO();
+
+                            addressDTO.setAddressId(address.getAddressId());
+                            addressDTO.setFullName(address.getFullName());
+                            addressDTO.setContact(address.getContact());
+                            addressDTO.setStreet(address.getStreet());
+                            addressDTO.setCity(address.getCity());
+                            addressDTO.setDistrict(address.getDistrict());
+                            addressDTO.setProvince(address.getProvince());
+                            addressDTO.setZipCode(address.getZipCode());
+                            addressDTO.setCountry(address.getCountry());
+                            addressDTO.setUserId(user.getUserId());
+
+                            userDTO.setAddressDTO(addressDTO);
+                        }
+
+                        userDTOList.add(userDTO);
+                    }
+                }
+            }
+
+            return userDTOList;
+
+        } catch (Exception e) {
+            log.error("Error in getAllUsersByEmail() : " + e.getMessage());
+            throw e;
+        }
+    }
+
+    @Override
     public void changePassword(ChangePasswordDTO changePasswordDTO) {
         log.info("Execute changePassword() dto {}", changePasswordDTO);
         try {

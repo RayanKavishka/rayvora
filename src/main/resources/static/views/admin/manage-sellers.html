@@ -1,0 +1,64 @@
+<div class="dashboard-container">
+    <!-- Sidebar Navigation -->
+    <aside class="dashboard-sidebar">
+        <div class="brand-logo" style="margin-bottom: 1.5rem; padding: 0 0.5rem;">
+            <div class="logo-icon"><i class="fa-solid fa-user-shield"></i></div>
+            <span>Admin<span class="accent">Portal</span></span>
+        </div>
+        <ul class="sidebar-menu">
+            <li id="defaultAdminDashboard" class="sidebar-item"><a href=""><i class="fa-solid fa-chart-pie"></i> Overview & Analytics</a></li>
+            <li id="manageAdmins" class="sidebar-item"><a href=""><i class="fa-solid fa-user-gear"></i> Manage Admins</a></li>
+            <li id="manageCustomers" class="sidebar-item"><a href=""><i class="fa-solid fa-users"></i> Manage Customers</a></li>
+            <li id="manageSellers" class="sidebar-item active"><a href=""><i class="fa-solid fa-store"></i> Manage Sellers</a></li>
+            <li id="manageCategories" class="sidebar-item"><a href=""><i class="fa-solid fa-layer-group"></i> Manage Categories</a></li>
+            <li id="monitorOrders" class="sidebar-item"><a href=""><i class="fa-solid fa-receipt"></i> Monitor Orders</a></li>
+            <li id="PaymentRecords" class="sidebar-item"><a href=""><i class="fa-solid fa-credit-card"></i> Payment Records</a></li>
+            <li id="inventoryLevels" class="sidebar-item"><a href=""><i class="fa-solid fa-boxes-stacked"></i> Inventory Levels</a></li>
+            <li id="ReportsAndExport" class="sidebar-item"><a href=""><i class="fa-solid fa-file-export"></i> Reports & Export</a></li>
+            <li id="backupScheduling" class="sidebar-item"><a href=""><i class="fa-solid fa-database"></i> Backup Scheduling</a></li>
+        </ul>
+    </aside>
+
+    <!-- Main Content Panel -->
+    <main class="dashboard-main-content">
+        <div class="section-header">
+            <div>
+                <h1 class="section-title"><i class="fa-solid fa-store" style="color: var(--c-primary);"></i> Manage Sellers</h1>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">View and manage all registered seller accounts</p>
+            </div>
+        </div>
+
+        <!-- Registered Sellers Table -->
+        <div class="data-table-card">
+            <div class="section-header" style="margin-bottom: 1rem;">
+                <h3 style="font-size: 1.1rem; font-weight: 800;"><i class="fa-solid fa-store" style="color: var(--c-primary-dark); margin-right: 0.4rem;"></i>Registered Sellers</h3>
+                <div class="input-with-icon" style="max-width: 800px; display: flex; gap: 1rem">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="sellerSearchInput" placeholder="Type email" style="padding: 0.55rem 1rem 0.55rem 2.6rem; font-size: 0.85rem;">
+                    <button type="button" class="btn btn-primary btn-block" id="refreshSellers" style="background: var(--c-sky);">
+                        Refresh
+                    </button>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="custom-table" id="sellersTable">
+                    <thead>
+                        <tr>
+                            <th>Seller ID</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Email</th>
+                            <th>Contact</th>
+                            <th>Joined Date</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="sellersTableBody">
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+</div>
