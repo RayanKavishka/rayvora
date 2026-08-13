@@ -2,11 +2,10 @@ import {router} from "../router.js";
 import {
     registerAdmin,
     getAllUsers,
-    updateAdmin,
     removeUser,
     searchUserByEmail,
-    getUserRolesById,
-    getAllCategories, addCategory, removeCategory
+    getUserById,
+    getAllCategories, addCategory, removeCategory, updateUser
 } from "../api.js";
 
 // Overview & Analytics
@@ -30,38 +29,49 @@ $(document).on('click', '#manageAdmins', async function(e) {
 const loadAdminsTable = async () => {
     $('#adminsTableBody').empty();
 
-    const response = await getAllUsers("ADMIN");
+    try {
+        const response = await getAllUsers("ADMIN");
 
-    let rows = '';
-    response.forEach((row) => {
+        if (response.status === 500) {
+            Alert.error(response.message);
+        }
 
-        const joinedDate = new Date(row.createdAt)
-            .toLocaleDateString("en-GB");
+        if (response.status === 0) {
+            let rows = '';
+            response.body.forEach((row) => {
 
-        rows += `
-            <tr>
-                <td>${row.userId}</td>
-                <td>${row.firstName}</td>
-                <td>${row.lastName}</td>
-                <td>${row.email}</td>
-                <td>${row.contact}</td>
-                <td>${joinedDate}</td>
-                <td>
-                    <button onclick="handleUpdateAdmin(${row.userId})"
-                            class="btn btn-sm btn-outline">
-                        <i class="fa-solid fa-pen"></i>
-                    </button>
+                const joinedDate = new Date(row.createdAt)
+                    .toLocaleDateString("en-GB");
 
-                    <button onclick="handleSetInactiveUser(${row.userId})"
-                            class="btn btn-sm btn-orange">
-                        <i class="fa-solid fa-trash"></i>
-                    </button>
-                </td>
-            </tr>
-        `;
-    });
+                rows += `
+                    <tr>
+                        <td>${row.userId}</td>
+                        <td>${row.firstName}</td>
+                        <td>${row.lastName}</td>
+                        <td>${row.email}</td>
+                        <td>${row.contact}</td>
+                        <td>${joinedDate}</td>
+                        <td>
+                            <button onclick="handleUpdateAdmin(${row.userId})"
+                                    class="btn btn-sm btn-outline">
+                                <i class="fa-solid fa-pen"></i>
+                            </button>
 
-    $('#adminsTableBody').html(rows);
+                            <button onclick="handleSetInactiveUser(${row.userId})"
+                                    class="btn btn-sm btn-orange">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            $('#adminsTableBody').html(rows);
+        }
+
+    } catch (error) {
+        Alert.error("Something went wrong. Please try again.");
+    }
 };
 
 
@@ -74,38 +84,49 @@ $(document).on('input', '#adminSearchInput', async function () {
         return;
     }
 
-    const response = await searchUserByEmail("ADMIN", email);
+    try {
+        const response = await searchUserByEmail("ADMIN", email);
 
-    let rows = '';
-    response.forEach((row) => {
+        if (response.status === 500) {
+            Alert.error(response.message);
+        }
 
-        const joinedDate = new Date(row.createdAt)
-            .toLocaleDateString("en-GB");
+        if (response.status === 0) {
+            let rows = '';
+            response.body.forEach((row) => {
 
-        rows += `
-            <tr>
-                <td>${row.userId}</td>
-                <td>${row.firstName}</td>
-                <td>${row.lastName}</td>
-                <td>${row.email}</td>
-                <td>${row.contact}</td>
-                <td>${joinedDate}</td>
-                <td>
-                    <button onclick="handleUpdateAdmin(${row.userId})"
-                            class="btn btn-sm btn-outline">
-                        <i class="fa-solid fa-pen"></i>
-                    </button>
+                const joinedDate = new Date(row.createdAt)
+                    .toLocaleDateString("en-GB");
 
-                    <button onclick="handleSetInactiveUser(${row.userId})"
-                            class="btn btn-sm btn-orange">
-                        <i class="fa-solid fa-trash"></i>
-                    </button>
-                </td>
-            </tr>
-        `;
-    });
+                rows += `
+                    <tr>
+                        <td>${row.userId}</td>
+                        <td>${row.firstName}</td>
+                        <td>${row.lastName}</td>
+                        <td>${row.email}</td>
+                        <td>${row.contact}</td>
+                        <td>${joinedDate}</td>
+                        <td>
+                            <button onclick="handleUpdateAdmin(${row.userId})"
+                                    class="btn btn-sm btn-outline">
+                                <i class="fa-solid fa-pen"></i>
+                            </button>
 
-    $('#adminsTableBody').html(rows);
+                            <button onclick="handleSetInactiveUser(${row.userId})"
+                                    class="btn btn-sm btn-orange">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            $('#adminsTableBody').html(rows);
+        }
+
+    } catch (error) {
+        Alert.error("Something went wrong. Please try again.");
+    }
 });
 
 $(document).on('click', '#refreshAdmins', async function (e) {
@@ -121,23 +142,33 @@ window.handleUpdateAdmin = async function (userId) {
     $('#updateAdminBtn').css({display: "block"});
     $('#btnSubmitAdminRegister').css({display: "none"});
 
-    const response = await getAllUsers("ADMIN");
-    const toBeUpdateUser = response.find((user) => user.userId === userId);
+    try {
+        const response = await getAllUsers("ADMIN");
 
-    $('#regPassword').prop('disabled', true);
+        if (response.status === 500) {
+            Alert.error(response.message);
+        }
 
-    $('#adminId').val(toBeUpdateUser.userId);
-    $('#regUsername').val(toBeUpdateUser.username);
-    $('#regFirstName').val(toBeUpdateUser.firstName);
-    $('#regLastName').val(toBeUpdateUser.lastName);
-    $('#regEmail').val(toBeUpdateUser.email);
-    $('#regContact').val(toBeUpdateUser.contact);
+        if (response.status === 0) {
+            const toBeUpdateUser = response.body.find((user) => user.userId === userId);
+
+            $('#regPassword').prop('disabled', true);
+
+            $('#adminId').val(toBeUpdateUser.userId);
+            $('#regFirstName').val(toBeUpdateUser.firstName);
+            $('#regLastName').val(toBeUpdateUser.lastName);
+            $('#regEmail').val(toBeUpdateUser.email);
+            $('#regContact').val(toBeUpdateUser.contact);
+        }
+
+    } catch (error) {
+        Alert.error("Something went wrong. Please try again.");
+    }
 }
 
 $(document).on('click', '#updateAdminBtn', async function () {
     let object = {
         "userId": $('#adminId').val(),
-        "username": $('#regUsername').val().trim(),
         "userRoles": "ADMIN, SELLER, CUSTOMER",
         "firstName": $('#regFirstName').val().trim(),
         "lastName": $('#regLastName').val().trim(),
@@ -145,7 +176,38 @@ $(document).on('click', '#updateAdminBtn', async function () {
         "contact": $('#regContact').val().trim(),
     };
 
-    await updateAdmin(object);
+    try {
+        const response = await updateUser(object);
+
+        if (response.status === 400) {
+            Alert.error(response.message);
+        }
+
+        if (response.status === 409) {
+            Alert.error(response.message);
+        }
+
+        if (response.status === 500) {
+            Alert.error(response.message);
+        }
+
+        if (response.status === 0) {
+            $('#regFirstName').val("");
+            $('#regLastName').val("");
+            $('#regEmail').val("");
+            $('#regContact').val("");
+
+            $('#updateAdminBtn').css({display: "none"});
+            $('#btnSubmitAdminRegister').css({display: "block"});
+            $('#regPassword').prop('disabled', false);
+
+            Alert.success("Admin is updated successfully!");
+        }
+
+    } catch (error) {
+        Alert.error("Something went wrong. Please try again.");
+    }
+
     await loadAdminsTable();
 });
 
@@ -153,16 +215,51 @@ $(document).on('click', '#updateAdminBtn', async function () {
 // Set status as inactive
 window.handleSetInactiveUser = function (userId) {
     Alert.confirm("Do you want to remove this user ?", async () => {
-        const response = await removeUser(userId);
+        try {
+            const response = await removeUser(userId);
 
-        const role = await getUserRolesById(userId);
+            if (response.status === 404) {
+                Alert.error(response.message);
+            }
 
-        if (role === "ADMIN") {
-            await loadAdminsTable();
-        } else if (role === "CUSTOMER") {
-            await loadCustomersTable();
-        } else if (role === "SELLER") {
-            await loadSellersTable();
+            if (response.status === 500) {
+                Alert.error(response.message);
+            }
+
+            if (response.status === 0) {
+                Alert.success("User is removed successfully!");
+            }
+
+        } catch (error) {
+            Alert.error("Something went wrong. Please try again.");
+        }
+
+        try {
+            const response = await getUserById(userId);
+
+            if (response.status === 404) {
+                Alert.error(response.message);
+            }
+
+            if (response.status === 500) {
+                Alert.error(response.message);
+            }
+
+            if (response.status === 0) {
+                let roles = response.body.userRoles;
+                let role = roles.split(",")[0].trim();
+
+                if (role === "ADMIN") {
+                    await loadAdminsTable();
+                } else if (role === "CUSTOMER") {
+                    await loadCustomersTable();
+                } else if (role === "SELLER") {
+                    await loadSellersTable();
+                }
+            }
+
+        } catch (error) {
+            Alert.error("Something went wrong. Please try again.");
         }
     });
 };
@@ -182,7 +279,36 @@ $(document).on('click', '#btnSubmitAdminRegister', async function (e) {
         "contact": $('#regContact').val().trim(),
     };
 
-    await registerAdmin(object);
+    try {
+        const response = await registerAdmin(object);
+
+        if (response.status === 400) {
+            Alert.error(response.message);
+        }
+
+        if (response.status === 409) {
+            Alert.error(response.message);
+        }
+
+        if (response.status === 500) {
+            Alert.error(response.message);
+        }
+
+        if (response.status === 0) {
+            $('#regUsername').val("");
+            $('#regPassword').val("");
+            $('#regFirstName').val("");
+            $('#regLastName').val("");
+            $('#regEmail').val("");
+            $('#regContact').val("");
+
+            Alert.success("Registration successfully!");
+        }
+
+    } catch (error) {
+        Alert.error("Something went wrong. Please try again.");
+    }
+
     await loadAdminsTable();
 });
 
@@ -202,33 +328,44 @@ $(document).on('click', '#manageCustomers', async function(e) {
 const loadCustomersTable = async () => {
     $('#customersTableBody').empty();
 
-    const response = await getAllUsers("CUSTOMER");
+    try {
+        const response = await getAllUsers("CUSTOMER");
 
-    let rows = '';
-    response.forEach((row) => {
+        if (response.status === 500) {
+            Alert.error(response.message);
+        }
 
-        const joinedDate = new Date(row.createdAt)
-            .toLocaleDateString("en-GB");
+        if (response.status === 0) {
+            let rows = '';
+            response.body.forEach((row) => {
 
-        rows += `
-            <tr>
-                <td>${row.userId}</td>
-                <td>${row.firstName}</td>
-                <td>${row.lastName}</td>
-                <td>${row.email}</td>
-                <td>${row.contact}</td>
-                <td>${joinedDate}</td>
-                <td>
-                    <button onclick="handleSetInactiveUser(${row.userId})"
-                            class="btn btn-sm btn-orange">
-                        <i class="fa-solid fa-trash"></i>
-                    </button>
-                </td>
-            </tr>
-        `;
-    });
+                const joinedDate = new Date(row.createdAt)
+                    .toLocaleDateString("en-GB");
 
-    $('#customersTableBody').html(rows);
+                rows += `
+                    <tr>
+                        <td>${row.userId}</td>
+                        <td>${row.firstName}</td>
+                        <td>${row.lastName}</td>
+                        <td>${row.email}</td>
+                        <td>${row.contact}</td>
+                        <td>${joinedDate}</td>
+                        <td>
+                            <button onclick="handleSetInactiveUser(${row.userId})"
+                                    class="btn btn-sm btn-orange">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            $('#customersTableBody').html(rows);
+        }
+
+    } catch (error) {
+        Alert.error("Something went wrong. Please try again.");
+    }
 };
 
 
@@ -241,33 +378,44 @@ $(document).on('input', '#customerSearchInput', async function () {
         return;
     }
 
-    const response = await searchUserByEmail("CUSTOMER", email);
+    try {
+        const response = await searchUserByEmail("CUSTOMER", email);
 
-    let rows = '';
-    response.forEach((row) => {
+        if (response.status === 500) {
+            Alert.error(response.message);
+        }
 
-        const joinedDate = new Date(row.createdAt)
-            .toLocaleDateString("en-GB");
+        if (response.status === 0) {
+            let rows = '';
+            response.body.forEach((row) => {
 
-        rows += `
-            <tr>
-                <td>${row.userId}</td>
-                <td>${row.firstName}</td>
-                <td>${row.lastName}</td>
-                <td>${row.email}</td>
-                <td>${row.contact}</td>
-                <td>${joinedDate}</td>
-                <td>
-                    <button onclick="handleSetInactiveUser(${row.userId})"
-                            class="btn btn-sm btn-orange">
-                        <i class="fa-solid fa-trash"></i>
-                    </button>
-                </td>
-            </tr>
-        `;
-    });
+                const joinedDate = new Date(row.createdAt)
+                    .toLocaleDateString("en-GB");
 
-    $('#customersTableBody').html(rows);
+                rows += `
+                    <tr>
+                        <td>${row.userId}</td>
+                        <td>${row.firstName}</td>
+                        <td>${row.lastName}</td>
+                        <td>${row.email}</td>
+                        <td>${row.contact}</td>
+                        <td>${joinedDate}</td>
+                        <td>
+                            <button onclick="handleSetInactiveUser(${row.userId})"
+                                    class="btn btn-sm btn-orange">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            $('#customersTableBody').html(rows);
+        }
+
+    } catch (error) {
+        Alert.error("Something went wrong. Please try again.");
+    }
 });
 
 $(document).on('click', '#refreshCustomers', async function (e) {
@@ -293,33 +441,44 @@ $(document).on('click', '#manageSellers', async function(e) {
 const loadSellersTable = async () => {
     $('#sellersTableBody').empty();
 
-    const response = await getAllUsers("SELLER");
+    try {
+        const response = await getAllUsers("SELLER");
 
-    let rows = '';
-    response.forEach((row) => {
+        if (response.status === 500) {
+            Alert.error(response.message);
+        }
 
-        const joinedDate = new Date(row.createdAt)
-            .toLocaleDateString("en-GB");
+        if (response.status === 0) {
+            let rows = '';
+            response.body.forEach((row) => {
 
-        rows += `
-            <tr>
-                <td>${row.userId}</td>
-                <td>${row.firstName}</td>
-                <td>${row.lastName}</td>
-                <td>${row.email}</td>
-                <td>${row.contact}</td>
-                <td>${joinedDate}</td>
-                <td>
-                    <button onclick="handleSetInactiveUser(${row.userId})"
-                            class="btn btn-sm btn-orange">
-                        <i class="fa-solid fa-trash"></i>
-                    </button>
-                </td>
-            </tr>
-        `;
-    });
+                const joinedDate = new Date(row.createdAt)
+                    .toLocaleDateString("en-GB");
 
-    $('#sellersTableBody').html(rows);
+                rows += `
+                    <tr>
+                        <td>${row.userId}</td>
+                        <td>${row.firstName}</td>
+                        <td>${row.lastName}</td>
+                        <td>${row.email}</td>
+                        <td>${row.contact}</td>
+                        <td>${joinedDate}</td>
+                        <td>
+                            <button onclick="handleSetInactiveUser(${row.userId})"
+                                    class="btn btn-sm btn-orange">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            $('#sellersTableBody').html(rows);
+        }
+
+    } catch (error) {
+        Alert.error("Something went wrong. Please try again.");
+    }
 };
 
 
@@ -332,33 +491,44 @@ $(document).on('input', '#sellerSearchInput', async function () {
         return;
     }
 
-    const response = await searchUserByEmail("SELLER", email);
+    try {
+        const response = await searchUserByEmail("SELLER", email);
 
-    let rows = '';
-    response.forEach((row) => {
+        if (response.status === 500) {
+            Alert.error(response.message);
+        }
 
-        const joinedDate = new Date(row.createdAt)
-            .toLocaleDateString("en-GB");
+        if (response.status === 0) {
+            let rows = '';
+            response.body.forEach((row) => {
 
-        rows += `
-            <tr>
-                <td>${row.userId}</td>
-                <td>${row.firstName}</td>
-                <td>${row.lastName}</td>
-                <td>${row.email}</td>
-                <td>${row.contact}</td>
-                <td>${joinedDate}</td>
-                <td>
-                    <button onclick="handleSetInactiveUser(${row.userId})"
-                            class="btn btn-sm btn-orange">
-                        <i class="fa-solid fa-trash"></i>
-                    </button>
-                </td>
-            </tr>
-        `;
-    });
+                const joinedDate = new Date(row.createdAt)
+                    .toLocaleDateString("en-GB");
 
-    $('#sellersTableBody').html(rows);
+                rows += `
+                    <tr>
+                        <td>${row.userId}</td>
+                        <td>${row.firstName}</td>
+                        <td>${row.lastName}</td>
+                        <td>${row.email}</td>
+                        <td>${row.contact}</td>
+                        <td>${joinedDate}</td>
+                        <td>
+                            <button onclick="handleSetInactiveUser(${row.userId})"
+                                    class="btn btn-sm btn-orange">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            $('#sellersTableBody').html(rows);
+        }
+
+    } catch (error) {
+        Alert.error("Something went wrong. Please try again.");
+    }
 });
 
 $(document).on('click', '#refreshSellers', async function (e) {
@@ -382,30 +552,41 @@ $(document).on('click', '#manageCategories', async function(e) {
 
 // Load all categories
 const loadAllCategories = async () => {
-    const response = await getAllCategories();
-
     $('#categoriesGrid').html("");
 
-    let categories = '';
+    try {
+        const response = await getAllCategories();
 
-    response.forEach((category) => {
-        categories += `
-            <div class="category-card">
-                <div class="category-card-image">
-                    <img src="${category.imageUrl}" alt="">
-                </div>
-                <div class="category-card-body">
-                    <h4 class="category-card-title">${category.categoryName}</h4>
-                    <p class="category-card-desc">${category.description}</p>
-                </div>
-                <div class="category-card-actions">
-                    <button onclick="handleDeleteCategory(${category.categoryId})" class="btn btn-sm btn-orange"><i class="fa-solid fa-trash"></i> Delete</button>
-                </div>
-            </div>
-        `;
-    });
+        if (response.status === 500) {
+            Alert.error(response.message);
+        }
 
-    $('#categoriesGrid').html(categories);
+        if (response.status === 0) {
+            let categories = '';
+
+            response.body.forEach((category) => {
+                categories += `
+                    <div class="category-card">
+                        <div class="category-card-image">
+                            <img src="${category.imageUrl}" alt="">
+                        </div>
+                        <div class="category-card-body">
+                            <h4 class="category-card-title">${category.categoryName}</h4>
+                            <p class="category-card-desc">${category.description}</p>
+                        </div>
+                        <div class="category-card-actions">
+                            <button onclick="handleDeleteCategory(${category.categoryId})" class="btn btn-sm btn-orange"><i class="fa-solid fa-trash"></i> Delete</button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            $('#categoriesGrid').html(categories);
+        }
+
+    } catch (error) {
+        Alert.error("Something went wrong. Please try again.");
+    }
 };
 
 
@@ -414,7 +595,34 @@ $(document).on('click', '#btnSubmitCategory', async function (e) {
     e.preventDefault();
 
     const form = $('#categoryForm')[0];
-    await addCategory(form);
+
+    try {
+        const response = await addCategory(form);
+
+        if (response.status === 400) {
+            Alert.error(response.message);
+        }
+
+        if (response.status === 500) {
+            Alert.error(response.message);
+        }
+
+        if (response.status === 0) {
+            $('#categoryForm')[0].reset();
+
+            $('#categoryImagePreview')
+                .attr('src', '')
+                .hide();
+
+            $('#fileUploadPlaceholder').show();
+
+            Alert.success("Category is added successfully!");
+        }
+
+    } catch (error) {
+        Alert.error("Something went wrong. Please try again.");
+    }
+
     await loadAllCategories();
 });
 
@@ -446,7 +654,25 @@ $(document).on('change', '#categoryImageInput', function () {
 // Set status as inactive
 window.handleDeleteCategory = function (categoryId) {
     Alert.confirm("Do you want to remove this category ?", async () => {
-        await removeCategory(categoryId);
+        try {
+            const response = await removeCategory(categoryId);
+
+            if (response.status === 404) {
+                Alert.error(response.message);
+            }
+
+            if (response.status === 500) {
+                Alert.error(response.message);
+            }
+
+            if (response.status === 0) {
+                Alert.success("Category is removed successfully!");
+            }
+
+        } catch (error) {
+            Alert.error("Something went wrong. Please try again.");
+        }
+
         await loadAllCategories();
     });
 };

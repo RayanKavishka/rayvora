@@ -1,0 +1,219 @@
+<div class="dashboard-container">
+    <!-- Seller Sidebar Navigation -->
+    <aside class="dashboard-sidebar">
+        <div class="brand-logo" style="margin-bottom: 1.5rem; padding: 0 0.5rem;">
+            <div class="logo-icon"><i class="fa-solid fa-store"></i></div>
+            <span>Seller<span class="accent">Hub</span></span>
+        </div>
+        <ul class="sidebar-menu">
+            <li id="saleAndEarnings" class="sidebar-item"><a href=""><i class="fa-solid fa-chart-line"></i> Sales & Earnings</a></li>
+            <li id="manageProducts" class="sidebar-item"><a href=""><i class="fa-solid fa-box-open"></i> Manage Products</a></li>
+            <li id="customerReviews" class="sidebar-item"><a href=""><i class="fa-solid fa-star-half-stroke"></i> Customer Reviews</a></li>
+            <li id="profileAndAddress" class="sidebar-item active"><a href=""><i class="fa-solid fa-id-card"></i> Profile & Address</a></li>
+        </ul>
+    </aside>
+
+    <!-- Main Seller Panel -->
+    <main class="dashboard-main-content">
+        <div class="section-header">
+            <div>
+                <h1 class="section-title"><i class="fa-solid fa-id-card" style="color: var(--c-orange);"></i> Profile & Address</h1>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">Manage your seller profile, business address, and account security</p>
+            </div>
+        </div>
+
+        <!-- ==================================================================== -->
+        <!-- Profile & Business Address Form -->
+        <!-- ==================================================================== -->
+        <div class="data-table-card" style="margin-bottom: 2rem;">
+            <div class="section-header" style="margin-bottom: 1.25rem;">
+                <h3 style="font-size: 1.1rem; font-weight: 800;"><i class="fa-solid fa-id-card" style="color: var(--c-primary-dark); margin-right: 0.4rem;"></i>Profile & Business Address</h3>
+            </div>
+
+            <form id="sellerProfileForm" class="auth-form">
+
+                <div class="form-grid-2col">
+                    <!-- Seller ID (read-only) -->
+                    <div class="form-group">
+                        <label for="sellerId">Seller ID</label>
+                        <div class="input-with-icon">
+                            <i class="fa-solid fa-hashtag"></i>
+                            <input type="text" id="sellerId" name="sellerId" placeholder="Auto-generated" disabled>
+                        </div>
+                    </div>
+
+                    <div class="form-group"></div>
+                </div>
+
+                <!-- First Name & Last Name -->
+                <div class="form-grid-2col">
+                    <div class="form-group">
+                        <label for="sellerFirstName">First Name</label>
+                        <div class="input-with-icon">
+                            <i class="fa-solid fa-user"></i>
+                            <input type="text" id="sellerFirstName" name="firstName" placeholder="Jane" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="sellerLastName">Last Name</label>
+                        <div class="input-with-icon">
+                            <i class="fa-solid fa-user"></i>
+                            <input type="text" id="sellerLastName" name="lastName" placeholder="Smith" required>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Email & Contact -->
+                <div class="form-grid-2col">
+                    <div class="form-group">
+                        <label for="sellerEmail">Email</label>
+                        <div class="input-with-icon">
+                            <i class="fa-solid fa-envelope"></i>
+                            <input type="email" id="sellerEmail" name="email" placeholder="sales@techzone.com" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="sellerContact">Contact Number</label>
+                        <div class="input-with-icon">
+                            <i class="fa-solid fa-phone"></i>
+                            <input type="tel" id="sellerContact" name="contact" placeholder="+1 (555) 987-6543" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 0.5rem; margin-bottom: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;">
+                    <h3 style="font-size: 1.02rem; font-weight: 800; color: var(--c-orange);">
+                        <i class="fa-solid fa-location-dot"></i> Business Address
+                    </h3>
+                </div>
+
+                <!-- Business Name & Business Contact -->
+                <div class="form-grid-2col">
+                    <div class="form-group">
+                        <label for="sellerBusinessName">Business Name</label>
+                        <div class="input-with-icon">
+                            <i class="fa-solid fa-store"></i>
+                            <input type="text" id="sellerBusinessName" name="businessName" placeholder="TechZone Official Store LLC" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="sellerBusinessContact">Business Contact</label>
+                        <div class="input-with-icon">
+                            <i class="fa-solid fa-phone-volume"></i>
+                            <input type="tel" id="sellerBusinessContact" name="businessContact" placeholder="+1 (800) 555-0199" required>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Street -->
+                <div class="form-group">
+                    <label for="sellerStreet">Street Address</label>
+                    <div class="input-with-icon">
+                        <i class="fa-solid fa-road"></i>
+                        <input type="text" id="sellerStreet" name="street" placeholder="123 Commerce Avenue, Suite 400" required>
+                    </div>
+                </div>
+
+                <!-- City & District -->
+                <div class="form-grid-2col">
+                    <div class="form-group">
+                        <label for="sellerCity">City</label>
+                        <div class="input-with-icon">
+                            <i class="fa-solid fa-city"></i>
+                            <input type="text" id="sellerCity" name="city" placeholder="Colombo" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="sellerDistrict">District</label>
+                        <div class="input-with-icon">
+                            <i class="fa-solid fa-map-pin"></i>
+                            <input type="text" id="sellerDistrict" name="district" placeholder="Gampaha" required>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Province & Zip Code -->
+                <div class="form-grid-2col">
+                    <div class="form-group">
+                        <label for="sellerProvince">Province</label>
+                        <div class="input-with-icon">
+                            <i class="fa-solid fa-map"></i>
+                            <input type="text" id="sellerProvince" name="province" placeholder="Western Province" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="sellerZipCode">Zip Code</label>
+                        <div class="input-with-icon">
+                            <i class="fa-solid fa-mail-bulk"></i>
+                            <input type="text" id="sellerZipCode" name="zipCode" placeholder="11500" required>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Country -->
+                <div class="form-group">
+                    <label for="sellerCountry">Country</label>
+                    <div class="input-with-icon">
+                        <i class="fa-solid fa-earth-americas"></i>
+                        <input type="text" id="sellerCountry" name="country" placeholder="Sri Lanka" required>
+                    </div>
+                </div>
+
+                <button type="button" class="btn btn-primary btn-block" id="btnSaveSellerProfile">
+                    <i class="fa-solid fa-floppy-disk"></i> Save Changes
+                </button>
+            </form>
+
+            <p id="sellerProfileFormError" class="auth-error-msg"></p>
+        </div>
+
+        <!-- ==================================================================== -->
+        <!-- Change Password Form -->
+        <!-- ==================================================================== -->
+        <div class="data-table-card">
+            <div class="section-header" style="margin-bottom: 1.25rem;">
+                <h3 style="font-size: 1.1rem; font-weight: 800;"><i class="fa-solid fa-lock" style="color: var(--c-primary-dark); margin-right: 0.4rem;"></i>Change Password</h3>
+            </div>
+
+            <form id="changePasswordForm" class="auth-form" style="max-width: 480px;">
+
+                <!-- Current Password -->
+                <div class="form-group">
+                    <label for="currentPassword">Current Password</label>
+                    <div class="input-with-icon">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" id="currentPassword" name="currentPassword" placeholder="••••••••••••" required>
+                    </div>
+                </div>
+
+                <!-- Revealed only after current password is verified -->
+                <div id="newPasswordFields">
+                    <div class="form-group">
+                        <label for="newPassword">New Password</label>
+                        <div class="input-with-icon">
+                            <i class="fa-solid fa-key"></i>
+                            <input type="password" id="newPassword" name="newPassword" placeholder="••••••••••••">
+                        </div>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 0.75rem;">
+                    <!-- Shown first, to check the current password -->
+                    <button type="button" class="btn btn-primary btn-block" id="btnVerifyPassword">
+                        <i class="fa-solid fa-check"></i> Verify & Save
+                    </button>
+                    <button type="button" class="btn btn-outline btn-block" id="btnCancelPasswordChange">
+                        Cancel
+                    </button>
+                </div>
+            </form>
+
+            <p id="changePasswordFormError" class="auth-error-msg"></p>
+        </div>
+    </main>
+</div>

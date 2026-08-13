@@ -11,7 +11,7 @@ $(document).on('click', '#linkSignupSeller', function() {
 
 
 // Customer signup
-$(document).on('click', '#btnSubmitCustomerSignup', function () {
+$(document).on('click', '#btnSubmitCustomerSignup', async function () {
     const password = $('#password').val().trim();
     const confirmedPassword = $('#confirmPassword').val().trim();
 
@@ -30,12 +30,41 @@ $(document).on('click', '#btnSubmitCustomerSignup', function () {
         "contact": $('#contact').val().trim(),
     };
 
-    signUpCustomer(object);
+    try {
+        const response = await signUpCustomer(object);
+
+        if (response.status === 400) {
+            Alert.error(response.message);
+        }
+
+        if (response.status === 409) {
+            Alert.error(response.message);
+        }
+
+        if (response.status === 500) {
+            Alert.error(response.message);
+        }
+
+        if (response.status === 0) {
+            $('#username').val("");
+            $('#password').val("");
+            $('#firstName').val("");
+            $('#lastName').val("");
+            $('#email').val("");
+            $('#contact').val("");
+            $('#confirmPassword').val("");
+
+            Alert.success("Registration successfully!");
+        }
+
+    } catch (error) {
+        Alert.error("Something went wrong. Please try again.");
+    }
 });
 
 
 // Seller signup
-$(document).on('click', '#btnSubmitSellerSignup', function () {
+$(document).on('click', '#btnSubmitSellerSignup', async function () {
     const password = $('#passwordSeller').val().trim();
     const confirmedPassword = $('#confirmPasswordSeller').val().trim();
 
@@ -64,7 +93,45 @@ $(document).on('click', '#btnSubmitSellerSignup', function () {
         }
     };
 
-    signUpSeller(object);
+    try {
+        const response = await signUpSeller(object);
+
+        if (response.status === 400) {
+            Alert.error(response.message);
+        }
+
+        if (response.status === 409) {
+            Alert.error(response.message);
+        }
+
+        if (response.status === 500) {
+            Alert.error(response.message);
+        }
+
+        if (response.status === 0) {
+            $('#usernameSeller').val("");
+            $('#passwordSeller').val("");
+            $('#firstNameSeller').val("");
+            $('#lastNameSeller').val("");
+            $('#emailSeller').val("");
+            $('#contactSeller').val("");
+            $('#confirmPasswordSeller').val("");
+
+            $('#businessFullName').val("");
+            $('#businessContact').val("");
+            $('#street').val("");
+            $('#city').val("");
+            $('#district').val("");
+            $('#province').val("");
+            $('#zipCode').val("");
+            $('#country').val("");
+
+            Alert.success("Registration successfully!");
+        }
+
+    } catch (error) {
+        Alert.error("Something went wrong. Please try again.");
+    }
 });
 
 
