@@ -17,12 +17,12 @@ const getUserRolesById = async (userId) => {
         });
 
         if (response.status === 404) {
-            alert(response.message);
+            Alert.error(response.message);
             return null;
         }
 
         if (response.status === 500) {
-            alert(response.message);
+            Alert.error(response.message);
             return null;
         }
 
@@ -34,7 +34,7 @@ const getUserRolesById = async (userId) => {
         }
 
     } catch (error) {
-        alert("Something went wrong. Please try again.");
+        Alert.error('Something went wrong. Please try again.');
         return null;
     }
 };
@@ -48,19 +48,19 @@ const userSignIn = (object) => {
 
         success: function (response) {
             if (response.status === 400) {
-                alert(response.message);
+                Alert.error(response.message);
             }
 
             if (response.status === 401) {
-                alert(response.message);
+                Alert.error(response.message);
             }
 
             if (response.status === 404) {
-                alert(response.message);
+                Alert.error(response.message);
             }
 
             if (response.status === 500) {
-                alert(response.message);
+                Alert.error(response.message);
             }
 
             if (response.status === 0) {
@@ -73,7 +73,7 @@ const userSignIn = (object) => {
         },
 
         error: function (response) {
-            alert("Something went wrong. Please try again.");
+            Alert.error("Something went wrong. Please try again.");
         }
     });
 };
@@ -87,15 +87,15 @@ const signUpCustomer = (object) => {
 
         success: function(response) {
             if (response.status === 400) {
-                alert(response.message);
+                Alert.error(response.message);
             }
 
             if (response.status === 409) {
-                alert(response.message);
+                Alert.error(response.message);
             }
 
             if (response.status === 500) {
-                alert(response.message);
+                Alert.error(response.message);
             }
 
             if (response.status === 0) {
@@ -107,12 +107,12 @@ const signUpCustomer = (object) => {
                 $('#contact').val("");
                 $('#confirmPassword').val("");
 
-                alert("Registration successfully!");
+                Alert.success("Registration successfully!");
             }
         },
 
         error: function (response) {
-            alert("Something went wrong. Please try again.");
+            Alert.error("Something went wrong. Please try again.");
         }
     });
 };
@@ -126,15 +126,15 @@ const signUpSeller = (object) => {
 
         success: function(response) {
             if (response.status === 400) {
-                alert(response.message);
+                Alert.error(response.message);
             }
 
             if (response.status === 409) {
-                alert(response.message);
+                Alert.error(response.message);
             }
 
             if (response.status === 500) {
-                alert(response.message);
+                Alert.error(response.message);
             }
 
             if (response.status === 0) {
@@ -155,12 +155,12 @@ const signUpSeller = (object) => {
                 $('#zipCode').val("");
                 $('#country').val("");
 
-                alert("Registration successfully!");
+                Alert.success("Registration successfully!");
             }
         },
 
         error: function (response) {
-            alert("Something went wrong. Please try again.");
+            Alert.error("Something went wrong. Please try again.");
         }
     });
 };
@@ -174,15 +174,15 @@ const registerAdmin = (object) => {
 
         success: function(response) {
             if (response.status === 400) {
-                alert(response.message);
+                Alert.error(response.message);
             }
 
             if (response.status === 409) {
-                alert(response.message);
+                Alert.error(response.message);
             }
 
             if (response.status === 500) {
-                alert(response.message);
+                Alert.error(response.message);
             }
 
             if (response.status === 0) {
@@ -193,12 +193,12 @@ const registerAdmin = (object) => {
                 $('#regEmail').val("");
                 $('#regContact').val("");
 
-                alert("Registration successfully!");
+                Alert.success("Registration successfully!");
             }
         },
 
         error: function (response) {
-            alert("Something went wrong. Please try again.");
+            Alert.error("Something went wrong. Please try again.");
         }
     });
 };
@@ -219,7 +219,7 @@ const getAllUsers = async (role) => {
         });
 
         if (response.status === 500) {
-            alert(response.message);
+            Alert.error(response.message);
             return null;
         }
 
@@ -228,7 +228,7 @@ const getAllUsers = async (role) => {
         }
 
     } catch (error) {
-        alert("Something went wrong. Please try again.");
+        Alert.error("Something went wrong. Please try again.");
         return null;
     }
 };
@@ -250,7 +250,7 @@ const searchUserByEmail = async (role, email) => {
         });
 
         if (response.status === 500) {
-            alert(response.message);
+            Alert.error(response.message);
             return null;
         }
 
@@ -259,7 +259,7 @@ const searchUserByEmail = async (role, email) => {
         }
 
     } catch (error) {
-        alert("Something went wrong. Please try again.");
+        Alert.error("Something went wrong. Please try again.");
         return null;
     }
 };
@@ -276,15 +276,15 @@ const updateAdmin = (object) => {
 
         success: function(response) {
             if (response.status === 400) {
-                alert(response.message);
+                Alert.error(response.message);
             }
 
             if (response.status === 409) {
-                alert(response.message);
+                Alert.error(response.message);
             }
 
             if (response.status === 500) {
-                alert(response.message);
+                Alert.error(response.message);
             }
 
             if (response.status === 0) {
@@ -298,12 +298,12 @@ const updateAdmin = (object) => {
                 $('#btnSubmitAdminRegister').css({display: "block"});
                 $('#regPassword').prop('disabled', false);
 
-                alert("Admin is updated successfully!");
+                Alert.success("Admin is updated successfully!");
             }
         },
 
         error: function (response) {
-            alert("Something went wrong. Please try again.");
+            Alert.error("Something went wrong. Please try again.");
         }
     });
 };
@@ -319,20 +319,20 @@ const removeUser = (userId) => {
 
         success: function (response) {
             if (response.status === 404) {
-                alert(response.message);
+                Alert.error(response.message);
             }
 
             if (response.status === 500) {
-                alert(response.message);
+                Alert.error(response.message);
             }
 
             if (response.status === 0) {
-                alert("User is removed successfully!");
+                Alert.success("User is removed successfully!");
             }
         },
 
         error: function (response) {
-            alert("Something went wrong. Please try again.");
+            Alert.error("Something went wrong. Please try again.");
         }
     });
 };
@@ -351,7 +351,7 @@ const getAllCategories = async () => {
         });
 
         if (response.status === 500) {
-            alert(response.message);
+            Alert.error(response.message);
             return null;
         }
 
@@ -360,7 +360,7 @@ const getAllCategories = async () => {
         }
 
     } catch (error) {
-        alert("Something went wrong. Please try again.");
+        Alert.error("Something went wrong. Please try again.");
         return null;
     }
 };
@@ -381,11 +381,11 @@ const addCategory = (form) => {
 
         success: function (response) {
             if (response.status === 400) {
-                alert(response.message);
+                Alert.error(response.message);
             }
 
             if (response.status === 500) {
-                alert(response.message);
+                Alert.error(response.message);
             }
 
             if (response.status === 0) {
@@ -397,12 +397,12 @@ const addCategory = (form) => {
 
                 $('#fileUploadPlaceholder').show();
 
-                alert("Category is added successfully!");
+                Alert.success("Category is added successfully!");
             }
         },
 
         error: function (response) {
-            alert("Something went wrong. Please try again.");
+            Alert.error("Something went wrong. Please try again.");
         }
     });
 };
@@ -419,20 +419,20 @@ const removeCategory = (categoryId) => {
 
         success: function (response) {
             if (response.status === 404) {
-                alert(response.message);
+                Alert.error(response.message);
             }
 
             if (response.status === 500) {
-                alert(response.message);
+                Alert.error(response.message);
             }
 
             if (response.status === 0) {
-                alert("Category is removed successfully!");
+                Alert.success("Category is removed successfully!");
             }
         },
 
         error: function (response) {
-            alert("Something went wrong. Please try again.");
+            Alert.error("Something went wrong. Please try again.");
         }
     });
 };

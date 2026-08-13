@@ -151,21 +151,21 @@ $(document).on('click', '#updateAdminBtn', async function () {
 
 
 // Set status as inactive
-window.handleSetInactiveUser = async function (userId) {
-    await removeUser(userId);
+window.handleSetInactiveUser = function (userId) {
+    Alert.confirm("Do you want to remove this user ?", async () => {
+        const response = await removeUser(userId);
 
-    if (await getUserRolesById(userId) === "ADMIN") {
-        await loadAdminsTable();
-    }
+        const role = await getUserRolesById(userId);
 
-    if (await getUserRolesById(userId) === "CUSTOMER") {
-        await loadCustomersTable();
-    }
-
-    if (await getUserRolesById(userId) === "SELLER") {
-        await loadSellersTable();
-    }
-}
+        if (role === "ADMIN") {
+            await loadAdminsTable();
+        } else if (role === "CUSTOMER") {
+            await loadCustomersTable();
+        } else if (role === "SELLER") {
+            await loadSellersTable();
+        }
+    });
+};
 
 
 // Signup Admin
@@ -444,7 +444,9 @@ $(document).on('change', '#categoryImageInput', function () {
 
 
 // Set status as inactive
-window.handleDeleteCategory = async function (categoryId) {
-    await removeCategory(categoryId);
-    await loadAllCategories();
+window.handleDeleteCategory = function (categoryId) {
+    Alert.confirm("Do you want to remove this category ?", async () => {
+        await removeCategory(categoryId);
+        await loadAllCategories();
+    });
 };
