@@ -112,9 +112,6 @@ public class UserServiceImpl implements UserService {
     public void updateUser(UpdateUserDTO updateUserDTO) {
         log.info("Execute updateUser() dto {}", updateUserDTO);
         try {
-            if (userRepository.existsByUserName(updateUserDTO.getUsername())) {
-                throw new RayvoraException(409, "Username already exists");
-            }
             if (userRepository.existsByEmail(updateUserDTO.getEmail())) {
                 throw new RayvoraException(409, "Email already exists");
             }
@@ -127,7 +124,6 @@ public class UserServiceImpl implements UserService {
                 throw new RayvoraException(404, "Sorry, related user is not found!");
 
             User user = optionalUser.get();
-            user.setUserName(updateUserDTO.getUsername());
             user.setFirstName(updateUserDTO.getFirstName());
             user.setLastName(updateUserDTO.getLastName());
             user.setEmail(updateUserDTO.getEmail());
@@ -140,7 +136,7 @@ public class UserServiceImpl implements UserService {
                     throw new RayvoraException(409, "Contact already exists in other business");
                 }
 
-                Optional<Address> optionalAddress = addressRepository.findById(updateUserDTO.getAddressDTO().getAddressId());
+                Optional<Address> optionalAddress = addressRepository.findById(savedUser.getAddress().getAddressId());
                 if (optionalAddress.isEmpty())
                     throw new RayvoraException(404, "Sorry, related address is not found!");
 

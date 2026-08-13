@@ -15,10 +15,6 @@ import lombok.NoArgsConstructor;
 public class UpdateUserDTO {
     private Long userId;
 
-    @NotBlank(message = "Username is required")
-    @Size(min = 5, max = 50, message = "Username must be between 3 and 50 characters")
-    private String username;
-
     @NotBlank(message = "User role is required")
     private String userRoles;
 
