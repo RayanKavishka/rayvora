@@ -36,13 +36,11 @@ public class ProductDTO {
     @NotNull(message = "Seller is required")
     private Long userId;
 
-    @NotBlank(message = "Quantity is required")
-    @Pattern(regexp = "^[0-9]+$", message = "Quantity must be a valid number")
+    @NotNull(message = "Quantity is required")
     @Min(value = 1, message = "Quantity must be at least 1")
     private Integer quantity;
 
-    @NotBlank(message = "Limit is required")
-    @Pattern(regexp = "^[0-9]+$", message = "Limit must be a valid number")
+    @NotNull(message = "Limit is required")
     @Min(value = 0, message = "Limit must be at least 0")
     private Integer lowStockLimit;
 

@@ -126,7 +126,7 @@ public class ProductController {
             @RequestParam(value = "searchedProductName", required = false) String searchedProductName,
             @RequestParam(value = "categoryName", required = false) String categoryName,
             @RequestParam(value = "startPrice", required = false) BigDecimal startPrice,
-            @RequestParam(value = "lastPrice", required = false)BigDecimal lastPrice
+            @RequestParam(value = "lastPrice", required = false) BigDecimal lastPrice
     ) {
         return new CommonResponse(
                 ResponseCode.OPERATION_SUCCESS,
