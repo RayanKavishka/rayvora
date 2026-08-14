@@ -306,17 +306,7 @@ public class ProductServiceImpl implements ProductService {
 
             Page<Product> allProducts = productRepository.findByStatus(Status.ACTIVE, pageable);
 
-            List<ResponseProductDTO> responseProductDTOS = new ArrayList<>();
-            for (Product product : allProducts) {
-                ResponseProductDTO responseProductDTO = getResponseProductDTO(product);
-                responseProductDTOS.add(responseProductDTO);
-            }
-
-            return new PageImpl<>(
-                    responseProductDTOS,
-                    pageable,
-                    allProducts.getTotalElements()
-            );
+            return allProducts.map(this::getResponseProductDTO);
 
         } catch (Exception e) {
             log.error("Error in getAllProducts() : " + e.getMessage());
@@ -336,17 +326,7 @@ public class ProductServiceImpl implements ProductService {
 
             Page<Product> searchedProducts = productRepository.searchProductsByProductName(productName, pageable);
 
-            List<ResponseProductDTO> searchedProductsDTOs = new ArrayList<>();
-            for (Product product : searchedProducts) {
-                ResponseProductDTO responseProductDTO = getResponseProductDTO(product);
-                searchedProductsDTOs.add(responseProductDTO);
-            }
-
-            return new PageImpl<>(
-                    searchedProductsDTOs,
-                    pageable,
-                    searchedProducts.getTotalElements()
-            );
+            return searchedProducts.map(this::getResponseProductDTO);
 
         } catch (Exception e) {
             log.error("Error in searchProductsByName() : " + e.getMessage());
@@ -369,17 +349,7 @@ public class ProductServiceImpl implements ProductService {
 
             Page<Product> sortedProducts = productRepository.findByStatus(Status.ACTIVE, pageable);
 
-            List<ResponseProductDTO> productDTOs = new ArrayList<>();
-            for (Product product : sortedProducts) {
-                ResponseProductDTO responseProductDTO = getResponseProductDTO(product);
-                productDTOs.add(responseProductDTO);
-            }
-
-            return new PageImpl<>(
-                    productDTOs,
-                    pageable,
-                    sortedProducts.getTotalElements()
-            );
+            return sortedProducts.map(this::getResponseProductDTO);
 
         } catch (Exception e) {
             log.error("Error in filterPriceAscOrDesc() : " + e.getMessage());
@@ -401,6 +371,22 @@ public class ProductServiceImpl implements ProductService {
                 startPrice,
                 lastPrice);
         try {
+            String productNameArgument = "";
+            String categoryNameArgument = "";
+            if (searchedProductName.isEmpty()) {
+                productNameArgument = null;
+
+            } else {
+                productNameArgument = searchedProductName;
+            }
+
+            if (categoryName.isEmpty()) {
+                categoryNameArgument = null;
+
+            } else {
+                categoryNameArgument = categoryName;
+            }
+
             Pageable pageable = PageRequest.of(
                     page,
                     size,
@@ -408,19 +394,9 @@ public class ProductServiceImpl implements ProductService {
             );
 
             Page<Product> filteredProducts =
-                    productRepository.filterProducts(searchedProductName, categoryName, startPrice, lastPrice, pageable);
+                    productRepository.filterProducts(productNameArgument, categoryNameArgument, startPrice, lastPrice, pageable);
 
-            List<ResponseProductDTO> productDTOs = new ArrayList<>();
-            for (Product product : filteredProducts) {
-                ResponseProductDTO responseProductDTO = getResponseProductDTO(product);
-                productDTOs.add(responseProductDTO);
-            }
-
-            return new PageImpl<>(
-                    productDTOs,
-                    pageable,
-                    filteredProducts.getTotalElements()
-            );
+            return filteredProducts.map(this::getResponseProductDTO);
 
         } catch (Exception e) {
             log.error("Error in filterProducts() : " + e.getMessage());
