@@ -1,13 +1,12 @@
 package lk.ijse.rayvora.dto;
 
 import jakarta.validation.constraints.*;
-import lk.ijse.rayvora.enumeration.Status;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
+import org.springframework.web.multipart.MultipartFile;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -31,6 +30,21 @@ public class ProductDTO {
     @Size(max = 100, message = "Brand must not exceed 100 characters")
     private String brand;
 
-    private LocalDateTime createdAt;
-    private Status status;
+    @NotNull(message = "You must need to select a category")
+    private Long categoryId;
+
+    @NotNull(message = "Seller is required")
+    private Long userId;
+
+    @NotBlank(message = "Quantity is required")
+    @Pattern(regexp = "^[0-9]+$", message = "Quantity must be a valid number")
+    @Min(value = 1, message = "Quantity must be at least 1")
+    private Integer quantity;
+
+    @NotBlank(message = "Limit is required")
+    @Pattern(regexp = "^[0-9]+$", message = "Limit must be a valid number")
+    @Min(value = 0, message = "Limit must be at least 0")
+    private Integer lowStockLimit;
+
+    private List<MultipartFile> productImages;
 }

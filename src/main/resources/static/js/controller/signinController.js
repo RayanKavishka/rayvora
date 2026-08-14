@@ -8,6 +8,11 @@ $(document).on('click', '#btnSubmitLogin', async function () {
         "password": $('#password').val().trim()
     };
 
+    if (!object.username || !object.password) {
+        Alert.error("Please enter your username and password.");
+        return;
+    }
+
     try {
         const response = await userSignIn(object);
 

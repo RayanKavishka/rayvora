@@ -16,10 +16,12 @@ public class StockDTO {
 
     @NotNull(message = "Quantity is required")
     @Min(value = 1, message = "Quantity must be at least 1")
+    @Pattern(regexp = "^[0-9]+$", message = "Quantity must be a valid number")
     private Integer quantity;
 
     @NotNull(message = "Low stock limit is required")
     @Min(value = 0, message = "Low stock limit cannot be negative")
+    @Pattern(regexp = "^[0-9]+$", message = "Low stock must be a valid number")
     private Integer lowStockLimit;
 
     private LocalDateTime createdAt;

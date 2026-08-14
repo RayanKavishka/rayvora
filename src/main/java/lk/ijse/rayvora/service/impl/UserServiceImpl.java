@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -37,6 +38,10 @@ public class UserServiceImpl implements UserService {
             if (optionalUser.isEmpty())
                 throw new RayvoraException(404, "Invalid username or password");
 
+            if (optionalUser.get().getStatus().equals(Status.INACTIVE)) {
+                throw new RayvoraException(404, "This user is not longer available");
+            }
+
             User user = optionalUser.get();
             if (!passwordEncoder.matches(password, user.getPassword()) || password.isBlank()) {
                 throw new RayvoraException(401, "Invalid username or password");
@@ -56,7 +61,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = {Exception.class}, propagation = Propagation.REQUIRED)
     public void saveUser(UserDTO userDTO) {
         log.info("Execute saveUser() dto {}", userDTO);
         try {
@@ -108,7 +113,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = {Exception.class}, propagation = Propagation.REQUIRED)
     public void updateUser(UpdateUserDTO updateUserDTO) {
         log.info("Execute updateUser() dto {}", updateUserDTO);
         try {
