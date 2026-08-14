@@ -1,4 +1,5 @@
 import {router} from "../router.js";
+import {isValidContact, isValidEmail} from "../util/regex.js";
 import {
     registerAdmin,
     getAllUsers,
@@ -8,11 +9,13 @@ import {
     getAllCategories, addCategory, removeCategory, updateUser
 } from "../api.js";
 
+
 // Overview & Analytics
 $(document).on('click', '#defaultAdminDashboard', function(e) {
     e.preventDefault();
     router("admin-dashboard.html");
 });
+
 
 // =====================================================================================================================
 
@@ -139,6 +142,11 @@ $(document).on('click', '#refreshAdmins', async function (e) {
 
 // Update admin
 window.handleUpdateAdmin = async function (userId) {
+    if (!userId) {
+        Alert.error("Invalid admin selected.");
+        return;
+    }
+
     $('#updateAdminBtn').css({display: "block"});
     $('#btnSubmitAdminRegister').css({display: "none"});
 
@@ -175,6 +183,21 @@ $(document).on('click', '#updateAdminBtn', async function () {
         "email": $('#regEmail').val().trim(),
         "contact": $('#regContact').val().trim(),
     };
+
+    if (!object.firstName || !object.lastName || !object.email || !object.contact) {
+        Alert.error("Please fill in all fields.");
+        return;
+    }
+
+    if (!isValidEmail(object.email)) {
+        Alert.error("Please enter a valid email address.");
+        return;
+    }
+
+    if (!isValidContact(object.contact)) {
+        Alert.error("Please enter a valid contact number.");
+        return;
+    }
 
     try {
         const response = await updateUser(object);
@@ -214,6 +237,11 @@ $(document).on('click', '#updateAdminBtn', async function () {
 
 // Set status as inactive
 window.handleSetInactiveUser = function (userId) {
+    if (!userId) {
+        Alert.error("Invalid user selected.");
+        return;
+    }
+
     Alert.confirm("Do you want to remove this user ?", async () => {
         try {
             const response = await removeUser(userId);
@@ -278,6 +306,26 @@ $(document).on('click', '#btnSubmitAdminRegister', async function (e) {
         "email": $('#regEmail').val().trim(),
         "contact": $('#regContact').val().trim(),
     };
+
+    if (!object.username || !object.password || !object.firstName || !object.lastName || !object.email || !object.contact) {
+        Alert.error("Please fill in all fields.");
+        return;
+    }
+
+    if (object.password.length < 6) {
+        Alert.error("Password must be at least 6 characters long.");
+        return;
+    }
+
+    if (!isValidEmail(object.email)) {
+        Alert.error("Please enter a valid email address.");
+        return;
+    }
+
+    if (!isValidContact(object.contact)) {
+        Alert.error("Please enter a valid contact number.");
+        return;
+    }
 
     try {
         const response = await registerAdmin(object);
@@ -596,6 +644,18 @@ $(document).on('click', '#btnSubmitCategory', async function (e) {
 
     const form = $('#categoryForm')[0];
 
+    if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+    }
+
+    const imageInput = $('#categoryImageInput')[0];
+
+    if (imageInput && imageInput.files.length === 0) {
+        Alert.error("Please select a category image.");
+        return;
+    }
+
     try {
         const response = await addCategory(form);
 
@@ -653,6 +713,11 @@ $(document).on('change', '#categoryImageInput', function () {
 
 // Set status as inactive
 window.handleDeleteCategory = function (categoryId) {
+    if (!categoryId) {
+        Alert.error("Invalid category selected.");
+        return;
+    }
+
     Alert.confirm("Do you want to remove this category ?", async () => {
         try {
             const response = await removeCategory(categoryId);

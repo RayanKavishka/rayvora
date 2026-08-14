@@ -1,6 +1,7 @@
 import {router} from "../router.js";
 import {changePassword, getUserById, updateUser} from "../api.js";
 import {auth} from "../auth.js";
+import {isValidContact, isValidEmail} from "../util/regex.js";
 
 
 // Sales & Earnings
@@ -106,6 +107,33 @@ $(document).on('click', '#btnSaveSellerProfile', async function () {
         }
     };
 
+    if (!object.firstName || !object.lastName || !object.email || !object.contact) {
+        Alert.error("Please fill in all seller details.");
+        return;
+    }
+
+    if (!isValidEmail(object.email)) {
+        Alert.error("Please enter a valid email address.");
+        return;
+    }
+
+    if (!isValidContact(object.contact)) {
+        Alert.error("Please enter a valid contact number.");
+        return;
+    }
+
+    if (!object.addressDTO.fullName || !object.addressDTO.contact || !object.addressDTO.street ||
+        !object.addressDTO.city || !object.addressDTO.district || !object.addressDTO.province ||
+        !object.addressDTO.zipCode || !object.addressDTO.country) {
+        Alert.error("Please fill in all business address details.");
+        return;
+    }
+
+    if (!isValidContact(object.addressDTO.contact)) {
+        Alert.error("Please enter a valid business contact number.");
+        return;
+    }
+
     try {
         const response = await updateUser(object);
 
@@ -152,7 +180,7 @@ $(document).on('click', '#btnSaveSellerProfile', async function () {
 $(document).on('click', '#btnVerifyPassword', async function (e) {
     e.preventDefault();
 
-    if ($('#currentPassword').val() === "") {
+    if ($('#currentPassword').val() === "" || $('#newPassword').val() === "") {
         Alert.error("Enter your current & new password to save.");
         return;
     }
@@ -162,6 +190,16 @@ $(document).on('click', '#btnVerifyPassword', async function (e) {
         "currentPassword": $('#currentPassword').val().trim(),
         "newPassword": $('#newPassword').val().trim()
     };
+
+    if (object.newPassword.length < 8) {
+        Alert.error("New password must be at least 6 characters long.");
+        return;
+    }
+
+    if (object.newPassword === object.currentPassword) {
+        Alert.error("New password must be different from current password.");
+        return;
+    }
 
     try {
         console.log("before");

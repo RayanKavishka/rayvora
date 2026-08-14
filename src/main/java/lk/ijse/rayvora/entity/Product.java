@@ -46,11 +46,12 @@ public class Product {
     )
     private List<OrderProducts> orderProducts;
 
-    @OneToOne(
+    @OneToMany(
             mappedBy = "product",
-            cascade = CascadeType.ALL
+            cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY
     )
-    private Review review;
+    private List<Review> reviews;
 
     @OneToOne(
             mappedBy = "product",

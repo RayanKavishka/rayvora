@@ -17,7 +17,7 @@ public class OrdersDTO {
     private String trackingNumber;
     private LocalDateTime orderDate;
 
-    @DecimalMin(value = "0.00", message = "Discount amount cannot be negative")
+    @Min(value = 0, message = "Discount amount cannot be negative")
     private BigDecimal discountAmount;
 
     @NotNull(message = "Total amount is required")

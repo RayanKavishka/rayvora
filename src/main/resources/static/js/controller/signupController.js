@@ -1,5 +1,6 @@
 import {router} from "../router.js";
 import {signUpCustomer, signUpSeller} from "../api.js";
+import {isValidContact, isValidEmail} from "../util/regex.js";
 
 $(document).on('click', '#linkSignupCustomer', function() {
     router("signup-customer.html");
@@ -29,6 +30,26 @@ $(document).on('click', '#btnSubmitCustomerSignup', async function () {
         "email": $('#email').val().trim(),
         "contact": $('#contact').val().trim(),
     };
+
+    if (!object.username || !object.password || !object.firstName || !object.lastName || !object.email || !object.contact) {
+        Alert.error("Please fill in all fields.");
+        return;
+    }
+
+    if (object.password.length < 6) {
+        Alert.error("Password must be at least 6 characters long.");
+        return;
+    }
+
+    if (!isValidEmail(object.email)) {
+        Alert.error("Please enter a valid email address.");
+        return;
+    }
+
+    if (!isValidContact(object.contact)) {
+        Alert.error("Please enter a valid contact number.");
+        return;
+    }
 
     try {
         const response = await signUpCustomer(object);
@@ -92,6 +113,38 @@ $(document).on('click', '#btnSubmitSellerSignup', async function () {
             "country": $('#country').val().trim()
         }
     };
+
+    if (!object.username || !object.password || !object.firstName || !object.lastName || !object.email || !object.contact) {
+        Alert.error("Please fill in all fields.");
+        return;
+    }
+
+    if (object.password.length < 6) {
+        Alert.error("Password must be at least 6 characters long.");
+        return;
+    }
+
+    if (!isValidEmail(object.email)) {
+        Alert.error("Please enter a valid email address.");
+        return;
+    }
+
+    if (!isValidContact(object.contact)) {
+        Alert.error("Please enter a valid contact number.");
+        return;
+    }
+
+    if (!object.addressDTO.fullName || !object.addressDTO.contact || !object.addressDTO.street ||
+        !object.addressDTO.city || !object.addressDTO.district || !object.addressDTO.province ||
+        !object.addressDTO.zipCode || !object.addressDTO.country) {
+        Alert.error("Please fill in all business address details.");
+        return;
+    }
+
+    if (!isValidContact(object.addressDTO.contact)) {
+        Alert.error("Please enter a valid business contact number.");
+        return;
+    }
 
     try {
         const response = await signUpSeller(object);
