@@ -732,12 +732,13 @@ window.handleDeleteCategory = function (categoryId) {
 
             if (response.status === 0) {
                 Alert.success("Category is removed successfully!");
+                await loadAllCategories();
             }
 
         } catch (error) {
             Alert.error("Something went wrong. Please try again.");
         }
 
-        await loadAllCategories();
+
     });
 };

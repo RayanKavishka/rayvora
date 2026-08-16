@@ -12,10 +12,11 @@ public interface ProductService {
     void updateProduct(ProductDTO productDTO);
     void updateActiveStatus(long productId);
     ResponseProductDTO getProductById(long productId);
-    List<ResponseProductDTO> getProductBySellerAndCategoryName(Long sellerId, String categoryName);
+    Page<ResponseProductDTO> getProductBySellerAndCategoryName(int page, int size, Long sellerId, String categoryName);
     List<ResponseProductDTO> getLowStockProducts();
     Page<ResponseProductDTO> getAllProducts(int page, int size);
     Page<ResponseProductDTO> searchProductsByName(int page, int size, String productName);
+    Page<ResponseProductDTO> searchProductsByNameWithSeller(int page, int size, Long sellerId, String productName);
     Page<ResponseProductDTO> filterPriceAscOrDesc(int page, int size, String direction);
     Page<ResponseProductDTO> filterProducts(
         int page, int size,

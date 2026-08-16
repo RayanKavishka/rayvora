@@ -153,57 +153,6 @@ public class ProductServiceImpl implements ProductService {
             stock.setLowStockLimit(productDTO.getLowStockLimit());
             stockRepository.save(stock);
 
-
-            List<ProductImage> existingImages =
-                    productImageRepository.findByProductProductId(optionalProduct.get().getProductId());
-
-            for (ProductImage productImage : existingImages) {
-                String imageUrl = productImage.getImageUrl();
-                if (imageUrl != null) {
-                    Path oldImagePath = Paths.get(
-                            imageUrl.substring(1)
-                    );
-
-                    Files.deleteIfExists(oldImagePath);
-                }
-            }
-
-            productImageRepository.deleteByProduct(optionalProduct.get());
-
-            List<ProductImage> productImages = new ArrayList<>();
-            int imageCount = 0;
-            for (MultipartFile image : productDTO.getProductImages()) {
-                if (image != null && !image.isEmpty()) {
-                    imageCount += 1;
-
-                    String fileName = UUID.randomUUID() + getExtension(image.getOriginalFilename());
-                    Path uploadPath = Paths.get("uploads/images");
-
-                    Files.createDirectories(uploadPath);
-                    Path filePath = uploadPath.resolve(fileName);
-                    Files.copy(
-                            image.getInputStream(),
-                            filePath,
-                            StandardCopyOption.REPLACE_EXISTING
-                    );
-
-                    ProductImage productImage = new ProductImage();
-                    productImage.setImageUrl("/uploads/images/" + fileName);
-                    productImage.setProduct(optionalProduct.get());
-
-                    productImages.add(productImage);
-                }
-            }
-
-            productImageRepository.saveAll(productImages);
-
-            if (imageCount == 0) {
-                throw new RayvoraException(400, "Please upload image");
-            }
-
-        } catch (IOException e) {
-            throw new RayvoraException(500, "Failed to delete old product image");
-
         } catch (Exception e) {
             log.error("Error in updateProduct() : " + e.getMessage());
             throw e;
@@ -250,22 +199,23 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ResponseProductDTO> getProductBySellerAndCategoryName(Long sellerId, String categoryName) {
+    public Page<ResponseProductDTO> getProductBySellerAndCategoryName(int page, int size, Long sellerId, String categoryName) {
         log.info("Execute getProductByCategoryName() sellerId {}, categoryName {}", sellerId, categoryName);
         try {
             String passingCategoryName = categoryName;
-            if (categoryName.equalsIgnoreCase("ALL")) {
+            if (categoryName.equalsIgnoreCase("All")) {
                 passingCategoryName = "ALL";
             }
-            List<Product> products = productRepository.searchProductsBySellerAndCategoryName(sellerId, passingCategoryName);
 
-            List<ResponseProductDTO> categorizedProducts = new ArrayList<>();
-            for (Product product : products) {
-                ResponseProductDTO responseProductDTO = getResponseProductDTO(product);
-                categorizedProducts.add(responseProductDTO);
-            }
+            Pageable pageable = PageRequest.of(
+                    page,
+                    size,
+                    Sort.by(Sort.Direction.DESC, "createdAt")
+            );
 
-            return categorizedProducts;
+            Page<Product> products = productRepository.searchProductsBySellerAndCategoryName(sellerId, passingCategoryName, pageable);
+
+            return products.map(this::getResponseProductDTO);
 
         } catch (Exception e) {
             log.error("Error in getProductByCategoryName() : " + e.getMessage());
@@ -330,6 +280,27 @@ public class ProductServiceImpl implements ProductService {
 
         } catch (Exception e) {
             log.error("Error in searchProductsByName() : " + e.getMessage());
+            throw e;
+        }
+    }
+
+    @Override
+    public Page<ResponseProductDTO> searchProductsByNameWithSeller(int page, int size, Long sellerId, String productName) {
+        log.info("Execute searchProductsByNameWithSeller() sellerId {}, productName {}", sellerId, productName);
+        try {
+            Pageable pageable = PageRequest.of(
+                    page,
+                    size,
+                    Sort.by(Sort.Direction.DESC, "createdAt")
+            );
+
+            Page<Product> searchedProducts = productRepository
+                    .searchProductsByProductNameWithSeller(sellerId, productName, pageable);
+
+            return searchedProducts.map(this::getResponseProductDTO);
+
+        } catch (Exception e) {
+            log.error("Error in searchProductsByNameWithSeller() : " + e.getMessage());
             throw e;
         }
     }

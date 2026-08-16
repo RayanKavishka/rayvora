@@ -26,11 +26,18 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query(value = """
     SELECT p
     FROM Product p
+    WHERE p.stock.user.userId = ?1 AND p.productName LIKE %?2%  AND p.status = 'ACTIVE'
+    """)
+    Page<Product> searchProductsByProductNameWithSeller(Long sellerId, String productName,  Pageable pageable);
+
+    @Query(value = """
+    SELECT p
+    FROM Product p
     WHERE p.stock.user.userId = ?1
         AND (?2 = 'ALL' OR p.category.categoryName = ?2)
         AND p.status = 'ACTIVE'
     """)
-    List<Product> searchProductsBySellerAndCategoryName(Long sellerId, String categoryName);
+    Page<Product> searchProductsBySellerAndCategoryName(Long sellerId, String categoryName, Pageable pageable);
 
     @Query(value = """
     SELECT p

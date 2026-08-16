@@ -19,7 +19,7 @@ public class ProductDTO {
     private String productName;
 
     @NotBlank(message = "Description is required")
-    @Size(max = 500, message = "Description must not exceed 500 characters")
+    @Size(max = 255, message = "Description must not exceed 255 characters")
     private String description;
 
     @NotNull(message = "Unit price is required")

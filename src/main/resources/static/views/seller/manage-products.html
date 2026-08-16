@@ -23,9 +23,68 @@
         </div>
 
         <!-- ==================================================================== -->
+        <!-- All Products (grouped by category, paginated — 4 columns x 2 rows = 8 per page) -->
+        <!-- ==================================================================== -->
+        <div class="data-table-card" style="margin-bottom: 2rem;">
+            <div class="section-header" style="margin-bottom: 1.25rem; flex-wrap: wrap; gap: 1rem;">
+                <h3 style="font-size: 1.1rem; font-weight: 800;"><i class="fa-solid fa-grip" style="color: var(--c-primary-dark); margin-right: 0.4rem;"></i>All Products</h3>
+                <div class="section-toolbar">
+                    <div class="input-with-icon toolbar-search">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" id="productsSearchInput" placeholder="Type product name">
+                    </div>
+                    <button type="button" class="refresh-btn" id="productsRefreshBtn" title="Refresh products">
+                        <i class="fa-solid fa-rotate-right"></i>
+                    </button>
+
+                    <div class="input-with-icon" style="min-width: 190px; max-width: 300px;">
+                        <i class="fa-solid fa-filter"></i>
+                        <select id="productCategoryFilter">
+
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="category-cards-grid products-page-grid" id="productsGrid" data-current-page="1">
+
+
+            </div>
+
+            <!-- Pagination controls: your JS reads data-target to know which grid to page -->
+            <div class="pagination-controls" id="productsPagination" data-target="productsGrid">
+                <button type="button" class="pagination-arrow-btn" id="productsPrevBtn" disabled aria-label="Previous page">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </button>
+                <div id="productsPageNumbers" class="pagination-pill">
+                    <span class="pagination-page active" data-page="1">1</span>
+                </div>
+                <button type="button" class="pagination-arrow-btn" id="productsNextBtn" aria-label="Next page">
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- ==================================================================== -->
+        <!-- Low Stock Products (paginated — 4 columns x 2 rows = 8 per page) -->
+        <!-- ==================================================================== -->
+        <div class="data-table-card">
+            <div class="section-header" style="margin-bottom: 1.25rem; flex-wrap: wrap; gap: 1rem;">
+                <h3 style="font-size: 1.1rem; font-weight: 800;">
+                    <i class="fa-solid fa-triangle-exclamation" style="color: var(--c-orange); margin-right: 0.4rem;"></i>Low Stock Products
+                </h3>
+            </div>
+
+            <div class="category-cards-grid products-page-grid" id="lowStockProductsGrid" data-current-page="1">
+
+            </div>
+
+        </div>
+
+        <!-- ==================================================================== -->
         <!-- Add / Update Product Form (hidden by default — toggle display:none/block from JS) -->
         <!-- ==================================================================== -->
-        <div class="data-table-card" id="productFormCard" style="margin-bottom: 2rem;">
+        <div class="data-table-card" id="productFormCard" style="margin-top: 2rem">
             <div class="section-header" style="margin-bottom: 1.25rem;">
                 <h3 style="font-size: 1.1rem; font-weight: 800;" id="productFormTitle">
                     <i class="fa-solid fa-square-plus" style="color: var(--c-primary-dark); margin-right: 0.4rem;"></i>Add New Product
@@ -40,12 +99,7 @@
                     <div class="input-with-icon">
                         <i class="fa-solid fa-layer-group"></i>
                         <select id="productFormCategory" name="categoryId" required>
-                            <option value="" disabled selected>Select a category</option>
-                            <option value="electronics">Electronics</option>
-                            <option value="fashion">Fashion & Apparel</option>
-                            <option value="home">Home & Living</option>
-                            <option value="beauty">Beauty & Health</option>
-                            <option value="gaming">Gaming & Audio</option>
+
                         </select>
                     </div>
                 </div>
@@ -56,7 +110,7 @@
                         <label for="productFormId">Product ID</label>
                         <div class="input-with-icon">
                             <i class="fa-solid fa-hashtag"></i>
-                            <input type="text" id="productFormId" name="productId" placeholder="Auto-generated" disabled>
+                            <input type="text" id="productFormId" name="productId" placeholder="Auto-generated" readonly>
                         </div>
                     </div>
 
@@ -99,50 +153,6 @@
                     </div>
                 </div>
 
-                <!-- Product Images (multiple, with primary image selection) -->
-                <div class="form-group">
-                    <label for="productImagesInput">Product Images</label>
-                    <label class="file-upload-box" for="productImagesInput" id="productImagesUploadLabel">
-                        <input type="file" id="productImagesInput" name="images" accept="image/*" multiple hidden>
-                        <div class="file-upload-placeholder" id="productImagesPlaceholder">
-                            <i class="fa-solid fa-images"></i>
-                            <span>Click to upload product images</span>
-                            <small>PNG or JPG, up to 5MB each — select multiple images</small>
-                        </div>
-                    </label>
-
-                    <!-- Uploaded images preview — each has a "Primary" radio to mark the main listing image -->
-                    <div id="productImagesPreviewGrid" style="display: flex; flex-wrap: wrap; gap: 0.85rem; margin-top: 0.85rem;">
-                        <div class="product-image-thumb" style="position: relative; width: 92px;">
-                            <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=200&q=80" alt="Preview 1" style="width: 92px; height: 92px; border-radius: 10px; object-fit: cover; border: 2px solid var(--c-orange);">
-                            <button type="button" class="remove-image-btn" title="Remove image">
-                                <i class="fa-solid fa-xmark"></i>
-                            </button>
-                            <label style="display: flex; align-items: center; gap: 0.3rem; font-size: 0.72rem; margin-top: 0.35rem; cursor: pointer;">
-                                <input type="radio" name="primaryImage" value="0" checked> Primary
-                            </label>
-                        </div>
-                        <div class="product-image-thumb" style="position: relative; width: 92px;">
-                            <img src="https://images.unsplash.com/photo-1546868871-7041f2a55e12?auto=format&fit=crop&w=200&q=80" alt="Preview 2" style="width: 92px; height: 92px; border-radius: 10px; object-fit: cover;">
-                            <button type="button" class="remove-image-btn" title="Remove image">
-                                <i class="fa-solid fa-xmark"></i>
-                            </button>
-                            <label style="display: flex; align-items: center; gap: 0.3rem; font-size: 0.72rem; margin-top: 0.35rem; cursor: pointer;">
-                                <input type="radio" name="primaryImage" value="1"> Primary
-                            </label>
-                        </div>
-                        <div class="product-image-thumb" style="position: relative; width: 92px;">
-                            <img src="https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&w=200&q=80" alt="Preview 3" style="width: 92px; height: 92px; border-radius: 10px; object-fit: cover;">
-                            <button type="button" class="remove-image-btn" title="Remove image">
-                                <i class="fa-solid fa-xmark"></i>
-                            </button>
-                            <label style="display: flex; align-items: center; gap: 0.3rem; font-size: 0.72rem; margin-top: 0.35rem; cursor: pointer;">
-                                <input type="radio" name="primaryImage" value="2"> Primary
-                            </label>
-                        </div>
-                    </div>
-                </div>
-
                 <div class="form-grid-2col">
                     <!-- Quantity -->
                     <div class="form-group">
@@ -163,9 +173,27 @@
                     </div>
                 </div>
 
+                <!-- Product Images (multiple) -->
+                <div class="form-group">
+                    <label for="productImagesInput">Product Images</label>
+                    <label class="file-upload-box" for="productImagesInput" id="productImagesUploadLabel">
+                        <input type="file" id="productImagesInput" name="productImages" accept="image/*" multiple hidden>
+                        <div class="file-upload-placeholder" id="productImagesPlaceholder">
+                            <i class="fa-solid fa-images"></i>
+                            <span>Click to upload product images</span>
+                            <small>PNG or JPG, up to 5MB each — select multiple images</small>
+                        </div>
+                    </label>
+
+                    <!-- Uploaded images preview (primary-image selector removed — first image uploaded is used as the listing thumbnail) -->
+                    <div id="productImagesPreviewGrid" style="display: flex; flex-wrap: wrap; gap: 0.85rem; margin-top: 0.85rem;">
+
+                    </div>
+                </div>
+
                 <div style="display: flex; gap: 0.75rem;">
                     <button type="button" class="btn btn-primary btn-block" id="btnSubmitProduct">
-                        <i class="fa-solid fa-floppy-disk"></i> Save Product
+                        Save Product
                     </button>
                     <button type="button" class="btn btn-outline btn-block" id="btnCancelProductForm">
                         Cancel
@@ -174,148 +202,6 @@
             </form>
 
             <p id="productFormError" class="auth-error-msg"></p>
-        </div>
-
-        <!-- ==================================================================== -->
-        <!-- All Products (grouped by category) -->
-        <!-- ==================================================================== -->
-        <div class="data-table-card" style="margin-bottom: 2rem;">
-            <div class="section-header" style="margin-bottom: 1.25rem; flex-wrap: wrap; gap: 1rem;">
-                <h3 style="font-size: 1.1rem; font-weight: 800;"><i class="fa-solid fa-grip" style="color: var(--c-primary-dark); margin-right: 0.4rem;"></i>All Products</h3>
-                <div class="input-with-icon" style="min-width: 220px; max-width: 220px;">
-                    <i class="fa-solid fa-filter"></i>
-                    <select id="productCategoryFilter">
-                        <option value="all">All Categories</option>
-                        <option value="electronics">Electronics</option>
-                        <option value="fashion">Fashion & Apparel</option>
-                        <option value="home">Home & Living</option>
-                        <option value="beauty">Beauty & Health</option>
-                        <option value="gaming">Gaming & Audio</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="category-cards-grid scroll-pane" id="productsGrid">
-                <!-- Product Card -->
-                <div class="category-card" data-product-id="P-20194" data-category="gaming">
-                    <div class="category-card-image">
-                        <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80" alt="Rayvora SonicPro Headphones">
-                    </div>
-                    <div class="category-card-body">
-                        <h4 class="category-card-title">Rayvora SonicPro Headphones</h4>
-                        <p class="category-card-desc">Over-ear wireless headphones with active noise cancellation and 40-hour battery life.</p>
-                        <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.4rem;">
-                            Product ID: P-20194 &nbsp;•&nbsp; Brand: Rayvora
-                        </p>
-                        <p style="font-size: 0.9rem; font-weight: 800;">
-                            LKR 26,990 &nbsp;<span style="font-weight: 600; color: var(--text-muted); font-size: 0.8rem;">| Qty: 42</span>
-                        </p>
-                    </div>
-                    <div class="category-card-actions">
-                        <button type="button" class="btn btn-sm btn-outline btn-update-product"><i class="fa-solid fa-pen"></i> Update</button>
-                        <button type="button" class="btn btn-sm btn-orange btn-delete-product"><i class="fa-solid fa-trash"></i> Delete</button>
-                    </div>
-                </div>
-
-                <!-- Product Card -->
-                <div class="category-card" data-product-id="P-20255" data-category="fashion">
-                    <div class="category-card-image">
-                        <img src="https://images.unsplash.com/photo-1560343090-f0409e92791a?auto=format&fit=crop&w=600&q=80" alt="Leather Sneaker Footwear">
-                    </div>
-                    <div class="category-card-body">
-                        <h4 class="category-card-title">Leather Sneaker Footwear</h4>
-                        <p class="category-card-desc">Premium genuine leather sneakers with cushioned insole, available in multiple sizes.</p>
-                        <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.4rem;">
-                            Product ID: P-20255 &nbsp;•&nbsp; Brand: Rayvora Footwear
-                        </p>
-                        <p style="font-size: 0.9rem; font-weight: 800;">
-                            LKR 18,750 &nbsp;<span style="font-weight: 600; color: var(--text-muted); font-size: 0.8rem;">| Qty: 24</span>
-                        </p>
-                    </div>
-                    <div class="category-card-actions">
-                        <button type="button" class="btn btn-sm btn-outline btn-update-product"><i class="fa-solid fa-pen"></i> Update</button>
-                        <button type="button" class="btn btn-sm btn-orange btn-delete-product"><i class="fa-solid fa-trash"></i> Delete</button>
-                    </div>
-                </div>
-
-                <!-- Product Card -->
-                <div class="category-card" data-product-id="P-20267" data-category="fashion">
-                    <div class="category-card-image">
-                        <img src="https://images.unsplash.com/photo-1608231387042-66d1773070a5?auto=format&fit=crop&w=600&q=80" alt="Puma Street Runner Shoes">
-                    </div>
-                    <div class="category-card-body">
-                        <h4 class="category-card-title">Puma Street Runner Shoes</h4>
-                        <p class="category-card-desc">Lightweight running shoes with breathable mesh upper, ideal for daily training.</p>
-                        <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.4rem;">
-                            Product ID: P-20267 &nbsp;•&nbsp; Brand: Puma
-                        </p>
-                        <p style="font-size: 0.9rem; font-weight: 800;">
-                            LKR 21,300 &nbsp;<span style="font-weight: 600; color: var(--text-muted); font-size: 0.8rem;">| Qty: 15</span>
-                        </p>
-                    </div>
-                    <div class="category-card-actions">
-                        <button type="button" class="btn btn-sm btn-outline btn-update-product"><i class="fa-solid fa-pen"></i> Update</button>
-                        <button type="button" class="btn btn-sm btn-orange btn-delete-product"><i class="fa-solid fa-trash"></i> Delete</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- ==================================================================== -->
-        <!-- Low Stock Products -->
-        <!-- ==================================================================== -->
-        <div class="data-table-card">
-            <div class="section-header" style="margin-bottom: 1.25rem;">
-                <h3 style="font-size: 1.1rem; font-weight: 800;">
-                    <i class="fa-solid fa-triangle-exclamation" style="color: var(--c-orange); margin-right: 0.4rem;"></i>Low Stock Products
-                </h3>
-            </div>
-
-            <div class="category-cards-grid scroll-pane" id="lowStockProductsGrid" style="max-height: 420px;">
-                <!-- Low Stock Product Card -->
-                <div class="category-card" data-product-id="P-20211" data-category="electronics" style="border: 1.5px solid var(--c-orange);">
-                    <div class="category-card-image" style="position: relative;">
-                        <img src="https://images.unsplash.com/photo-1546868871-7041f2a55e12?auto=format&fit=crop&w=600&q=80" alt="Smart Watch Series 9">
-                        <span class="badge badge-orange" style="position: absolute; top: 0.6rem; left: 0.6rem;">Low Stock</span>
-                    </div>
-                    <div class="category-card-body">
-                        <h4 class="category-card-title">Smart Watch Series 9</h4>
-                        <p class="category-card-desc">Fitness tracking smartwatch with AMOLED display, heart-rate & SpO2 monitoring.</p>
-                        <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.4rem;">
-                            Product ID: P-20211 &nbsp;•&nbsp; Brand: Rayvora
-                        </p>
-                        <p style="font-size: 0.9rem; font-weight: 800;">
-                            LKR 52,425 &nbsp;<span style="font-weight: 600; color: var(--c-orange); font-size: 0.8rem;">| Qty: 8 (Limit: 10)</span>
-                        </p>
-                    </div>
-                    <div class="category-card-actions">
-                        <button type="button" class="btn btn-sm btn-outline btn-update-product"><i class="fa-solid fa-pen"></i> Update</button>
-                        <button type="button" class="btn btn-sm btn-orange btn-delete-product"><i class="fa-solid fa-trash"></i> Delete</button>
-                    </div>
-                </div>
-
-                <!-- Low Stock Product Card -->
-                <div class="category-card" data-product-id="P-20233" data-category="electronics" style="border: 1.5px solid var(--c-orange);">
-                    <div class="category-card-image" style="position: relative;">
-                        <img src="https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&w=600&q=80" alt="Ergonomic Wireless Mouse">
-                        <span class="badge" style="position: absolute; top: 0.6rem; left: 0.6rem; background-color: var(--c-brown); color: #FFF;">Out of Stock</span>
-                    </div>
-                    <div class="category-card-body">
-                        <h4 class="category-card-title">Ergonomic Wireless Mouse</h4>
-                        <p class="category-card-desc">Silent-click wireless mouse with adjustable DPI and ergonomic grip design.</p>
-                        <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.4rem;">
-                            Product ID: P-20233 &nbsp;•&nbsp; Brand: Rayvora
-                        </p>
-                        <p style="font-size: 0.9rem; font-weight: 800;">
-                            LKR 13,500 &nbsp;<span style="font-weight: 600; color: var(--c-orange); font-size: 0.8rem;">| Qty: 0 (Limit: 10)</span>
-                        </p>
-                    </div>
-                    <div class="category-card-actions">
-                        <button type="button" class="btn btn-sm btn-outline btn-update-product"><i class="fa-solid fa-pen"></i> Update</button>
-                        <button type="button" class="btn btn-sm btn-orange btn-delete-product"><i class="fa-solid fa-trash"></i> Delete</button>
-                    </div>
-                </div>
-            </div>
         </div>
     </main>
 </div>

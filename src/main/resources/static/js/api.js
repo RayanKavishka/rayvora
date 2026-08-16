@@ -52,7 +52,7 @@ const registerAdmin = (object) => {
 };
 
 const getAllUsers = (role) => {
-    const queryParam = $.param({
+    let queryParam = $.param({
         "role": role
     });
 
@@ -67,7 +67,7 @@ const getAllUsers = (role) => {
 };
 
 const searchUserByEmail = (role, email) => {
-    const queryParam = $.param({
+    let queryParam = $.param({
         "role": role,
         "email": email
     });
@@ -134,7 +134,7 @@ const getAllCategories = () => {
 
 
 const addCategory = (form) => {
-    const formData = new FormData(form);
+    let formData = new FormData(form);
 
     return $.ajax({
         url: API_BASE_URL + "/categories",
@@ -162,6 +162,134 @@ const removeCategory = (categoryId) => {
 
 
 
+// Products
+const saveProduct = (form) => {
+    let formData = new FormData(form);
+    formData.append("userId", auth.getUserId());
+
+    return $.ajax({
+        url: API_BASE_URL + "/products",
+        type: 'POST',
+        contentType: false,
+        processData: false,
+        data: formData,
+        headers: {
+            'Authorization': 'Bearer ' + auth.getJWT()
+        }
+    });
+};
+
+
+const updateProduct = (form) => {
+    let formData = new FormData(form);
+    formData.append("userId", auth.getUserId());
+
+    return $.ajax({
+        url: API_BASE_URL + "/products",
+        type: 'PUT',
+        contentType: false,
+        processData: false,
+        data: formData,
+        headers: {
+            'Authorization': 'Bearer ' + auth.getJWT()
+        }
+    });
+};
+
+
+const getProductsBySellerAndCategory = (sellerId, categoryName, page, size) => {
+    let queryParam = $.param({
+        "page": page,
+        "size": size
+    });
+
+    return $.ajax({
+        url: API_BASE_URL + `/products/${sellerId}/${categoryName}?`+queryParam,
+        type: 'GET',
+        contentType: 'application/json',
+        headers: {
+            'Authorization': 'Bearer ' + auth.getJWT()
+        }
+    });
+};
+
+
+const getLowStockProducts = () => {
+    return $.ajax({
+        url: API_BASE_URL + "/products",
+        type: 'GET',
+        contentType: 'appication/json',
+        headers: {
+            'Authorization': 'Bearer ' + auth.getJWT()
+        }
+    });
+};
+
+
+const getProductById = (productId) => {
+    return $.ajax({
+        url: API_BASE_URL + "/products/"+productId,
+        type: 'GET',
+        contentType: 'application/json',
+        headers: {
+            'Authorization': 'Bearer ' + auth.getJWT()
+        }
+    });
+};
+
+
+const removeProduct = (productId) => {
+    return $.ajax({
+        url: API_BASE_URL + "/products/"+productId,
+        type: 'DELETE',
+        contentType: 'application/json',
+        headers: {
+            'Authorization': 'Bearer ' + auth.getJWT()
+        }
+    });
+};
+
+
+const getSearchedProductsForSeller = (page, size, sellerId, productName) => {
+    const queryParam = $.param({
+        "page": page,
+        "size": size,
+        "sellerId": sellerId,
+        "productName": productName
+    });
+
+    return $.ajax({
+        url: API_BASE_URL + "/products/search-products-seller?"+queryParam,
+        type: 'GET',
+        contentType: 'application/json',
+        headers: {
+            'Authorization': 'Bearer ' + auth.getJWT()
+        }
+    });
+};
+
+
+const getSearchedProducts = (page, size, productName) => {
+    const queryParam = $.param({
+        "page": page,
+        "size": size,
+        "productName": productName
+    });
+
+    return $.ajax({
+        url: API_BASE_URL + "/products/search-products?"+queryParam,
+        type: 'GET',
+        contentType: 'application/json',
+        headers: {
+            'Authorization': 'Bearer ' + auth.getJWT()
+        }
+    });
+};
+
+
+
+
+
 
 
 export {
@@ -177,5 +305,13 @@ export {
     getAllCategories,
     addCategory,
     removeCategory,
-    changePassword
+    changePassword,
+    saveProduct,
+    updateProduct,
+    getProductsBySellerAndCategory,
+    getLowStockProducts,
+    getProductById,
+    removeProduct,
+    getSearchedProductsForSeller,
+    getSearchedProducts
 }

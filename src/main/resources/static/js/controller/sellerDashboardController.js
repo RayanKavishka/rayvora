@@ -1,5 +1,12 @@
 import {router} from "../router.js";
-import {changePassword, getUserById, updateUser} from "../api.js";
+import {
+    changePassword,
+    getAllCategories, getProductById,
+    getProductsBySellerAndCategory,
+    getUserById,
+    saveProduct, removeProduct, updateProduct,
+    updateUser, getLowStockProducts, getSearchedProductsForSeller
+} from "../api.js";
 import {auth} from "../auth.js";
 import {isValidContact, isValidEmail} from "../util/regex.js";
 
@@ -15,11 +22,575 @@ $(document).on('click', '#saleAndEarnings', function (e) {
 // ======================================================================================================================
 
 
+let currentProductPage = 0;
+let totalProductPages = 0;
+const PRODUCTS_PER_PAGE = 8;
+
+let categoryBasedCurrentPage = 0;
+let categoryBasedTotalProductPages = 0;
+
+let searchedCurrentPage = 0;
+let searchedTotalProductPages = 0;
+
+
 // Manage Products
-$(document).on('click', '#manageProducts', function (e) {
+$(document).on('click', '#manageProducts', async function (e) {
     e.preventDefault();
 
-    router("seller/manage-products.html");
+    await router("seller/manage-products.html");
+
+    // Fills categories into selection
+    $('#productFormCategory').empty();
+
+    try {
+        const response = await getAllCategories();
+
+        if (response.status === 500) {
+            Alert.error(response.message);
+        }
+
+        if (response.status === 0) {
+            let html = `<option value="" disabled selected>Select a category</option>`;
+
+            response.body.forEach((category) => {
+                html += `
+                    <option value="${category.categoryId}">${category.categoryName}</option>
+                `;
+            });
+
+            $('#productFormCategory').html(html);
+        }
+
+    } catch (error) {
+        Alert.error("Something went wrong. Please try again.");
+    }
+
+
+    // Load category filter selection
+    $('#productCategoryFilter').empty();
+    try {
+        const response = await getAllCategories();
+
+        if (response.status === 500) {
+            Alert.error(response.message);
+        }
+
+        if (response.status === 0) {
+            let html = `<option value="All" selected>All Categories</option>`;
+
+            response.body.forEach((category) => {
+                html += `
+                    <option value="${category.categoryName}">${category.categoryName}</option>
+                `;
+            });
+
+            $('#productCategoryFilter').html(html);
+        }
+
+    } catch (error) {
+        Alert.error("Something went wrong. Please try again.");
+    }
+
+    await loadProductsBySellerAndCategory();
+    await loadLowStockProducts();
+});
+
+
+// Load products when changes selection
+$(document).on('change', '#productCategoryFilter', async function () {
+    await loadProductsBySellerAndCategory(0);
+});
+
+const getSelectedCategory = () => {
+    if (!$('#productCategoryFilter').val().startsWith("All")) {
+        return $('#productCategoryFilter').val();
+
+    }
+    return "All";
+};
+
+
+// Load products by category for relevant seller
+const loadProductsBySellerAndCategory = async (page = 0) => {
+    try {
+
+        const sellerId = auth.getUserId();
+        const categoryName = getSelectedCategory();
+
+        const response = await getProductsBySellerAndCategory(
+                sellerId,
+                categoryName,
+                page,
+                PRODUCTS_PER_PAGE
+            );
+
+        if (response.status === 404) {
+            Alert.error(response.message);
+        }
+
+        if (response.status === 500) {
+            Alert.error(response.message);
+        }
+
+        if (response.status === 0) {
+            const pageData = response.body;
+
+            categoryBasedCurrentPage = pageData.number;
+            categoryBasedTotalProductPages = pageData.totalPages;
+
+            currentProductPage = categoryBasedCurrentPage;
+            totalProductPages = categoryBasedTotalProductPages;
+
+            loadProducts(pageData.content);
+            loadProductPagination();
+        }
+
+    } catch (error) {
+        Alert.error("Something went wrong. Please try again");
+    }
+};
+
+const loadProducts = (products) => {
+    const productsGrid = $("#productsGrid");
+
+    if (!products || products.length === 0) {
+        productsGrid.html(`
+            <div class="no-products">
+                <p>No products found.</p>
+            </div>
+        `);
+        return;
+    }
+
+    let html = "";
+    products.forEach((product) => {
+        html += `
+            <div class="category-card">
+                <div class="category-card-image">
+                    <img src="${product.imageUrls[0]}" alt="Rayvora SonicPro Headphones">
+                </div>
+                <div class="category-card-body">
+                    <div class="category-card-meta-row">
+                        <span class="product-brand-badge">${product.brand}</span>
+                        <span class="product-sold-count"><i class="fa-solid fa-fire"></i>Sold ${product.soldCount}+</span>
+                    </div>
+                    <h4 class="category-card-title">${product.productName}</h4>
+                    <p class="category-card-desc">${product.description}</p>
+                    <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.4rem;">
+                        Product ID: ${product.productId}
+                    </p>
+                    <p style="font-size: 0.9rem; font-weight: 800;">
+                        LKR ${product.unitPrice} &nbsp;
+                        <span style="font-weight: 600; color: var(--text-muted); font-size: 0.8rem;">
+                            | Qty: ${product.quantity}
+                        </span>
+                    </p>
+                </div>
+                <div class="category-card-actions">
+                    <button onclick="loadProductIntoForm(${product.productId})" type="button" class="btn btn-sm btn-outline btn-update-product">
+                        <i class="fa-solid fa-pen"></i> Update
+                    </button>
+                    <button onclick="removeProduct(${product.productId})" type="button" class="btn btn-sm btn-orange btn-delete-product">
+                        <i class="fa-solid fa-trash"></i> Delete
+                    </button>
+                </div>
+            </div>
+        `;
+    });
+
+    productsGrid.html(html);
+};
+
+const loadProductPagination = () => {
+    let html = "";
+
+    for (let i = (currentProductPage - 1); i < currentProductPage + 2; i++) {
+        if (i !== -1) {
+            html += `
+            <span class="pagination-page ${i === currentProductPage ? "active" : ""}">
+                ${i + 1}
+            </span>
+        `;
+        }
+
+    }
+    $("#productsPageNumbers").html(html);
+
+    $("#productsPrevBtn").prop(
+        "disabled",
+        currentProductPage === 0
+    );
+
+    $("#productsNextBtn").prop(
+        "disabled",
+        currentProductPage === totalProductPages - 1
+    );
+};
+
+$(document).on("click", "#productsPrevBtn", async function () {
+    if (currentProductPage > 0) {
+        await loadProductsBySellerAndCategory(currentProductPage - 1);
+    }
+});
+
+$(document).on("click", "#productsNextBtn", async function () {
+    console.log("clicked");
+
+    if (currentProductPage < totalProductPages - 1) {
+        await loadProductsBySellerAndCategory(currentProductPage + 1);
+    }
+});
+
+
+// Load low stock products
+const loadLowStockProducts = async () => {
+
+    const response = await getLowStockProducts();
+
+    if (response.status === 500) {
+        Alert.error(response.message);
+    }
+
+    if (response.status === 0) {
+        $('#lowStockProductsGrid').html('');
+
+        const products = response.body;
+
+        let html = "";
+        products.forEach((product) => {
+
+            let classLabel = (product.quantity === 0) ? "badge badge-brown" : "badge badge-orange";
+            let valueOfLabel = (product.quantity === 0) ? "OUT OF STOCK" : "LOW STOCK";
+
+            html += `
+                <div class="category-card" data-product-id="P-20211" data-category="electronics" data-page="1" style="border: 1.5px solid var(--c-orange);">
+                    <div class="category-card-image" style="position: relative;">
+                        <img src="${product.imageUrls[0]}" alt="Smart Watch Series 9">
+                        <span class="${classLabel}" style="position: absolute; top: 0.6rem; left: 0.6rem;">${valueOfLabel}</span>
+                    </div>
+                    <div class="category-card-body">
+                        <div class="category-card-meta-row">
+                            <span class="product-brand-badge">${product.brand}</span>
+                            <span class="product-sold-count"><i class="fa-solid fa-fire"></i> Sold ${product.soldCount}+</span>
+                        </div>
+                        <h4 class="category-card-title">${product.productName}</h4>
+                        <p class="category-card-desc">${product.description}</p>
+                        <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.4rem;">Product ID: ${product.productId}</p>
+                        <p style="font-size: 0.9rem; font-weight: 800;">
+                            LKR ${product.unitPrice} &nbsp;
+                            <span style="font-weight: 600; color: var(--c-orange); font-size: 0.8rem;">
+                                | Qty: ${product.quantity} (Limit: ${product.lowStockLimit})
+                            </span>
+                        </p>
+                    </div>
+                    <div class="category-card-actions">
+                        <button onclick="loadProductIntoForm(${product.productId})" type="button" class="btn btn-sm btn-outline btn-update-product"><i class="fa-solid fa-pen"></i> Update</button>
+                        <button onclick="removeProduct(${product.productId})" type="button" class="btn btn-sm btn-orange btn-delete-product"><i class="fa-solid fa-trash"></i> Delete</button>
+                    </div>
+                </div>
+            `;
+
+            if (product.lowStockLimit > 0) {
+                $('#labelOfStocks').addClass("");
+            }
+        });
+
+        $('#lowStockProductsGrid').html(html);
+    }
+};
+
+
+// Load product into form for update
+window.loadProductIntoForm = async function (productId) {
+    const response = await getProductById(productId);
+
+    if (response.status === 404) {
+        Alert.error(response.message);
+    }
+
+    if (response.status === 500) {
+        Alert.error(response.message);
+    }
+
+    if (response.status === 0) {
+        const product = response.body;
+
+
+        let category = $('#productFormCategory option').filter((index, option) => {
+            return $(option).text().trim() === product.categoryName;
+        });
+        $('#productFormCategory').val(category.val());
+
+        $('#productFormId').val(product.productId);
+        $('#productFormName').val(product.productName);
+        $('#productFormDescription').val(product.description);
+        $('#productFormPrice').val(product.unitPrice);
+        $('#productFormBrand').val(product.brand);
+        $('#productFormQuantity').val(product.quantity);
+        $('#productFormLowStockLimit').val(product.lowStockLimit);
+
+        $('#productImagesInput').prop('disabled', true);
+
+        $('#btnSubmitProduct')
+            .text("Update Product")
+            .css({background: "var(--c-sky)"});
+    }
+}
+
+
+// Remove product
+window.removeProduct = async (productId) => {
+    Alert.confirm("Do you want to remove this product ?", async () => {
+        try {
+            const response = await removeProduct(productId);
+
+            if (response.status === 404) {
+                Alert.error(response.message);
+            }
+
+            if (response.status === 500) {
+                Alert.error(response.message);
+            }
+
+            if (response.status === 0) {
+                Alert.success("Category is removed successfully!");
+                await loadProductsBySellerAndCategory(currentProductPage);
+                await loadLowStockProducts();
+            }
+
+        } catch (error) {
+            Alert.error("Something went wrong. Please try again.");
+        }
+    });
+}
+
+
+// Save or Update product
+$(document).on('click', '#btnSubmitProduct', async function (e) {
+    e.preventDefault();
+
+    const buttonText = $('#btnSubmitProduct').text().trim();
+
+    if (buttonText === "Save Product") {
+
+        const form = $('#productForm')[0];
+
+        if (!form.checkValidity()) {
+            form.reportValidity();
+            return;
+        }
+
+        const response = await saveProduct(form);
+
+        if (response.status === 400) {
+            Alert.error(response.message);
+        }
+
+        if (response.status === 404) {
+            Alert.error(response.message);
+        }
+
+        if (response.status === 500) {
+            Alert.error(response.message);
+        }
+
+        if (response.status === 0) {
+            $('#productForm')[0].reset();
+
+            $('#productImagesPreviewGrid')
+                .html('')
+                .hide();
+            $('#file-upload-placeholder').show();
+
+            Alert.success("Product is saved successfully");
+            await loadProductsBySellerAndCategory(currentProductPage);
+        }
+    }
+
+    if (buttonText === "Update Product") {
+
+        const form = $('#productForm')[0];
+
+
+        if (!$('#productFormCategory').val()) {
+            Alert.error("Please select a category.");
+            return;
+        }
+
+        if (!$('#productFormName').val().trim()) {
+            Alert.error("Please enter product name.");
+            return;
+        }
+
+        if (!$('#productFormDescription').val().trim()) {
+            Alert.error("Please enter product description.");
+            return;
+        }
+
+        if (!$('#productFormPrice').val()) {
+            Alert.error("Please enter unit price.");
+            return;
+        }
+
+        if (!$('#productFormBrand').val().trim()) {
+            Alert.error("Please enter brand.");
+            return;
+        }
+
+        if (!$('#productFormQuantity').val()) {
+            Alert.error("Please enter quantity.");
+            return;
+        }
+
+        if (!$('#productFormLowStockLimit').val()) {
+            Alert.error("Please enter low stock limit.");
+            return;
+        }
+
+
+        const response = await updateProduct(form);
+
+        if (response.status === 400) {
+            Alert.error(response.message);
+        }
+
+        if (response.status === 404) {
+            Alert.error(response.message);
+        }
+
+        if (response.status === 500) {
+            Alert.error(response.message);
+        }
+
+        if (response.status === 0) {
+            $('#productForm')[0].reset();
+
+            $('#productImagesPreviewGrid')
+                .html('')
+                .hide();
+            $('#file-upload-placeholder').show();
+
+            $('#btnSubmitProduct')
+                .text("Save Product")
+                .css({background: "var(--c-primary)"});
+
+            $('#productImagesInput').prop('disabled', false);
+
+            Alert.success("Product is updated successfully");
+            await loadProductsBySellerAndCategory(currentProductPage);
+            await loadLowStockProducts();
+        }
+    }
+});
+
+
+// Handle cancel btn
+$(document).on('click', '#btnCancelProductForm', function (e) {
+    e.preventDefault();
+
+    if ($('#btnSubmitProduct') .text() === "Update Product") {
+        $('#btnSubmitProduct')
+            .text("Save Product")
+            .css({background: "var(--c-primary)"});
+
+        $('#productImagesInput').prop('disabled', false);
+    }
+
+    $('#productForm')[0].reset();
+    $('#productImagesPreviewGrid')
+        .html('')
+        .hide();
+});
+
+
+// Handle images preview
+$(document).on('change', '#productImagesInput', function (e) {
+    e.preventDefault();
+
+    let files = Array.from(this.files);
+
+    if (!files) {
+        $('#productImagesPreviewGrid').hide();
+        $('#file-upload-placeholder').show();
+        return;
+    }
+
+    files.forEach((file) => {
+        if (!file.type.startsWith('image/')) {
+            Alert.error("Please select only images.");
+            return;
+        }
+    });
+
+    let html = '';
+    files.forEach((image) => {
+        let imageUrl = URL.createObjectURL(image);
+
+        html += `
+            <div class="product-image-thumb" style="position: relative; width: 92px;">
+                <img src="${imageUrl}" alt="Preview" style="width: 92px; height: 92px; border-radius: 10px; object-fit: cover;">
+            </div>
+        `;
+    });
+    $('#productImagesPreviewGrid')
+        .html(html)
+        .show();
+    $('#file-upload-placeholder').hide();
+})
+
+
+// Handle search products in All products section
+let searchedProduct = '';
+$(document).on('input', '#productsSearchInput',function (e) {
+    e.preventDefault();
+
+    searchedProduct = $(this).val().trim();
+
+    if (searchedProduct === '') {
+        $("#productsGrid").html('');
+        return;
+    }
+
+    loadSearchedProducts(0);
+});
+
+const loadSearchedProducts = async (page = 0) => {
+    try {
+        const response = await getSearchedProductsForSeller(page, PRODUCTS_PER_PAGE, auth.getUserId(), searchedProduct);
+
+        if (response.status === 404) {
+            Alert.error(response.message);
+        }
+
+        if (response.status === 500) {
+            Alert.error(response.message);
+        }
+
+        if (response.status === 0) {
+            const pageData = response.body;
+
+            searchedCurrentPage = pageData.number;
+            searchedTotalProductPages = pageData.totalPages;
+
+            currentProductPage = searchedCurrentPage;
+            totalProductPages = searchedTotalProductPages;
+
+            loadProducts(pageData.content);
+            loadProductPagination();
+        }
+
+    } catch (error) {
+        Alert.error("Something went wrong. Please try again");
+    }
+};
+
+
+// Handle refresh button
+$(document).on('click', '#productsRefreshBtn', async function (e) {
+    e.preventDefault();
+
+    $('#productsSearchInput').val("");
+    await loadProductsBySellerAndCategory(0);
 });
 
 

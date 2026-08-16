@@ -50,6 +50,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/v1/products").hasRole("SELLER")
                         .requestMatchers(HttpMethod.GET,
                                 "/api/v1/products/*",
+                                "/api/v1/products/search-products-seller",
                                 "/api/v1/products/search-products",
                                 "/api/v1/products/filter-poducts/prices-direction",
                                 "/api/v1/products/filter-products"

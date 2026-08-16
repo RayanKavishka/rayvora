@@ -41,7 +41,6 @@ public class ProductController {
         );
     }
 
-
     // Only seller
     @DeleteMapping(value = "/{productId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public CommonResponse updateActiveStatus(@PathVariable long productId) {
@@ -54,10 +53,14 @@ public class ProductController {
 
     // Only seller
     @GetMapping(value = "/{sellerId}/{categoryName}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public CommonResponse getProductsBySellerAndCategory(@PathVariable long sellerId, @PathVariable String categoryName) {
+    public CommonResponse getProductsBySellerAndCategory(
+            @RequestParam(value = "page") int page,
+            @RequestParam(value = "size") int size,
+            @PathVariable long sellerId, @PathVariable String categoryName
+    ) {
         return new CommonResponse(
                 ResponseCode.OPERATION_SUCCESS,
-                productService.getProductBySellerAndCategoryName(sellerId, categoryName),
+                productService.getProductBySellerAndCategoryName(page, size, sellerId, categoryName),
                 ResponseMessage.SUCCESS_MESSAGE
         );
     }
@@ -68,6 +71,21 @@ public class ProductController {
         return new CommonResponse(
                 ResponseCode.OPERATION_SUCCESS,
                 productService.getLowStockProducts(),
+                ResponseMessage.SUCCESS_MESSAGE
+        );
+    }
+
+    // Only seller
+    @GetMapping(value = "/search-products-seller", produces = MediaType.APPLICATION_JSON_VALUE)
+    public CommonResponse searchProducts(
+            @RequestParam(value = "page") int page,
+            @RequestParam(value = "size") int size,
+            @RequestParam(value = "sellerId") long sellerId,
+            @RequestParam(value = "productName") String productName
+    ) {
+        return new CommonResponse(
+                ResponseCode.OPERATION_SUCCESS,
+                productService.searchProductsByNameWithSeller(page, size, sellerId, productName),
                 ResponseMessage.SUCCESS_MESSAGE
         );
     }
