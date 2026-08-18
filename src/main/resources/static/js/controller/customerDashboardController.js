@@ -4,8 +4,10 @@ import {
     getAllProducts,
     getSearchedProducts,
     filterProducts,
-    filterProductsByPriceDirection
+    filterProductsByPriceDirection,
+    getProductById
 } from "../api.js";
+import {checkRole} from "../app.js";
 
 
 
@@ -108,7 +110,7 @@ $(document).on("keypress", "#searchResultsInput", async function (e) {
 // Handle back button in searched results page
 $(document).on("click", "#btnSearchResultsBack", async function (e) {
     e.preventDefault();
-    await router("customer-dashboard.html");
+    await checkRole();
 });
 
 
@@ -298,7 +300,7 @@ const loadProducts = (products) => {
             : "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80";
 
         html += `
-            <div class="product-card">
+            <div class="product-card" data-product-id="${product.productId}">
                 <div class="product-thumb">
                     <img src="${thumbnail}" alt="${product.productName}">
                 </div>
@@ -454,4 +456,268 @@ $(document).on("click", "#sortHighToLowOption", async function (e) {
     $(this).addClass("active-sort");
 
     await loadSortedProducts(0, "DESC");
+});
+
+
+// Product Details Card Pane
+let pdImages = [];
+let pdCurrentImageIndex = 0;
+
+
+const injectProductDetailsModal = () => {
+    if ($("#productDetailsModal").length) {
+        return;
+    }
+
+    const modalHtml = `
+        <div class="modal-overlay" id="productDetailsModal">
+            <div class="product-details-modal-pane">
+                <button type="button" class="modal-close-btn" id="btnCloseProductDetails" aria-label="Cancel">
+                    <i class="fa-solid fa-xmark"></i> Cancel
+                </button>
+
+                <div class="product-details-modal-body">
+                    <!-- Image Carousel -->
+                    <div class="pd-carousel">
+                        <div class="pd-carousel-track" id="pdCarouselTrack"></div>
+                        <button type="button" class="pd-carousel-arrow pd-carousel-prev" id="pdCarouselPrev" aria-label="Previous image">
+                            <i class="fa-solid fa-chevron-left"></i>
+                        </button>
+                        <button type="button" class="pd-carousel-arrow pd-carousel-next" id="pdCarouselNext" aria-label="Next image">
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </button>
+                        <div class="pd-carousel-dots" id="pdCarouselDots"></div>
+                    </div>
+
+                    <!-- Product Info -->
+                    <div class="pd-info">
+                        <div class="pd-info-top-row">
+                            <span class="product-brand-badge" id="pdBrand"></span>
+                            <span class="pd-shop-name"><i class="fa-solid fa-store"></i> <span id="pdShopName"></span></span>
+                        </div>
+
+                        <h2 class="pd-title" id="pdProductName"></h2>
+
+                        <div class="pd-rating-row">
+                            <div class="rating-stars" id="pdStars"></div>
+                            <span class="rating-count" id="pdRatingCount"></span>
+                        </div>
+
+                        <div class="pd-price-row">
+                            <span class="current-price" id="pdUnitPrice"></span>
+                        </div>
+
+                        <div class="pd-meta-grid">
+                            <div class="pd-meta-item">
+                                <i class="fa-solid fa-layer-group"></i>
+                                <div>
+                                    <span class="pd-meta-label">Category</span>
+                                    <span class="pd-meta-value" id="pdCategoryName"></span>
+                                </div>
+                            </div>
+                            <div class="pd-meta-item">
+                                <i class="fa-solid fa-boxes-stacked"></i>
+                                <div>
+                                    <span class="pd-meta-label">Avl QTY</span>
+                                    <span class="pd-meta-value" id="pdQuantity"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="pd-description">
+                            <h4>Description</h4>
+                            <p id="pdDescription"></p>
+                        </div>
+
+                        <button type="button" class="add-cart-btn pd-add-cart-btn" id="pdAddCartBtn">
+                            <i class="fa-solid fa-cart-plus"></i> Add to Cart
+                        </button>
+
+                        <div class="pd-reviews-section">
+                            <h4>Customer Reviews</h4>
+                            <div id="pdReviewsList" class="pd-reviews-list"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+
+    $("body").append(modalHtml);
+};
+
+
+const renderPdCarousel = () => {
+    let trackHtml = "";
+    pdImages.forEach((image) => {
+        trackHtml += `<div class="pd-carousel-slide"><img src="${image}" alt="Product image"></div>`;
+    });
+    $("#pdCarouselTrack").html(trackHtml);
+
+    let dotsHtml = "";
+    pdImages.forEach((image, index) => {
+        dotsHtml += `<span class="pd-carousel-dot ${index === pdCurrentImageIndex ? "active" : ""}" data-index="${index}"></span>`;
+    });
+    $("#pdCarouselDots").html(dotsHtml);
+
+    const hasMultipleImages = pdImages.length > 1;
+    $("#pdCarouselPrev, #pdCarouselNext, #pdCarouselDots").toggleClass("pd-carousel-nav-hidden", !hasMultipleImages);
+
+    updatePdCarouselPosition();
+};
+
+
+const updatePdCarouselPosition = () => {
+    $("#pdCarouselTrack").css("transform", `translateX(-${pdCurrentImageIndex * 100}%)`);
+
+    $(".pd-carousel-dot").removeClass("active");
+    $(`.pd-carousel-dot[data-index="${pdCurrentImageIndex}"]`).addClass("active");
+};
+
+
+const renderPdReviews = (reviews) => {
+    if (!reviews || reviews.length === 0) {
+        $("#pdReviewsList").html(`<p class="pd-no-reviews">No reviews yet for this product.</p>`);
+        return;
+    }
+
+    let html = "";
+    reviews.forEach((review) => {
+        const reviewDate = review.createdAt ? new Date(review.createdAt).toLocaleDateString() : "";
+
+        html += `
+            <div class="pd-review-item">
+                <div class="pd-review-header">
+                    <div class="rating-stars">${buildRatingStarsHtml(review.rating)}</div>
+                    <span class="pd-review-date">${reviewDate}</span>
+                </div>
+                <p class="pd-review-comment">${review.comment}</p>
+            </div>
+        `;
+    });
+
+    $("#pdReviewsList").html(html);
+};
+
+
+const renderProductDetails = (product) => {
+    pdImages = (product.imageUrls && product.imageUrls.length > 0)
+        ? product.imageUrls
+        : ["https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=800&q=80"];
+    pdCurrentImageIndex = 0;
+
+    renderPdCarousel();
+
+    $("#pdBrand").text(product.brand);
+    $("#pdShopName").text(product.shopName);
+    $("#pdProductName").text(product.productName);
+    $("#pdUnitPrice").text(`LKR ${product.unitPrice}`);
+    $("#pdCategoryName").text(product.categoryName);
+    $("#pdQuantity").text(`${product.quantity} in stock`);
+    $("#pdDescription").text(product.description);
+
+    const averageRating = getAverageRating(product.reviews);
+    const reviewCount = product.reviews ? product.reviews.length : 0;
+
+    $("#pdStars").html(buildRatingStarsHtml(averageRating));
+    $("#pdRatingCount").text(
+        reviewCount
+            ? `(${averageRating.toFixed(1)}) &middot; ${reviewCount} review${reviewCount > 1 ? "s" : ""}`
+            : "No reviews yet"
+    );
+
+    renderPdReviews(product.reviews);
+};
+
+
+const closeProductDetailsModal = () => {
+    $("#productDetailsModal").removeClass("open");
+    $("body").removeClass("modal-open-lock");
+};
+
+
+const openProductDetailsModal = async (productId) => {
+    injectProductDetailsModal();
+
+    $("#productDetailsModal").addClass("open");
+    $("body").addClass("modal-open-lock");
+
+    $("#pdCarouselTrack").html(`<div class="pd-carousel-loading"><i class="fa-solid fa-spinner fa-spin"></i></div>`);
+    $("#pdCarouselDots").empty();
+    $("#pdProductName").text("Loading...");
+    $("#pdDescription, #pdBrand, #pdShopName, #pdCategoryName, #pdQuantity, #pdUnitPrice, #pdStars, #pdRatingCount").empty();
+    $("#pdReviewsList").empty();
+
+    try {
+        const response = await getProductById(productId);
+
+        if (response.status === 404) {
+            Alert.error(response.message);
+            closeProductDetailsModal();
+            return;
+        }
+
+        if (response.status === 500) {
+            Alert.error(response.message);
+            closeProductDetailsModal();
+            return;
+        }
+
+        if (response.status === 0) {
+            renderProductDetails(response.body);
+        }
+
+    } catch (error) {
+        Alert.error("Something went wrong. Please try again");
+        closeProductDetailsModal();
+    }
+};
+
+
+// Open the pane
+$(document).on("click", ".product-card", async function (e) {
+    if ($(e.target).closest(".add-cart-btn").length) {
+        return;
+    }
+
+    const productId = $(this).data("product-id");
+
+    if (productId) {
+        await openProductDetailsModal(productId);
+    }
+});
+
+
+// Carousel controls
+$(document).on("click", "#pdCarouselPrev", function () {
+    pdCurrentImageIndex = (pdCurrentImageIndex - 1 + pdImages.length) % pdImages.length;
+    updatePdCarouselPosition();
+});
+
+$(document).on("click", "#pdCarouselNext", function () {
+    pdCurrentImageIndex = (pdCurrentImageIndex + 1) % pdImages.length;
+    updatePdCarouselPosition();
+});
+
+$(document).on("click", ".pd-carousel-dot", function () {
+    pdCurrentImageIndex = parseInt($(this).data("index"), 10);
+    updatePdCarouselPosition();
+});
+
+
+// Close handlers
+$(document).on("click", "#btnCloseProductDetails", function () {
+    closeProductDetailsModal();
+});
+
+$(document).on("click", "#productDetailsModal", function (e) {
+    if (e.target.id === "productDetailsModal") {
+        closeProductDetailsModal();
+    }
+});
+
+$(document).on("keydown", function (e) {
+    if (e.key === "Escape" && $("#productDetailsModal").hasClass("open")) {
+        closeProductDetailsModal();
+    }
 });
