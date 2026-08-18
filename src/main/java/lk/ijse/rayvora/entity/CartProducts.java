@@ -1,6 +1,7 @@
 package lk.ijse.rayvora.entity;
 
 import jakarta.persistence.*;
+import lk.ijse.rayvora.enumeration.Status;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,6 +17,9 @@ public class CartProducts {
 
     @Column(nullable = false)
     private Integer quantity;
+
+    @Enumerated(EnumType.STRING)
+    private Status status = Status.ACTIVE;
 
     @ManyToOne
     @JoinColumn(name = "product_id")
