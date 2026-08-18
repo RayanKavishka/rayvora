@@ -38,27 +38,27 @@
 
             <!-- Header Action Controls -->
             <div class="header-actions">
-                <a href="#cart" class="nav-icon-btn" id="cartNavBtn" title="Shopping Cart">
+                <a href="" class="nav-icon-btn" id="cartNavBtn" title="Shopping Cart">
                     <i class="fa-solid fa-cart-shopping"></i>
                     <span>Cart</span>
                     <span class="badge-count">3</span>
                 </a>
 
                 <!-- Notification Button -->
-                <a href="#notifications" class="nav-icon-btn" id="notificationNavBtn" title="Notifications">
+                <a href="" class="nav-icon-btn" id="notificationNavBtn" title="Notifications">
                     <i class="fa-solid fa-bell"></i>
                     <span>Alerts</span>
                     <span class="badge-count">5</span>
                 </a>
 
                 <!-- User Profile Icon Trigger -->
-                <a href="views/login.html" class="user-menu-trigger" id="userAccountNavBtn" title="Sign In / Account">
+                <a href="" class="user-menu-trigger" id="userAccountNavBtn" title="Sign In / Account">
                     <div class="avatar-circle">
                         <i class="fa-solid fa-user"></i>
                     </div>
                     <div class="user-text-block" style="text-align: left; line-height: 1.2;">
                         <span style="font-size: 0.72rem; color: var(--text-muted); display: block;">Hello,</span>
-                        <span style="font-size: 0.82rem; font-weight: 700; color: var(--text-main);">My Account <i class="fa-solid fa-chevron-down" style="font-size: 0.68rem;"></i></span>
+                        <span id="usernameLogo" style="font-size: 0.82rem; font-weight: 700; color: var(--text-main);"></span>
                     </div>
                 </a>
             </div>
@@ -74,15 +74,8 @@
                 <!-- Category Sidebar (Horizontal Pill Slider on Mobile) -->
                 <aside class="category-sidebar">
                     <div class="category-menu-title"><i class="fa-solid fa-bars"></i> Explore Categories</div>
-                    <ul class="category-list">
-                        <li class="category-item"><a href="#cat-electronics"><i class="fa-solid fa-laptop"></i> Tech</a></li>
-                        <li class="category-item"><a href="#cat-mobile"><i class="fa-solid fa-mobile-screen-button"></i> Mobile</a></li>
-                        <li class="category-item"><a href="#cat-audio"><i class="fa-solid fa-headphones"></i> Audio</a></li>
-                        <li class="category-item"><a href="#cat-fashion"><i class="fa-solid fa-shirt"></i> Fashion</a></li>
-                        <li class="category-item"><a href="#cat-home"><i class="fa-solid fa-couch"></i> Home</a></li>
-                        <li class="category-item"><a href="#cat-watches"><i class="fa-solid fa-stopwatch"></i> Gear</a></li>
-                        <li class="category-item"><a href="#cat-beauty"><i class="fa-solid fa-wand-magic-sparkles"></i> Beauty</a></li>
-                        <li class="category-item"><a href="#cat-sports"><i class="fa-solid fa-person-running"></i> Sports</a></li>
+                    <ul id="cusCategoryExplore" class="category-list">
+                        <li class="category-item"><a href=""><i class="fa-solid fa-laptop"></i> Tech</a></li>
                     </ul>
                 </aside>
 

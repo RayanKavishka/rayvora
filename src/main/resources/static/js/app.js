@@ -1,5 +1,6 @@
 import {auth} from "./auth.js";
 import {router} from "./router.js";
+import {getAllCategories, getUserById} from "./api.js";
 
 $(document).ready(function () {
     if (!auth.isLoggedIn()) {
@@ -23,8 +24,58 @@ export async function checkRole()  {
 
     if (role === "CUSTOMER") {
         router("customer-dashboard.html");
+
+        loadCategoriesAndUserName();
     }
 }
+
+
+
+const loadCategoriesAndUserName = async () => {
+    try {
+        const response = await getUserById(auth.getUserId());
+
+        if (response.status === 404) {
+            Alert.error(response.message);
+        }
+
+        if (response.status === 500) {
+            Alert.error(response.message);
+        }
+
+        if (response.status === 0) {
+            $('#usernameLogo').html(
+                `${response.body.username} <i class="fa-solid fa-chevron-down" style="font-size: 0.68rem; color: var(--c-orange)"></i>`
+            );
+        }
+
+    } catch (error) {
+        Alert.error("Something went wrong. Please try again.")
+    }
+
+    try {
+        const response = await getAllCategories();
+
+        if (response.status === 500) {
+            Alert.error(response.message);
+        }
+
+        if (response.status === 0) {
+            let html = '';
+
+            response.body.forEach((category) => {
+                html += `
+                    <li class="category-item"><a href=""><i class="fa-solid fa-layer-group"></i> ${category.categoryName}</a></li>
+                `;
+            });
+
+            $('#cusCategoryExplore').html(html);
+        }
+
+    } catch (error) {
+        Alert.error("Something went wrong. Please try again.");
+    }
+};
 
 
 // Theme changing implementation

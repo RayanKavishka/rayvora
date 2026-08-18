@@ -992,7 +992,7 @@ img {
   border-radius: var(--border-radius-lg);
   padding: 0.85rem 0;
   box-shadow: var(--shadow-sm);
-  height: fit-content;
+  height: 390px;
 }
 
 .category-menu-title {
