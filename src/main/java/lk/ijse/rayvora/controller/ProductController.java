@@ -124,7 +124,7 @@ public class ProductController {
         );
     }
 
-    @GetMapping(value = "/filter-poducts/prices-direction", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/filter-products/prices-direction", produces = MediaType.APPLICATION_JSON_VALUE)
     public CommonResponse filterProductByPriceOrder(
             @RequestParam(value = "page") int page,
             @RequestParam(value = "size") int size,

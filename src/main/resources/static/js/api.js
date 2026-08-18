@@ -114,7 +114,7 @@ const changePassword = (object) => {
         contentType: 'application/json',
         data: JSON.stringify(object),
         headers: {
-           'Authorization': 'Bearer ' + auth.getJWT()
+            'Authorization': 'Bearer ' + auth.getJWT()
         }
     });
 }
@@ -287,6 +287,68 @@ const getSearchedProducts = (page, size, productName) => {
 };
 
 
+const getAllProducts = (page, size) => {
+    const queryParam = $.param({
+        "page": page,
+        "size": size
+    });
+
+    return $.ajax({
+        url: API_BASE_URL + "/products/all-products?"+queryParam,
+        type: 'GET',
+        contentType: 'application/json',
+        headers: {
+            'Authorization': 'Bearer ' + auth.getJWT()
+        }
+    });
+};
+
+
+const filterProducts = (page, size, searchedProductName, categoryName, startPrice, lastPrice) => {
+    let params = {
+        "page": page,
+        "size": size,
+        "searchedProductName": searchedProductName ? searchedProductName : "",
+        "categoryName": categoryName ? categoryName : ""
+    };
+
+    if (startPrice !== null && startPrice !== undefined && startPrice !== "") {
+        params.startPrice = startPrice;
+    }
+
+    if (lastPrice !== null && lastPrice !== undefined && lastPrice !== "") {
+        params.lastPrice = lastPrice;
+    }
+
+    const queryParam = $.param(params);
+
+    return $.ajax({
+        url: API_BASE_URL + "/products/filter-products?"+queryParam,
+        type: 'GET',
+        contentType: 'application/json',
+        headers: {
+            'Authorization': 'Bearer ' + auth.getJWT()
+        }
+    });
+};
+
+
+const filterProductsByPriceDirection = (page, size, direction) => {
+    const queryParam = $.param({
+        "page": page,
+        "size": size,
+        "direction": direction
+    });
+
+    return $.ajax({
+        url: API_BASE_URL + "/products/filter-products/prices-direction?"+queryParam,
+        type: 'GET',
+        contentType: 'application/json',
+        headers: {
+            'Authorization': 'Bearer ' + auth.getJWT()
+        }
+    });
+};
 
 
 
@@ -313,5 +375,8 @@ export {
     getProductById,
     removeProduct,
     getSearchedProductsForSeller,
-    getSearchedProducts
+    getSearchedProducts,
+    getAllProducts,
+    filterProducts,
+    filterProductsByPriceDirection
 }

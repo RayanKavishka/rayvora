@@ -1,4 +1,3 @@
-
 <div class="customer-dashboard-wrapper">
     <!-- Top Announcement Bar -->
     <div class="top-bar">
@@ -21,19 +20,24 @@
     <header class="main-header">
         <div class="container navbar">
             <!-- Brand Logo -->
-            <a href="" class="brand-logo">
+            <a href="views/login.html" class="brand-logo" id="searchResultsBrandLogo">
                 <div class="logo-icon">
                     <i class="fa-solid fa-bag-shopping"></i>
                 </div>
                 <span>Rayvora<span class="accent">.</span></span>
             </a>
 
-            <!-- Search Bar (category dropdown removed) -->
-            <div class="header-search">
-                <input type="text" class="search-input" id="searchInput" placeholder="Search wireless earbuds, smartwatches, sneakers...">
-                <button type="button" class="search-btn" id="btnSearch">
-                    <i class="fa-solid fa-magnifying-glass"></i>
+            <!-- Back Button + Search Bar (pre-filled with the searched product name) -->
+            <div class="header-search-row">
+                <button type="button" class="back-btn" id="btnSearchResultsBack" title="Back to Dashboard">
+                    <i class="fa-solid fa-arrow-left"></i>
                 </button>
+                <div class="header-search">
+                    <input type="text" class="search-input" id="searchResultsInput" placeholder="Search wireless earbuds, smartwatches, sneakers...">
+                    <button type="button" class="search-btn" id="btnSearchResultsSearch">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </button>
+                </div>
             </div>
 
             <!-- Header Action Controls -->
@@ -68,72 +72,16 @@
     <!-- Main Marketplace Container -->
     <main class="container">
 
-        <!-- Hero Carousel & Categories Section -->
-        <section class="hero-section">
-            <div class="hero-grid">
-                <!-- Category Sidebar (Horizontal Pill Slider on Mobile) -->
-                <aside class="category-sidebar">
-                    <div class="category-menu-title"><i class="fa-solid fa-bars"></i> Explore Categories</div>
-                    <ul class="category-list">
-                        <li class="category-item"><a href="#cat-electronics"><i class="fa-solid fa-laptop"></i> Tech</a></li>
-                        <li class="category-item"><a href="#cat-mobile"><i class="fa-solid fa-mobile-screen-button"></i> Mobile</a></li>
-                        <li class="category-item"><a href="#cat-audio"><i class="fa-solid fa-headphones"></i> Audio</a></li>
-                        <li class="category-item"><a href="#cat-fashion"><i class="fa-solid fa-shirt"></i> Fashion</a></li>
-                        <li class="category-item"><a href="#cat-home"><i class="fa-solid fa-couch"></i> Home</a></li>
-                        <li class="category-item"><a href="#cat-watches"><i class="fa-solid fa-stopwatch"></i> Gear</a></li>
-                        <li class="category-item"><a href="#cat-beauty"><i class="fa-solid fa-wand-magic-sparkles"></i> Beauty</a></li>
-                        <li class="category-item"><a href="#cat-sports"><i class="fa-solid fa-person-running"></i> Sports</a></li>
-                    </ul>
-                </aside>
-
-                <!-- Hero Banner Main Carousel (width reduced) -->
-                <div class="hero-banner-main" id="heroBanner">
-                    <div class="hero-content">
-                        <span class="hero-tag"><i class="fa-solid fa-fire"></i> Exclusive Launch</span>
-                        <h2 class="hero-title">Next-Gen Wireless Headphones</h2>
-                        <p class="hero-subtitle">Experience lossless spatial audio with active noise cancellation. Up to 40 hours continuous playback.</p>
-                        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
-                            <a href="#shop-now" class="btn btn-orange btn-sm"><i class="fa-solid fa-bag-shopping"></i> Shop Now</a>
-                            <a href="#view-details" class="btn btn-outline btn-sm" style="color: #FFF; border-color: rgba(255,255,255,0.4);"><i class="fa-solid fa-circle-info"></i> Learn More</a>
-                        </div>
-                    </div>
-                    <div class="hero-bg-decoration"></div>
-                </div>
-
-                <!-- Side Highlight Promo Cards -->
-                <div class="hero-side-cards">
-                    <div class="promo-card ai-theme">
-                        <div>
-                            <span class="badge badge-primary"><i class="fa-solid fa-robot"></i> AI Powered</span>
-                            <h4 style="margin-top: 0.4rem;">Use Our AI Agent</h4>
-                            <p>Get instant help finding the perfect product</p>
-                        </div>
-                        <a href="#ai-agent" class="btn btn-sm btn-primary" style="align-self: flex-start;">Chat with AI Agent</a>
-                    </div>
-
-                    <!-- 100% Buyer Protection (modern promo card, replaces the old inline Filter Products card —
-                         filtering & sorting now live in the toolbar above the product grid below) -->
-                    <div class="promo-card mint-theme">
-                        <div>
-                            <span class="badge badge-mint"><i class="fa-solid fa-shield-halved"></i> Protected</span>
-                            <h4 style="margin-top: 0.4rem;">100% Buyer Protection</h4>
-                            <p>Verified sellers, secure payments & easy returns on every order</p>
-                        </div>
-                        <a href="#buyer-protection" class="btn btn-sm btn-outline" style="align-self: flex-start;">Learn More</a>
-                    </div>
-                </div>
-            </div>
-        </section>
-
         <!-- Main Product Marketplace Layout -->
-        <section class="shop-layout">
+        <section class="shop-layout" style="margin-top: 1.75rem;">
 
             <!-- Product Grid Content Area -->
             <div>
-                <!-- Shop Toolbar: title + Filter & Sort By dropdown triggers -->
+                <!-- Search Results Toolbar: result heading + Filter & Sort By dropdown triggers -->
                 <div class="products-grid-header">
                     <h3 style="font-size: 1.1rem; font-weight: 800;">
-                        <i class="fa-solid fa-grip" style="color: var(--c-primary-dark); margin-right: 0.4rem;"></i>All Products
+                        <i class="fa-solid fa-magnifying-glass" style="color: var(--c-primary-dark); margin-right: 0.4rem;"></i>
+                        Search Results for &ldquo;<span id="searchResultsTerm"></span>&rdquo;
                     </h3>
                     <div class="section-toolbar">
                         <!-- Filter -->
@@ -193,20 +141,20 @@
                     </div>
                 </div>
 
-                <!-- Product Grid — paginated, 4 columns x 5 rows (20 products) per page, loaded from the server -->
-                <div class="category-cards-grid products-page-grid" id="shopProductsGrid" data-current-page="1">
+                <!-- Search Results Grid — paginated, loaded from the server -->
+                <div class="category-cards-grid products-page-grid" id="searchResultsGrid" data-current-page="1">
 
                 </div>
 
                 <!-- Pagination controls: your JS reads data-target to know which grid to page -->
-                <div class="pagination-controls" id="shopProductsPagination" data-target="shopProductsGrid">
-                    <button type="button" class="pagination-arrow-btn" id="shopProductsPrevBtn" disabled aria-label="Previous page">
+                <div class="pagination-controls" id="searchResultsPagination" data-target="searchResultsGrid">
+                    <button type="button" class="pagination-arrow-btn" id="searchResultsPrevBtn" disabled aria-label="Previous page">
                         <i class="fa-solid fa-arrow-left"></i>
                     </button>
-                    <div id="shopProductsPageNumbers" class="pagination-pill">
+                    <div id="searchResultsPageNumbers" class="pagination-pill">
                         <span class="pagination-page active" data-page="1">1</span>
                     </div>
-                    <button type="button" class="pagination-arrow-btn" id="shopProductsNextBtn" aria-label="Next page">
+                    <button type="button" class="pagination-arrow-btn" id="searchResultsNextBtn" aria-label="Next page">
                         <i class="fa-solid fa-arrow-right"></i>
                     </button>
                 </div>
