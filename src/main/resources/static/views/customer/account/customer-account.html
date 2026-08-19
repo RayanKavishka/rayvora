@@ -1,0 +1,265 @@
+<div class="customer-dashboard-wrapper">
+    <!-- Top Announcement Bar -->
+    <div class="top-bar">
+        <div class="container top-bar-flex">
+            <div class="top-bar-notice">
+                <span class="tag-sale"><i class="fa-solid fa-bolt"></i> Mega Sale</span>
+                <span>Get up to 60% OFF on premium electronics! Free shipping over LKR 5,000</span>
+            </div>
+            <div class="top-bar-links">
+                <!-- Dark / Light Theme Toggle Switch Button -->
+                <button type="button" class="theme-toggle-btn" id="themeToggleBtn" title="Toggle Light/Dark Theme">
+                    <i class="fa-solid fa-sun theme-toggle-icon" id="themeIcon"></i>
+                    <span id="themeLabel">Light</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Navigation Header -->
+    <header class="main-header">
+        <div class="container navbar">
+            <!-- Back Button + Brand Logo -->
+            <div class="header-search-row" style="flex: 0 0 auto;">
+                <button type="button" class="back-btn" id="btnAccountBack" title="Back to Dashboard">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </button>
+                <a href="" class="brand-logo">
+                    <div class="logo-icon">
+                        <i class="fa-solid fa-bag-shopping"></i>
+                    </div>
+                    <span>Rayvora<span class="accent">.</span></span>
+                </a>
+            </div>
+
+
+        </div>
+    </header>
+
+    <!-- Main Account Container -->
+    <main class="container account-page-container">
+
+        <!-- Account Summary Hero -->
+        <div class="account-hero-card">
+            <div class="account-avatar-lg" id="accountHeroAvatar">
+                <i class="fa-solid fa-user"></i>
+            </div>
+            <div class="account-hero-info">
+                <div class="account-hero-name" id="accountHeroName"></div>
+                <div class="account-hero-email" id="accountHeroEmail"></div>
+                <div class="account-hero-meta" id="accountHeroJoinedDateAndId"><i class="fa-solid fa-calendar-check"></i></div>
+            </div>
+            <div class="account-hero-stats">
+                <div class="account-hero-stat">
+                    <span class="account-hero-stat-num" id="heroOrdersCount">12</span>
+                    <span class="account-hero-stat-label">Orders</span>
+                </div>
+                <div class="account-hero-stat">
+                    <span class="account-hero-stat-num" id="heroReviewsCount">5</span>
+                    <span class="account-hero-stat-label">Reviews</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Account Layout: Sidebar + Content -->
+        <div class="account-layout">
+
+            <!-- Account Navigation Sidebar -->
+            <aside class="account-sidebar">
+                <ul class="account-sidebar-menu">
+                    <li id="navMyProfile" class="account-sidebar-item active"><a href=""><i class="fa-solid fa-user"></i> Customer Profile</a></li>
+                    <li id="navManageAddress" class="account-sidebar-item"><a href=""><i class="fa-solid fa-location-dot"></i> Customize Address</a></li>
+                    <li id="navMyOrders" class="account-sidebar-item"><a href=""><i class="fa-solid fa-box-open"></i> Your Orders</a></li>
+                    <li id="navMyReviews" class="account-sidebar-item"><a href=""><i class="fa-solid fa-star-half-stroke"></i> Your Reviews</a></li>
+                    <hr class="account-sidebar-divider">
+                    <li id="navAccountLogout" class="account-sidebar-item logout"><a href=""><i class="fa-solid fa-right-from-bracket"></i> Logout</a></li>
+                </ul>
+            </aside>
+
+            <!-- Account Content -->
+            <section class="account-content">
+
+                <!-- ==================================================================== -->
+                <!-- Profile Information Form -->
+                <!-- ==================================================================== -->
+                <div class="data-table-card">
+                    <div class="section-header" style="margin-bottom: 1.25rem;">
+                        <h3 style="font-size: 1.1rem; font-weight: 800;"><i class="fa-solid fa-user" style="color: var(--c-primary-dark); margin-right: 0.4rem;"></i>Customer Profile</h3>
+                    </div>
+
+                    <form id="customerProfileForm" class="auth-form">
+
+<!--                        &lt;!&ndash; Profile Photo Upload &ndash;&gt;-->
+<!--                        <div class="avatar-upload-row">-->
+<!--                            <div class="avatar-upload-circle" id="profilePhotoPreview">-->
+<!--                                <i class="fa-solid fa-user"></i>-->
+<!--                            </div>-->
+<!--                            <div class="avatar-upload-actions">-->
+<!--                                <label for="profilePhotoInput" class="btn btn-sm btn-outline" style="cursor: pointer;">-->
+<!--                                    <i class="fa-solid fa-camera"></i> Change Photo-->
+<!--                                </label>-->
+<!--                                <input type="file" id="profilePhotoInput" name="profilePhoto" accept="image/*" hidden>-->
+<!--                                <button type="button" class="btn btn-sm btn-outline" id="btnRemovePhoto">-->
+<!--                                    <i class="fa-solid fa-trash"></i> Remove-->
+<!--                                </button>-->
+<!--                            </div>-->
+<!--                        </div>-->
+
+                        <!-- Customer ID (read-only) -->
+                        <div class="form-grid-2col">
+                            <div class="form-group">
+                                <label for="customerId">Customer ID</label>
+                                <div class="input-with-icon">
+                                    <i class="fa-solid fa-hashtag"></i>
+                                    <input type="text" id="customerId" name="customerId" placeholder="Auto-generated" disabled>
+                                </div>
+                            </div>
+                            <div class="form-group"></div>
+                        </div>
+
+                        <!-- First Name & Last Name -->
+                        <div class="form-grid-2col">
+                            <div class="form-group">
+                                <label for="customerFirstName">First Name</label>
+                                <div class="input-with-icon">
+                                    <i class="fa-solid fa-user"></i>
+                                    <input type="text" id="customerFirstName" name="firstName" placeholder="Jane" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="customerLastName">Last Name</label>
+                                <div class="input-with-icon">
+                                    <i class="fa-solid fa-user"></i>
+                                    <input type="text" id="customerLastName" name="lastName" placeholder="Smith" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Email & Contact -->
+                        <div class="form-grid-2col">
+                            <div class="form-group">
+                                <label for="customerEmail">Email</label>
+                                <div class="input-with-icon">
+                                    <i class="fa-solid fa-envelope"></i>
+                                    <input type="email" id="customerEmail" name="email" placeholder="sales@techzone.com" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="customerContact">Contact Number</label>
+                                <div class="input-with-icon">
+                                    <i class="fa-solid fa-phone"></i>
+                                    <input type="tel" id="customerContact" name="contact" placeholder="+1 (555) 987-6543" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="button" class="btn btn-primary btn-block" id="btnSaveCustomerProfile">
+                            <i class="fa-solid fa-floppy-disk"></i> Save Changes
+                        </button>
+                    </form>
+
+                    <p id="customerProfileFormError" class="auth-error-msg"></p>
+                </div>
+
+                <!-- ==================================================================== -->
+                <!-- Change Password Form -->
+                <!-- ==================================================================== -->
+                <div class="data-table-card">
+                    <div class="section-header" style="margin-bottom: 1.25rem;">
+                        <h3 style="font-size: 1.1rem; font-weight: 800;"><i class="fa-solid fa-lock" style="color: var(--c-primary-dark); margin-right: 0.4rem;"></i>Change Password</h3>
+                    </div>
+
+                    <form id="customerChangePasswordForm" class="auth-form" style="max-width: 480px;">
+
+                        <!-- Current Password -->
+                        <div class="form-group">
+                            <label for="customerCurrentPassword">Current Password</label>
+                            <div class="input-with-icon">
+                                <i class="fa-solid fa-lock"></i>
+                                <input type="password" id="customerCurrentPassword" name="currentPassword" placeholder="••••••••••••" required>
+                            </div>
+                        </div>
+
+                        <!-- Revealed only after current password is verified -->
+                        <div id="customerNewPasswordFields">
+                            <div class="form-group">
+                                <label for="customerNewPassword">New Password</label>
+                                <div class="input-with-icon">
+                                    <i class="fa-solid fa-key"></i>
+                                    <input type="password" id="customerNewPassword" name="newPassword" placeholder="••••••••••••">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; gap: 0.75rem;">
+                            <button type="button" class="btn btn-primary btn-block" id="btnVerifyCustomerPassword">
+                                <i class="fa-solid fa-check"></i> Verify & Save
+                            </button>
+                            <button type="button" class="btn btn-outline btn-block" id="btnCancelCustomerPasswordChange">
+                                Cancel
+                            </button>
+                        </div>
+                    </form>
+
+                    <p id="customerChangePasswordFormError" class="auth-error-msg"></p>
+                </div>
+
+            </section>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-brand">
+                <a href="#dashboard" class="brand-logo">
+                    <div class="logo-icon"><i class="fa-solid fa-bag-shopping"></i></div>
+                    <span>Rayvora<span class="accent">.</span></span>
+                </a>
+                <p>Your ultimate destination for global flash deals, top-tier tech, and verified seller products with buyer protection.</p>
+                <div class="payment-methods">
+                    <i class="fa-brands fa-cc-visa"></i>
+                    <i class="fa-brands fa-cc-mastercard"></i>
+                    <i class="fa-brands fa-cc-paypal"></i>
+                    <i class="fa-brands fa-cc-apple-pay"></i>
+                </div>
+            </div>
+
+            <div>
+                <h4 class="footer-heading">Customer Care</h4>
+                <ul class="footer-links">
+                    <li><a href="#help">Help Center & FAQ</a></li>
+                    <li><a href="#orders">Track Order Status</a></li>
+                    <li><a href="#returns">Returns & Refunds</a></li>
+                    <li><a href="#shipping">Shipping Policy</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="footer-heading">Merchant Options</h4>
+                <ul class="footer-links">
+                    <li><a href="views/signup-seller.html">Become a Merchant</a></li>
+                    <li><a href="#fulfillment">Fulfillment Services</a></li>
+                    <li><a href="#policy">Merchant Guidelines</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="footer-heading">Legal & Policy</h4>
+                <ul class="footer-links">
+                    <li><a href="#privacy">Privacy Policy</a></li>
+                    <li><a href="#terms">Terms of Service</a></li>
+                    <li><a href="#contact">Contact Support</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="container footer-bottom">
+            <p>&copy; 2026 Rayvora E-Commerce Inc. All Rights Reserved.</p>
+            <p>Designed with High-Performance GSAP Animation Capabilities.</p>
+        </div>
+    </footer>
+</div>

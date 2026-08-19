@@ -15,6 +15,8 @@ import lk.ijse.rayvora.service.CartService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +32,7 @@ public class CartServiceImpl implements CartService {
     private final ProductRepository productRepository;
 
     @Override
+    @Transactional(rollbackFor = {Exception.class}, propagation = Propagation.REQUIRED)
     public void saveCart(CartDTO cartDTO) {
         log.info("Execute saveCart() dto {}", cartDTO);
         try {
@@ -99,6 +102,7 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
+    @Transactional(rollbackFor = {Exception.class}, propagation = Propagation.REQUIRED)
     public void updateCart(UpdateCartRequestDTO updateCartRequestDTO) {
         log.info("Execute updateCart() dto {}", updateCartRequestDTO);
         try {

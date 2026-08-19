@@ -2872,3 +2872,493 @@ body.modal-open-lock {
   .cart-item-actions { flex-direction: row; align-items: center; width: 100%; justify-content: space-between; margin-top: 0.5rem; }
   .cart-items-card { padding: 1.25rem; }
 }
+/* ==========================================================================
+   CUSTOMER ACCOUNT CONTROL PANEL — Added Styles
+   (Customer Profile, Manage Address, Your Orders, Your Reviews)
+   New rules only — nothing above this block has been modified.
+   ========================================================================== */
+
+:root {
+  --c-danger: #EF4444;
+  --c-danger-dark: #DC2626;
+}
+
+.account-page-container {
+  padding: 2rem 1.25rem 3rem;
+}
+
+/* --- Account Hero / Summary Card --- */
+.account-hero-card {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-sm);
+  padding: 1.5rem;
+  margin-bottom: 1.75rem;
+}
+
+.account-avatar-lg {
+  position: relative;
+  width: 78px;
+  height: 78px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--c-primary-light), var(--c-sky));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--c-brown);
+  font-weight: 800;
+  font-size: 1.8rem;
+  overflow: hidden;
+}
+
+.account-avatar-lg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.account-hero-info {
+  flex: 1;
+  min-width: 200px;
+}
+
+.account-hero-name {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--text-main);
+}
+
+.account-hero-email {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-weight: 600;
+  margin-top: 0.15rem;
+}
+
+.account-hero-meta {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-top: 0.35rem;
+}
+
+.account-hero-stats {
+  display: flex;
+  gap: 1.75rem;
+  flex-wrap: wrap;
+}
+
+.account-hero-stat {
+  text-align: center;
+}
+
+.account-hero-stat-num {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--c-primary-dark);
+  display: block;
+}
+
+.account-hero-stat-label {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+/* --- Account Layout: Sidebar + Content --- */
+.account-layout {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.account-sidebar {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-sm);
+  padding: 1rem;
+  position: sticky;
+  top: 1rem;
+}
+
+.account-sidebar-menu { list-style: none; }
+
+.account-sidebar-item + .account-sidebar-item { margin-top: 0.25rem; }
+
+.account-sidebar-item a {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-radius: var(--border-radius-md);
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  transition: all var(--transition-speed);
+}
+
+.account-sidebar-item.active a,
+.account-sidebar-item a:hover {
+  background: var(--bg-subtle);
+  color: var(--c-primary-dark);
+}
+
+.account-sidebar-divider {
+  border: none;
+  border-top: 1px solid var(--border-color);
+  margin: 0.6rem 0.25rem;
+}
+
+.account-sidebar-item.logout a { color: var(--c-orange); }
+.account-sidebar-item.logout a:hover { background: rgba(229, 80, 42, 0.1); color: var(--c-orange-hover); }
+
+.account-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  min-width: 0;
+}
+
+/* --- Avatar Upload (Profile Form) --- */
+.avatar-upload-row {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.avatar-upload-circle {
+  position: relative;
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--c-primary-light), var(--c-sky));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--c-brown);
+  font-size: 1.9rem;
+  font-weight: 800;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.avatar-upload-circle img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.avatar-upload-camera-btn {
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--c-orange);
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  border: 2px solid var(--card-bg);
+  box-shadow: var(--shadow-sm);
+}
+
+.avatar-upload-actions { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+
+/* --- Checkbox row (e.g. "Set as default address") --- */
+.checkbox-inline-row {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin: 0.9rem 0 1.25rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.checkbox-inline-row input[type="checkbox"] {
+  width: 17px;
+  height: 17px;
+  accent-color: var(--c-orange);
+  cursor: pointer;
+}
+
+/* --- Manage Address --- */
+.add-address-btn-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1.25rem;
+}
+
+.address-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1rem;
+}
+
+.address-card {
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-md);
+  padding: 1.1rem;
+  position: relative;
+}
+
+.address-card.is-default {
+  border-color: var(--c-primary);
+  box-shadow: 0 0 0 1px var(--c-primary) inset;
+}
+
+.address-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.6rem;
+}
+
+.address-card-label-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--c-primary-dark);
+}
+
+.address-card-text {
+  font-size: 0.85rem;
+  color: var(--text-main);
+  line-height: 1.55;
+  margin-bottom: 0.85rem;
+}
+
+.address-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.btn-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--card-bg);
+  border: 1.5px solid var(--border-color);
+  color: var(--text-main);
+  font-size: 0.8rem;
+  transition: all var(--transition-speed);
+  cursor: pointer;
+}
+
+.btn-icon:hover { background: var(--c-primary); border-color: var(--c-primary); color: var(--c-brown); }
+.btn-icon.danger:hover { background: var(--c-danger); border-color: var(--c-danger); color: #FFFFFF; }
+
+.set-default-link {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--c-primary-dark);
+  margin-left: auto;
+}
+.set-default-link:hover { text-decoration: underline; }
+
+/* --- Your Orders --- */
+.order-filter-tabs {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.25rem;
+}
+
+.order-filter-tab {
+  padding: 0.5rem 1rem;
+  border-radius: var(--border-radius-full);
+  font-size: 0.8rem;
+  font-weight: 700;
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all var(--transition-speed);
+}
+
+.order-filter-tab.active,
+.order-filter-tab:hover {
+  background: var(--c-primary);
+  border-color: var(--c-primary);
+  color: var(--c-brown);
+}
+
+.order-card {
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-md);
+  padding: 1.1rem;
+}
+
+.order-card + .order-card { margin-top: 1rem; }
+
+.order-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  padding-bottom: 0.85rem;
+  margin-bottom: 0.85rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.order-card-id { font-size: 0.92rem; font-weight: 800; color: var(--text-main); }
+.order-card-date { font-size: 0.76rem; color: var(--text-muted); font-weight: 600; margin-top: 0.15rem; }
+
+.order-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.7rem;
+  border-radius: var(--border-radius-full);
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.order-status-badge.status-processing { background: rgba(159, 161, 255, 0.2); color: var(--c-primary-dark); }
+.order-status-badge.status-shipped { background: rgba(174, 226, 255, 0.35); color: #0284C7; }
+.order-status-badge.status-delivered { background: var(--c-mint); color: var(--c-mint-dark); }
+.order-status-badge.status-cancelled { background: rgba(239, 68, 68, 0.15); color: var(--c-danger); }
+
+.order-card-items { display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 0.9rem; }
+
+.order-item-row { display: flex; align-items: center; gap: 0.85rem; }
+
+.order-item-thumb {
+  width: 52px;
+  height: 52px;
+  border-radius: var(--border-radius-sm);
+  overflow: hidden;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+}
+
+.order-item-thumb img { width: 100%; height: 100%; object-fit: cover; }
+
+.order-item-name { font-size: 0.85rem; font-weight: 700; color: var(--text-main); }
+.order-item-qty { font-size: 0.76rem; color: var(--text-muted); font-weight: 600; margin-top: 0.1rem; }
+
+.order-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.order-total-amount { font-size: 0.9rem; font-weight: 800; color: var(--text-main); }
+.order-total-amount span { color: var(--text-muted); font-weight: 600; font-size: 0.78rem; margin-right: 0.35rem; }
+
+.order-card-actions { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+
+/* --- Your Reviews --- */
+.customer-review-card {
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-md);
+  padding: 1.1rem;
+}
+
+.customer-review-card + .customer-review-card { margin-top: 1rem; }
+
+.customer-review-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.customer-review-product { display: flex; align-items: center; gap: 0.75rem; }
+
+.customer-review-product-thumb {
+  width: 46px;
+  height: 46px;
+  border-radius: var(--border-radius-sm);
+  overflow: hidden;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  flex-shrink: 0;
+}
+
+.customer-review-product-thumb img { width: 100%; height: 100%; object-fit: cover; }
+
+.customer-review-product-name { font-size: 0.85rem; font-weight: 700; color: var(--text-main); }
+
+.customer-review-date { font-size: 0.76rem; color: var(--text-muted); font-weight: 600; text-align: right; }
+
+.customer-review-text { font-size: 0.87rem; color: var(--text-main); line-height: 1.55; margin-bottom: 0.85rem; }
+
+.customer-review-actions { display: flex; gap: 0.6rem; }
+
+/* --- Empty State (used when a section has no data) --- */
+.empty-state-block {
+  text-align: center;
+  padding: 2.5rem 1rem;
+  color: var(--text-muted);
+}
+
+.empty-state-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--bg-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: var(--c-primary-dark);
+  margin: 0 auto 1rem;
+}
+
+.empty-state-title { font-size: 0.95rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.35rem; }
+.empty-state-text { font-size: 0.83rem; }
+
+/* --- Responsive --- */
+@media (max-width: 900px) {
+  .account-layout { grid-template-columns: 1fr; }
+  .account-sidebar { position: static; }
+  .account-sidebar-menu { display: flex; gap: 0.4rem; overflow-x: auto; scrollbar-width: none; }
+  .account-sidebar-item + .account-sidebar-item { margin-top: 0; }
+  .account-sidebar-item a { white-space: nowrap; }
+}
+
+@media (max-width: 640px) {
+  .account-hero-card { flex-direction: column; text-align: center; }
+  .account-hero-stats { justify-content: center; }
+  .order-card-header, .address-card-top { flex-direction: column; align-items: flex-start; }
+}

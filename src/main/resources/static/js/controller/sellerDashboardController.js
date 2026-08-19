@@ -684,7 +684,7 @@ $(document).on('click', '#btnSaveSellerProfile', async function () {
     };
 
     if (!object.firstName || !object.lastName || !object.email || !object.contact) {
-        Alert.error("Please fill in all seller details.");
+        Alert.error("Please fill in all your details.");
         return;
     }
 
@@ -726,7 +726,7 @@ $(document).on('click', '#btnSaveSellerProfile', async function () {
         }
 
         if (response.status === 0) {
-            Alert.success("Seller is updated successfully!");
+            Alert.success("Your details are updated successfully!");
 
             $("#sellerId").val("");
             $("#sellerFirstName").val("");
@@ -778,24 +778,26 @@ $(document).on('click', '#btnVerifyPassword', async function (e) {
     }
 
     try {
-        console.log("before");
         const response = await changePassword(object);
-        console.log("after");
 
         if (response.status === 400) {
             Alert.error(response.message);
+            return;
         }
 
         if (response.status === 401) {
             Alert.error(response.message);
+            return;
         }
 
         if (response.status === 404) {
             Alert.error(response.message);
+            return;
         }
 
         if (response.status === 500) {
             Alert.error(response.message);
+            return;
         }
 
         if (response.status === 0) {
@@ -807,6 +809,7 @@ $(document).on('click', '#btnVerifyPassword', async function (e) {
 
     } catch (error) {
         Alert.error("Something went wrong. Please try again.");
+        return;
     }
 })
 

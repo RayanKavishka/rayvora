@@ -120,6 +120,45 @@ const changePassword = (object) => {
 }
 
 
+// Addresses
+const getAddressByCustomerId = (userId) => {
+    return $.ajax({
+        url: API_BASE_URL + "/addresses/"+userId,
+        type: 'GET',
+        contentType: 'application/json',
+        headers: {
+            'Authorization': 'Bearer ' + auth.getJWT()
+        }
+    });
+};
+
+
+const saveAddress = (object) => {
+    return $.ajax({
+        url: API_BASE_URL + "/addresses",
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(object),
+        headers: {
+            'Authorization': 'Bearer ' + auth.getJWT()
+        }
+    });
+};
+
+
+const updateAddress = (object) => {
+    return $.ajax({
+        url: API_BASE_URL + "/addresses",
+        type: 'PUT',
+        contentType: 'application/json',
+        data: JSON.stringify(object),
+        headers: {
+            'Authorization': 'Bearer ' + auth.getJWT()
+        }
+    });
+};
+
+
 // Categories
 const getAllCategories = () => {
     return $.ajax({
@@ -417,6 +456,9 @@ export {
     updateUser,
     removeUser,
     searchUserByEmail,
+    getAddressByCustomerId,
+    saveAddress,
+    updateAddress,
     getAllCategories,
     addCategory,
     removeCategory,

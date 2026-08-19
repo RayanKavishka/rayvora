@@ -9,6 +9,7 @@ import {
 } from "../api.js";
 import {checkRole} from "../app.js";
 import {auth} from "../auth.js";
+import {fillCustomerDetails} from "./customerAccDashboardController.js";
 
 
 
@@ -975,4 +976,13 @@ $(document).on('click', '#btnCartBack', function (e) {
     e.preventDefault();
 
     checkRole();
+});
+
+
+// Handle customer profile nav
+$(document).on('click', '#customerProfileNav', function (e) {
+    e.preventDefault();
+
+    router("customer/account/customer-account.html");
+    fillCustomerDetails();
 });

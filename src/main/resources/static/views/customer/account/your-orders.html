@@ -1,0 +1,273 @@
+<div class="customer-dashboard-wrapper">
+    <!-- Top Announcement Bar -->
+    <div class="top-bar">
+        <div class="container top-bar-flex">
+            <div class="top-bar-notice">
+                <span class="tag-sale"><i class="fa-solid fa-bolt"></i> Mega Sale</span>
+                <span>Get up to 60% OFF on premium electronics! Free shipping over LKR 5,000</span>
+            </div>
+            <div class="top-bar-links">
+                <!-- Dark / Light Theme Toggle Switch Button -->
+                <button type="button" class="theme-toggle-btn" id="themeToggleBtn" title="Toggle Light/Dark Theme">
+                    <i class="fa-solid fa-sun theme-toggle-icon" id="themeIcon"></i>
+                    <span id="themeLabel">Light</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Navigation Header -->
+    <header class="main-header">
+        <div class="container navbar">
+            <!-- Back Button + Brand Logo -->
+            <div class="header-search-row" style="flex: 0 0 auto;">
+                <button type="button" class="back-btn" id="btnAccountBack" title="Back to Dashboard">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </button>
+                <a href="" class="brand-logo">
+                    <div class="logo-icon">
+                        <i class="fa-solid fa-bag-shopping"></i>
+                    </div>
+                    <span>Rayvora<span class="accent">.</span></span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Account Container -->
+    <main class="container account-page-container">
+
+        <!-- Account Summary Hero -->
+        <div class="account-hero-card">
+            <div class="account-avatar-lg" id="accountHeroAvatar">
+                <i class="fa-solid fa-user"></i>
+            </div>
+            <div class="account-hero-info">
+                <div class="account-hero-name" id="accountHeroName"></div>
+                <div class="account-hero-email" id="accountHeroEmail"></div>
+                <div class="account-hero-meta" id="accountHeroJoinedDateAndId"><i class="fa-solid fa-calendar-check"></i></div>
+            </div>
+            <div class="account-hero-stats">
+                <div class="account-hero-stat">
+                    <span class="account-hero-stat-num" id="heroOrdersCount">12</span>
+                    <span class="account-hero-stat-label">Orders</span>
+                </div>
+                <div class="account-hero-stat">
+                    <span class="account-hero-stat-num" id="heroReviewsCount">5</span>
+                    <span class="account-hero-stat-label">Reviews</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Account Layout: Sidebar + Content -->
+        <div class="account-layout">
+
+            <!-- Account Navigation Sidebar -->
+            <aside class="account-sidebar">
+                <ul class="account-sidebar-menu">
+                    <li id="navMyProfile" class="account-sidebar-item"><a href=""><i class="fa-solid fa-user"></i> Customer Profile</a></li>
+                    <li id="navManageAddress" class="account-sidebar-item"><a href=""><i class="fa-solid fa-location-dot"></i> Customize Address</a></li>
+                    <li id="navMyOrders" class="account-sidebar-item active"><a href=""><i class="fa-solid fa-box-open"></i> Your Orders</a></li>
+                    <li id="navMyReviews" class="account-sidebar-item"><a href=""><i class="fa-solid fa-star-half-stroke"></i> Your Reviews</a></li>
+                    <hr class="account-sidebar-divider">
+                    <li id="navAccountLogout" class="account-sidebar-item logout"><a href=""><i class="fa-solid fa-right-from-bracket"></i> Logout</a></li>
+                </ul>
+            </aside>
+
+            <!-- Account Content -->
+            <section class="account-content">
+
+                <!-- ==================================================================== -->
+                <!-- Order History -->
+                <!-- ==================================================================== -->
+                <div class="data-table-card">
+                    <div class="section-header" style="margin-bottom: 0.5rem;">
+                        <h3 style="font-size: 1.1rem; font-weight: 800;"><i class="fa-solid fa-box-open" style="color: var(--c-primary-dark); margin-right: 0.4rem;"></i>Order History</h3>
+                    </div>
+
+                    <!-- Filter Tabs -->
+                    <div class="order-filter-tabs" id="orderFilterTabs">
+                        <button type="button" class="order-filter-tab active" data-filter="all">All Orders</button>
+                        <button type="button" class="order-filter-tab" data-filter="processing">Processing</button>
+                        <button type="button" class="order-filter-tab" data-filter="shipped">Shipped</button>
+                        <button type="button" class="order-filter-tab" data-filter="delivered">Delivered</button>
+                        <button type="button" class="order-filter-tab" data-filter="cancelled">Cancelled</button>
+                    </div>
+
+                    <div id="ordersList">
+
+                        <!-- Order Card -->
+                        <div class="order-card" data-order-id="ORD-58231" data-status="delivered">
+                            <div class="order-card-header">
+                                <div>
+                                    <div class="order-card-id">Order #ORD-58231</div>
+                                    <div class="order-card-date">Placed on Aug 10, 2026, 3:45 PM</div>
+                                </div>
+                                <span class="order-status-badge status-delivered"><i class="fa-solid fa-circle-check"></i> Delivered</span>
+                            </div>
+                            <div class="order-card-items">
+                                <div class="order-item-row">
+                                    <div class="order-item-thumb"><i class="fa-solid fa-image"></i></div>
+                                    <div>
+                                        <div class="order-item-name">Rayvora SonicPro Wireless Headphones</div>
+                                        <div class="order-item-qty">Qty: 1</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="order-card-footer">
+                                <div class="order-total-amount"><span>Total:</span>LKR 24,990</div>
+                                <div class="order-card-actions">
+                                    <button type="button" class="btn btn-sm btn-outline">View Details</button>
+                                    <button type="button" class="btn btn-sm btn-primary">Buy Again</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Order Card -->
+                        <div class="order-card" data-order-id="ORD-58197" data-status="shipped">
+                            <div class="order-card-header">
+                                <div>
+                                    <div class="order-card-id">Order #ORD-58197</div>
+                                    <div class="order-card-date">Placed on Aug 15, 2026, 11:20 AM</div>
+                                </div>
+                                <span class="order-status-badge status-shipped"><i class="fa-solid fa-truck-fast"></i> Shipped</span>
+                            </div>
+                            <div class="order-card-items">
+                                <div class="order-item-row">
+                                    <div class="order-item-thumb"><i class="fa-solid fa-image"></i></div>
+                                    <div>
+                                        <div class="order-item-name">Ergonomic Wireless Mouse</div>
+                                        <div class="order-item-qty">Qty: 2</div>
+                                    </div>
+                                </div>
+                                <div class="order-item-row">
+                                    <div class="order-item-thumb"><i class="fa-solid fa-image"></i></div>
+                                    <div>
+                                        <div class="order-item-name">Smart Watch Series 9</div>
+                                        <div class="order-item-qty">Qty: 1</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="order-card-footer">
+                                <div class="order-total-amount"><span>Total:</span>LKR 41,450</div>
+                                <div class="order-card-actions">
+                                    <button type="button" class="btn btn-sm btn-outline">View Details</button>
+                                    <button type="button" class="btn btn-sm btn-outline">Track Order</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Order Card -->
+                        <div class="order-card" data-order-id="ORD-58042" data-status="processing">
+                            <div class="order-card-header">
+                                <div>
+                                    <div class="order-card-id">Order #ORD-58042</div>
+                                    <div class="order-card-date">Placed on Aug 18, 2026, 9:05 AM</div>
+                                </div>
+                                <span class="order-status-badge status-processing"><i class="fa-solid fa-rotate"></i> Processing</span>
+                            </div>
+                            <div class="order-card-items">
+                                <div class="order-item-row">
+                                    <div class="order-item-thumb"><i class="fa-solid fa-image"></i></div>
+                                    <div>
+                                        <div class="order-item-name">Portable Bluetooth Speaker</div>
+                                        <div class="order-item-qty">Qty: 1</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="order-card-footer">
+                                <div class="order-total-amount"><span>Total:</span>LKR 8,750</div>
+                                <div class="order-card-actions">
+                                    <button type="button" class="btn btn-sm btn-outline">View Details</button>
+                                    <button type="button" class="btn btn-sm btn-outline">Cancel Order</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Order Card -->
+                        <div class="order-card" data-order-id="ORD-57810" data-status="cancelled">
+                            <div class="order-card-header">
+                                <div>
+                                    <div class="order-card-id">Order #ORD-57810</div>
+                                    <div class="order-card-date">Placed on Jul 29, 2026, 6:12 PM</div>
+                                </div>
+                                <span class="order-status-badge status-cancelled"><i class="fa-solid fa-circle-xmark"></i> Cancelled</span>
+                            </div>
+                            <div class="order-card-items">
+                                <div class="order-item-row">
+                                    <div class="order-item-thumb"><i class="fa-solid fa-image"></i></div>
+                                    <div>
+                                        <div class="order-item-name">USB-C Fast Charging Cable (2m)</div>
+                                        <div class="order-item-qty">Qty: 3</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="order-card-footer">
+                                <div class="order-total-amount"><span>Total:</span>LKR 2,970</div>
+                                <div class="order-card-actions">
+                                    <button type="button" class="btn btn-sm btn-outline">View Details</button>
+                                    <button type="button" class="btn btn-sm btn-primary">Buy Again</button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </section>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-brand">
+                <a href="#dashboard" class="brand-logo">
+                    <div class="logo-icon"><i class="fa-solid fa-bag-shopping"></i></div>
+                    <span>Rayvora<span class="accent">.</span></span>
+                </a>
+                <p>Your ultimate destination for global flash deals, top-tier tech, and verified seller products with buyer protection.</p>
+                <div class="payment-methods">
+                    <i class="fa-brands fa-cc-visa"></i>
+                    <i class="fa-brands fa-cc-mastercard"></i>
+                    <i class="fa-brands fa-cc-paypal"></i>
+                    <i class="fa-brands fa-cc-apple-pay"></i>
+                </div>
+            </div>
+
+            <div>
+                <h4 class="footer-heading">Customer Care</h4>
+                <ul class="footer-links">
+                    <li><a href="#help">Help Center & FAQ</a></li>
+                    <li><a href="#orders">Track Order Status</a></li>
+                    <li><a href="#returns">Returns & Refunds</a></li>
+                    <li><a href="#shipping">Shipping Policy</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="footer-heading">Merchant Options</h4>
+                <ul class="footer-links">
+                    <li><a href="views/signup-seller.html">Become a Merchant</a></li>
+                    <li><a href="#fulfillment">Fulfillment Services</a></li>
+                    <li><a href="#policy">Merchant Guidelines</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="footer-heading">Legal & Policy</h4>
+                <ul class="footer-links">
+                    <li><a href="#privacy">Privacy Policy</a></li>
+                    <li><a href="#terms">Terms of Service</a></li>
+                    <li><a href="#contact">Contact Support</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="container footer-bottom">
+            <p>&copy; 2026 Rayvora E-Commerce Inc. All Rights Reserved.</p>
+            <p>Designed with High-Performance GSAP Animation Capabilities.</p>
+        </div>
+    </footer>
+</div>

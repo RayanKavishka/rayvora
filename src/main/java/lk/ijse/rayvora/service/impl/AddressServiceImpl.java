@@ -59,7 +59,7 @@ public class AddressServiceImpl implements AddressService {
                 throw new RayvoraException(404, "Sorry, related user is not found!");
             User user = optionalUser.get();
 
-            Optional<Address> optionalAddress = addressRepository.findById(addressDTO.getAddressId());
+            Optional<Address> optionalAddress = addressRepository.findById(user.getAddress().getAddressId());
             if (optionalAddress.isEmpty())
                 throw new RayvoraException(404, "Sorry, Related address is not found!");
 
@@ -89,7 +89,7 @@ public class AddressServiceImpl implements AddressService {
         try {
             Optional<AddressDTO> optionalAddress = addressRepository.getAddressByUserId(userId);
             if (optionalAddress.isEmpty())
-                throw new RayvoraException(404, "Sorry, related address is not found!");
+                throw new RayvoraException(404, "Please add your home address!");
 
             return optionalAddress.get();
 
