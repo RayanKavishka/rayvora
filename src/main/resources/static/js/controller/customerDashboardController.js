@@ -5,9 +5,10 @@ import {
     getSearchedProducts,
     filterProducts,
     filterProductsByPriceDirection,
-    getProductById
+    getProductById, addProductToCart, getAllCartProducts, updateCartProductQty, removeProductFromCartItems, getUserById
 } from "../api.js";
 import {checkRole} from "../app.js";
+import {auth} from "../auth.js";
 
 
 
@@ -317,7 +318,7 @@ const loadProducts = (products) => {
                     <div class="product-price-row">
                         <span class="current-price">LKR ${product.unitPrice}</span>
                     </div>
-                    <button type="button" class="add-cart-btn"><i class="fa-solid fa-cart-plus"></i> Add to Cart</button>
+                    <button onclick="addToCart(${product.productId})" type="button" class="add-cart-btn"><i class="fa-solid fa-cart-plus"></i> Add to Cart</button>
                 </div>
             </div>
         `;
@@ -459,7 +460,7 @@ $(document).on("click", "#sortHighToLowOption", async function (e) {
 });
 
 
-// Product Details Card Pane
+// Handle product Details Card Pane
 let pdImages = [];
 let pdCurrentImageIndex = 0;
 
@@ -528,10 +529,6 @@ const injectProductDetailsModal = () => {
                             <h4>Description</h4>
                             <p id="pdDescription"></p>
                         </div>
-
-                        <button type="button" class="add-cart-btn pd-add-cart-btn" id="pdAddCartBtn">
-                            <i class="fa-solid fa-cart-plus"></i> Add to Cart
-                        </button>
 
                         <div class="pd-reviews-section">
                             <h4>Customer Reviews</h4>
@@ -720,4 +717,262 @@ $(document).on("keydown", function (e) {
     if (e.key === "Escape" && $("#productDetailsModal").hasClass("open")) {
         closeProductDetailsModal();
     }
+});
+
+
+// ====================================================================================================================
+// Manage cart
+
+
+// Handle cart icon click and load cart products with total
+$(document).on('click', '#cartNavBtn', function (e) {
+    e.preventDefault();
+
+    router("customer/cart-view.html")
+    loadCartProductsAndCount();
+});
+
+
+const loadCartProductsAndCount = async () => {
+    try {
+        const response = await getAllCartProducts(auth.getUserId());
+
+        if (response.status === 404) {
+            Alert.error(response.message);
+        }
+
+        if (response.status === 500) {
+            Alert.error(response.message);
+        }
+
+        if (response.status === 0) {
+            const products = response.body.cartProduct;
+
+            $('#cartItemsList').html('');
+
+            let html = '';
+            let productsCount = 0;
+            let totalAmount = 0.0;
+            products.forEach((product) => {
+
+                html += `
+                    <div class="cart-item-row" data-cart-item-id="${product.productId}">
+                        <div class="cart-item-thumb">
+                          <img src="${product.cartProductImageUrl}" alt="${product.productName}-image">
+                        </div>
+            
+                        <div class="cart-item-info">
+                          <h4 class="cart-item-name">${product.productName}</h4>
+                          <span class="cart-item-seller"><i class="fa-solid fa-store"></i> ${product.shopName}</span>
+                          <span class="cart-item-price">LKR ${product.unitPrice}</span>
+                        </div>
+            
+                        <div class="cart-item-actions">
+                            <div class="qty-stepper">
+                                <button onclick="updateCartProductQty(${product.productId}, 'Minus')" type="button" class="qty-btn qty-minus-btn" aria-label="Decrease quantity">
+                                    <i class="fa-solid fa-minus"></i>
+                                </button>
+                                    <span class="qty-value">${product.quantity}</span>
+                                <button onclick="updateCartProductQty(${product.productId}, 'Plus')" type="button" class="qty-btn qty-plus-btn" aria-label="Increase quantity">
+                                    <i class="fa-solid fa-plus"></i>
+                                </button>
+                            </div>
+            
+                            <button onclick="removeProductFromCart(${product.productId})" type="button" class="cart-item-delete-btn" aria-label="Remove item">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+
+
+                // Calculate count
+                if (product.productId !== null) {
+                    productsCount += 1;
+                }
+
+                // Calculate total
+                totalAmount += (product.unitPrice * product.quantity);
+            });
+
+            $('#cartItemsList').html(html);
+
+            let formattedTotAmount = Number(totalAmount).toLocaleString('en-US', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+
+            $('#cartTotal').text("LKR " + formattedTotAmount);
+            $('#cartSubtotal').text("LKR " + formattedTotAmount);
+
+            $('#productsCountInCartView').text(productsCount);
+            $('#cartItemCount').text(productsCount + " Items");
+        }
+
+    } catch (error) {
+        Alert.error("Something went wrong. Please try again.")
+    }
+}
+
+
+// Handle add cart, when btn clicks
+window.addToCart = async function (productId) {
+    try {
+        const response = await addProductToCart({
+            "userId": auth.getUserId(),
+            "product": {
+                "productId": productId,
+                "quantity": 1
+            }
+        });
+
+        if (response.status === 404) {
+            Alert.error(response.message);
+        }
+
+        if (response.status === 500) {
+            Alert.error(response.message)
+        }
+
+        if (response.status === 0) {
+            let cartProductsCount = $('#cartProductsCountOnIcon').text();
+            $('#cartProductsCountOnIcon').text(Number(cartProductsCount) + 1);
+
+            Alert.success("Added to cart!");
+        }
+
+    } catch (error) {
+        Alert.error("Something went wrong. Please try again.")
+    }
+};
+
+
+// Handle Plus And Minus button in cart item
+window.updateCartProductQty = async function (productId, action) {
+    const cartItem = $(`.cart-item-row[data-cart-item-id="${productId}"]`);
+
+    let currentQty = Number(cartItem.find('.qty-value').text());
+
+    if (action === 'Minus') {
+        if (currentQty === 1) {
+            Alert.warning("Quantity can't go below 1.");
+            return;
+        }
+
+        currentQty -= 1;
+    }
+
+    if (action === 'Plus') {
+        try {
+            const response = await getProductById(productId);
+
+            if (response.status === 404) {
+                Alert.error(response.message);
+                return;
+            }
+
+            if (response.status === 500) {
+                Alert.error(response.message);
+                return;
+            }
+
+            if (response.status === 0) {
+                const product = response.body;
+
+                if (currentQty === product.quantity) {
+                    Alert.warning("Not enough stock available.");
+                    return;
+                }
+
+                currentQty += 1;
+            }
+
+        } catch (error) {
+            Alert.error("Something went wrong. Please try again.");
+            return;
+        }
+    }
+
+    const response = await updateCartProductQty({
+        "productId": productId,
+        "quantity": currentQty,
+        "userId": auth.getUserId()
+    });
+
+    if (response.status === 400) {
+        Alert.error(response.message);
+        return;
+    }
+
+    if (response.status === 404) {
+        Alert.error(response.message);
+        return;
+    }
+
+    if (response.status === 500) {
+        Alert.error(response.message);
+        return;
+    }
+
+    if (response.status === 0) {
+        cartItem.find('.qty-value').text(currentQty);
+
+        let newTotal = 0.0;
+        $('.cart-item-row').toArray().forEach((cartItem) => {
+            let quantity = Number(
+                $(cartItem).find('.qty-value').text()
+            );
+            let unitPrice = Number(
+                $(cartItem).find('.cart-item-price').text().replace("LKR ", "")
+            );
+
+            newTotal += quantity * unitPrice;
+        });
+
+        let formattedTotAmount = Number(newTotal).toLocaleString('en-US', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+
+        $('#cartTotal').text("LKR " + formattedTotAmount);
+        $('#cartSubtotal').text("LKR " + formattedTotAmount);
+    }
+};
+
+
+// Handle remove btn in cart item
+window.removeProductFromCart = async function (productId) {
+
+    const response = await removeProductFromCartItems({
+        "productId": productId,
+        "userId": auth.getUserId()
+    });
+
+    if (response.status === 400) {
+        Alert.error(response.message);
+        return;
+    }
+
+    if (response.status === 404) {
+        Alert.error(response.message);
+        return;
+    }
+
+    if (response.status === 500) {
+        Alert.error(response.message);
+        return;
+    }
+
+    if (response.status === 0) {
+        Alert.success("Product is removed from cart");
+        loadCartProductsAndCount();
+    }
+};
+
+
+// Handle back btn in cart view
+$(document).on('click', '#btnCartBack', function (e) {
+    e.preventDefault();
+
+    checkRole();
 });

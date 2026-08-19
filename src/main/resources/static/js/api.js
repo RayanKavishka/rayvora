@@ -352,6 +352,59 @@ const filterProductsByPriceDirection = (page, size, direction) => {
 
 
 
+// Cart
+const addProductToCart = (cartDTO) => {
+    return $.ajax({
+        url: API_BASE_URL + "/carts",
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(cartDTO),
+        headers: {
+            'Authorization': 'Bearer ' + auth.getJWT()
+        }
+    });
+};
+
+
+const updateCartProductQty = (updateCartDTO) => {
+    return $.ajax({
+        url: API_BASE_URL + "/carts",
+        type: 'PUT',
+        contentType: 'application/json',
+        data: JSON.stringify(updateCartDTO),
+        headers: {
+            'Authorization': 'Bearer ' + auth.getJWT()
+        }
+    });
+};
+
+
+const getAllCartProducts = (userId) => {
+    return $.ajax({
+        url: API_BASE_URL + "/carts/"+userId,
+        type: 'GET',
+        contentType: 'application/json',
+        headers: {
+            'Authorization': 'Bearer ' + auth.getJWT()
+        }
+    });
+};
+
+
+const removeProductFromCartItems = (updateCartDTO) => {
+    return $.ajax({
+        url: API_BASE_URL + "/carts",
+        type: 'DELETE',
+        contentType: 'application/json',
+        data: JSON.stringify(updateCartDTO),
+        headers: {
+            'Authorization': 'Bearer ' + auth.getJWT()
+        }
+    });
+};
+
+
+
 
 
 export {
@@ -378,5 +431,9 @@ export {
     getSearchedProducts,
     getAllProducts,
     filterProducts,
-    filterProductsByPriceDirection
+    filterProductsByPriceDirection,
+    addProductToCart,
+    getAllCartProducts,
+    updateCartProductQty,
+    removeProductFromCartItems
 }

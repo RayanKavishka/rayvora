@@ -2,10 +2,9 @@ package lk.ijse.rayvora.service.impl;
 
 import lk.ijse.rayvora.dto.CartDTO;
 import lk.ijse.rayvora.dto.request.UpdateCartRequestDTO;
-import lk.ijse.rayvora.entity.Cart;
-import lk.ijse.rayvora.entity.CartProducts;
-import lk.ijse.rayvora.entity.Product;
-import lk.ijse.rayvora.entity.User;
+import lk.ijse.rayvora.dto.response.CartProductsResponseDTO;
+import lk.ijse.rayvora.dto.response.ResponseProductDTO;
+import lk.ijse.rayvora.entity.*;
 import lk.ijse.rayvora.enumeration.Status;
 import lk.ijse.rayvora.exception.RayvoraException;
 import lk.ijse.rayvora.repository.CartProductsRepository;
@@ -17,6 +16,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -64,19 +65,32 @@ public class CartServiceImpl implements CartService {
             }
             Product product = optionalProduct.get();
             if (cartDTO.getProduct().getQuantity() <= 0) {
-                throw new RayvoraException(400, "Quantity must be greater than zero.");
+                throw new RayvoraException(409, "Quantity must be greater than zero.");
             }
 
             if (cartDTO.getProduct().getQuantity() > product.getStock().getQuantity()) {
-                throw new RayvoraException(400, "Not enough stock available.");
+                throw new RayvoraException(409, "Not enough stock available.");
             }
 
-            CartProducts cartProducts =  new CartProducts();
-            cartProducts.setCart(currentCart);
-            cartProducts.setProduct(product);
-            cartProducts.setQuantity(cartDTO.getProduct().getQuantity());
+            CartProducts cartProduct = null;
+            for (CartProducts cartProducts : cartProductsRepository.findAllByCartCartId(currentCart.getCartId())) {
+                if (cartProducts.getProduct().getProductId().equals(cartDTO.getProduct().getProductId())) {
+                    cartProduct = cartProducts;
 
-            cartProductsRepository.save(cartProducts);
+                    cartProducts.setQuantity(cartProducts.getQuantity() + cartDTO.getProduct().getQuantity());
+                    cartProducts.setStatus(Status.ACTIVE);
+                    break;
+                }
+            }
+
+            if (cartProduct == null) {
+                cartProduct = new CartProducts();
+                cartProduct.setCart(currentCart);
+                cartProduct.setProduct(product);
+                cartProduct.setQuantity(cartDTO.getProduct().getQuantity());
+            }
+
+            cartProductsRepository.save(cartProduct);
 
         } catch (Exception e) {
             log.error("Error in saveCart() : " + e.getMessage());
@@ -95,11 +109,11 @@ public class CartServiceImpl implements CartService {
             Product product = optionalProduct.get();
 
             if (updateCartRequestDTO.getQuantity() <= 0) {
-                throw new RayvoraException(400, "Quantity must be greater than zero.");
+                throw new RayvoraException(409, "Quantity must be greater than zero.");
             }
 
             if (updateCartRequestDTO.getQuantity() > product.getStock().getQuantity()) {
-                throw new RayvoraException(400, "Not enough stock available.");
+                throw new RayvoraException(409, "Not enough stock available.");
             }
 
             Optional<Cart> optionalCart = cartRepository.getLatestCart(updateCartRequestDTO.getUserId());
@@ -139,6 +153,58 @@ public class CartServiceImpl implements CartService {
 
         } catch (Exception e) {
             log.error("Error in removeProductFromCart() : " + e.getMessage());
+            throw e;
+        }
+    }
+
+    @Override
+    public CartProductsResponseDTO getAllCartProducts(Long customerId) {
+        log.info("Execute getAllCartProducts()");
+        try {
+            Optional<User> optionalUser = userRepository.findById(customerId);
+            if (optionalUser.isEmpty())
+                throw new RayvoraException(404, "Sorry, related customer is not found!");
+            User user = optionalUser.get();
+
+            Optional<Cart> optionalCart = cartRepository.getLatestCart(user.getUserId());
+            if (optionalCart.isEmpty())
+                throw new RayvoraException(404, "Your cart is waiting! Start exploring and find something you’ll love.");
+
+            List<CartProducts> allCartProducts =
+                    cartProductsRepository.findAllByCartCartIdAndStatus(optionalCart.get().getCartId(), Status.ACTIVE);
+
+            CartProductsResponseDTO cartProductRequestDTO = new CartProductsResponseDTO();
+            cartProductRequestDTO.setCartId(optionalCart.get().getCartId());
+
+            List<ResponseProductDTO> responseProduct = new ArrayList<>();
+            for (CartProducts cartProduct : allCartProducts) {
+                ResponseProductDTO responseProductDTO = new ResponseProductDTO();
+                responseProductDTO.setProductId(cartProduct.getProduct().getProductId());
+                responseProductDTO.setProductName(cartProduct.getProduct().getProductName());
+                responseProductDTO.setUnitPrice(cartProduct.getProduct().getUnitPrice());
+                responseProductDTO.setShopName(cartProduct
+                                .getProduct()
+                                .getStock()
+                                .getUser()
+                                .getAddress()
+                                .getFullName());
+                responseProductDTO.setQuantity(cartProduct.getQuantity());
+
+                String productUrl = "";
+                for (ProductImage productImage : cartProduct.getProduct().getProductImages()) {
+                    productUrl = productImage.getImageUrl();
+                    break;
+                }
+                responseProductDTO.setCartProductImageUrl(productUrl);
+
+                responseProduct.add(responseProductDTO);
+            }
+            cartProductRequestDTO.setCartProduct(responseProduct);
+
+            return cartProductRequestDTO;
+
+        } catch (Exception e) {
+            log.error("Error in getAllCartProducts() : " + e.getMessage());
             throw e;
         }
     }

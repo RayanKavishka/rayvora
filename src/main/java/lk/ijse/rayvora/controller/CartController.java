@@ -37,10 +37,19 @@ public class CartController {
     }
 
     @DeleteMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public CommonResponse removeProductFromCart(UpdateCartRequestDTO updateCartRequestDTO) {
+    public CommonResponse removeProductFromCart(@RequestBody UpdateCartRequestDTO updateCartRequestDTO) {
         cartService.removeProductFromCart(updateCartRequestDTO);
         return new CommonResponse(
                 ResponseCode.OPERATION_SUCCESS,
+                ResponseMessage.SUCCESS_MESSAGE
+        );
+    }
+
+    @GetMapping(value = "/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public CommonResponse getAllCartProducts(@PathVariable long userId) {
+        return new CommonResponse(
+                ResponseCode.OPERATION_SUCCESS,
+                cartService.getAllCartProducts(userId),
                 ResponseMessage.SUCCESS_MESSAGE
         );
     }

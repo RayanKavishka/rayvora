@@ -1,6 +1,6 @@
 import {auth} from "./auth.js";
 import {router} from "./router.js";
-import {getAllCategories, getUserById} from "./api.js";
+import {getAllCartProducts, getAllCategories, getUserById} from "./api.js";
 
 $(document).ready(function () {
     if (!auth.isLoggedIn()) {
@@ -26,9 +26,9 @@ export async function checkRole()  {
         router("customer-dashboard.html");
 
         loadCategoriesAndUserName();
+        loadCartProductsCount();
     }
 }
-
 
 
 const loadCategoriesAndUserName = async () => {
@@ -37,10 +37,12 @@ const loadCategoriesAndUserName = async () => {
 
         if (response.status === 404) {
             Alert.error(response.message);
+            return;
         }
 
         if (response.status === 500) {
             Alert.error(response.message);
+            return;
         }
 
         if (response.status === 0) {
@@ -50,7 +52,8 @@ const loadCategoriesAndUserName = async () => {
         }
 
     } catch (error) {
-        Alert.error("Something went wrong. Please try again.")
+        Alert.error("Something went wrong. Please try again.");
+        return;
     }
 
     try {
@@ -58,6 +61,7 @@ const loadCategoriesAndUserName = async () => {
 
         if (response.status === 500) {
             Alert.error(response.message);
+            return;
         }
 
         if (response.status === 0) {
@@ -74,8 +78,50 @@ const loadCategoriesAndUserName = async () => {
 
     } catch (error) {
         Alert.error("Something went wrong. Please try again.");
+        return;
     }
 };
+
+
+const loadCartProductsCount = async () => {
+    try {
+        const response = await getAllCartProducts(auth.getUserId());
+
+        if (response.status === 404) {
+            Alert.warning(response.message);
+            return;
+        }
+
+        if (response.status === 500) {
+            Alert.error(response.message);
+            return;
+        }
+
+        if (response.status === 0) {
+            const products = response.body.cartProduct;
+
+            let productsCount = 0;
+            products.forEach((product) => {
+                if (product.productId !== null) {
+                    productsCount += 1;
+                }
+            });
+
+            $('#cartProductsCountOnIcon').text(productsCount);
+        }
+
+    } catch (error) {
+        Alert.error("Something went wrong. Please try again.");
+        return;
+    }
+};
+
+
+
+
+
+
+
 
 
 // Theme changing implementation

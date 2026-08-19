@@ -1,0 +1,176 @@
+<div class="customer-dashboard-wrapper">
+  <!-- Top Announcement Bar -->
+  <div class="top-bar">
+    <div class="container top-bar-flex">
+      <div class="top-bar-notice">
+        <span class="tag-sale"><i class="fa-solid fa-bolt"></i> Mega Sale</span>
+        <span>Get up to 60% OFF on premium electronics! Free shipping over LKR 5,000</span>
+      </div>
+      <div class="top-bar-links">
+        <!-- Dark / Light Theme Toggle Switch Button -->
+        <button type="button" class="theme-toggle-btn" id="themeToggleBtn" title="Toggle Light/Dark Theme">
+          <i class="fa-solid fa-sun theme-toggle-icon" id="themeIcon"></i>
+          <span id="themeLabel">Light</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Navigation Header -->
+  <header class="main-header">
+    <div class="container navbar">
+      <!-- Back Button-->
+      <div class="header-search-row" style="flex: 0 0 auto;">
+        <button type="button" class="back-btn" id="btnCartBack" title="Back to Dashboard">
+          <i class="fa-solid fa-arrow-left"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Cart Container -->
+  <main class="container">
+
+    <div class="cart-page-title-row">
+      <h2 class="cart-page-title"><i class="fa-solid fa-cart-shopping"></i> Shopping Cart</h2>
+      <span class="cart-page-item-count" id="cartItemCount"></span>
+    </div>
+
+    <section class="cart-page-layout">
+
+      <!-- LEFT SIDE (65%) — Cart Items -->
+      <div class="cart-items-card">
+        <div class="cart-items-header">
+          <h3><i class="fa-solid fa-boxes-stacked"></i> Items in Your Cart</h3>
+        </div>
+
+        <div class="cart-items-list" id="cartItemsList">
+
+        </div>
+      </div>
+
+      <!-- RIGHT SIDE (35%) — Order Summary -->
+      <div class="order-summary-card">
+        <h3 class="order-summary-title"><i class="fa-solid fa-receipt"></i> Order Summary</h3>
+
+        <!-- Shipping Address -->
+        <div class="shipping-address-block">
+          <div class="shipping-address-text">
+            <span class="shipping-address-label"><i class="fa-solid fa-location-dot"></i> Deliver to</span>
+            <p id="shippingAddressText">No. 24, Lotus Lane, Negombo, Western Province, Sri Lanka</p>
+          </div>
+          <button type="button" class="btn btn-sm btn-outline" id="btnEditShippingAddress">
+            <i class="fa-solid fa-pen"></i> Edit
+          </button>
+        </div>
+
+        <!-- Payment Method -->
+        <div class="payment-method-section">
+          <h4 class="payment-method-title">Payment Method</h4>
+
+          <div class="payment-method-options" id="paymentMethodOptions">
+            <label class="payment-method-option selected" data-method="cod">
+              <span class="payment-method-icon"><i class="fa-solid fa-money-bill-wave"></i></span>
+              <span class="payment-method-text">
+                                <span class="payment-method-name">Cash on Delivery</span>
+                                <span class="payment-method-desc">Pay when your order arrives</span>
+                            </span>
+              <input type="radio" name="paymentMethod" value="cod" checked hidden>
+              <span class="payment-method-radio"></span>
+            </label>
+
+            <label class="payment-method-option" data-method="card">
+              <span class="payment-method-icon"><i class="fa-solid fa-credit-card"></i></span>
+              <span class="payment-method-text">
+                                <span class="payment-method-name">Debit / Credit Card</span>
+                                <span class="payment-method-desc">Visa, Mastercard & more</span>
+                            </span>
+              <input type="radio" name="paymentMethod" value="card" hidden>
+              <span class="payment-method-radio"></span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Totals -->
+        <div class="order-totals-list">
+          <div class="order-totals-row">
+            <span>Subtotal</span>
+            <span id="cartSubtotal"></span>
+          </div>
+          <div class="order-totals-row">
+            <span>Shipping</span>
+            <span class="shipping-free-label">FREE</span>
+          </div>
+          <div class="order-totals-row">
+            <span>Tax</span>
+            <span id="cartTax">LKR 0</span>
+          </div>
+          <div class="order-totals-row total-row">
+            <span>Total</span>
+            <span id="cartTotal"></span>
+          </div>
+        </div>
+
+        <button type="button" class="btn btn-orange btn-block place-order-btn" id="btnPlaceOrder">
+          <i class="fa-solid fa-lock"></i> Place Order
+        </button>
+
+        <p class="secure-checkout-note"><i class="fa-solid fa-shield-halved"></i> Secure checkout &middot; 100% Buyer Protection</p>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="main-footer">
+    <div class="container footer-grid">
+      <div class="footer-brand">
+        <a href="#dashboard" class="brand-logo">
+          <div class="logo-icon"><i class="fa-solid fa-bag-shopping"></i></div>
+          <span>Rayvora<span class="accent">.</span></span>
+        </a>
+        <p>Your ultimate destination for global flash deals, top-tier tech, and verified seller products with buyer protection.</p>
+        <div class="payment-methods">
+          <i class="fa-brands fa-cc-visa"></i>
+          <i class="fa-brands fa-cc-mastercard"></i>
+          <i class="fa-brands fa-cc-paypal"></i>
+          <i class="fa-brands fa-cc-apple-pay"></i>
+        </div>
+      </div>
+
+      <div>
+        <h4 class="footer-heading">Customer Care</h4>
+        <ul class="footer-links">
+          <li><a href="#help">Help Center & FAQ</a></li>
+          <li><a href="#orders">Track Order Status</a></li>
+          <li><a href="#returns">Returns & Refunds</a></li>
+          <li><a href="#shipping">Shipping Policy</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="footer-heading">Merchant Options</h4>
+        <ul class="footer-links">
+          <li><a href="views/signup-seller.html">Become a Merchant</a></li>
+          <li><a href="#fulfillment">Fulfillment Services</a></li>
+          <li><a href="#policy">Merchant Guidelines</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="footer-heading">Legal & Policy</h4>
+        <ul class="footer-links">
+          <li><a href="#privacy">Privacy Policy</a></li>
+          <li><a href="#terms">Terms of Service</a></li>
+          <li><a href="#contact">Contact Support</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="container footer-bottom">
+      <p>&copy; 2026 Rayvora E-Commerce Inc. All Rights Reserved.</p>
+      <p>Designed with High-Performance GSAP Animation Capabilities.</p>
+    </div>
+  </footer>
+</div>

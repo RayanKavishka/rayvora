@@ -25,4 +25,15 @@ public class ResponseProductDTO {
 
     private List<ReviewDTO> reviews;
     private List<String> imageUrls;
+
+    private String cartProductImageUrl;
+
+    public ResponseProductDTO(Long productId, String productName, BigDecimal unitPrice, String shopName, Integer quantity, String cartProductImageUrl) {
+        this.productId = productId;
+        this.productName = productName;
+        this.unitPrice = unitPrice;
+        this.shopName = shopName;
+        this.quantity = quantity;
+        this.cartProductImageUrl = cartProductImageUrl;
+    }
 }

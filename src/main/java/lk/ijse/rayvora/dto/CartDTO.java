@@ -17,9 +17,9 @@ public class CartDTO {
     private LocalDateTime createdAt;
     private Status status;
 
-    @NotNull(message = "Product is required")
-    private CartProductRequestDTO product;
-
     @NotNull(message = "User is required")
     private Long userId;
+
+    @NotNull(message = "Product is required")
+    private CartProductRequestDTO product;
 }

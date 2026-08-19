@@ -302,38 +302,43 @@ const loadLowStockProducts = async () => {
 
 // Load product into form for update
 window.loadProductIntoForm = async function (productId) {
-    const response = await getProductById(productId);
+    try {
+        const response = await getProductById(productId);
 
-    if (response.status === 404) {
-        Alert.error(response.message);
-    }
+        if (response.status === 404) {
+            Alert.error(response.message);
+        }
 
-    if (response.status === 500) {
-        Alert.error(response.message);
-    }
+        if (response.status === 500) {
+            Alert.error(response.message);
+        }
 
-    if (response.status === 0) {
-        const product = response.body;
+        if (response.status === 0) {
+            const product = response.body;
 
 
-        let category = $('#productFormCategory option').filter((index, option) => {
-            return $(option).text().trim() === product.categoryName;
-        });
-        $('#productFormCategory').val(category.val());
+            let category = $('#productFormCategory option').filter((index, option) => {
+                return $(option).text().trim() === product.categoryName;
+            });
+            $('#productFormCategory').val(category.val());
 
-        $('#productFormId').val(product.productId);
-        $('#productFormName').val(product.productName);
-        $('#productFormDescription').val(product.description);
-        $('#productFormPrice').val(product.unitPrice);
-        $('#productFormBrand').val(product.brand);
-        $('#productFormQuantity').val(product.quantity);
-        $('#productFormLowStockLimit').val(product.lowStockLimit);
+            $('#productFormId').val(product.productId);
+            $('#productFormName').val(product.productName);
+            $('#productFormDescription').val(product.description);
+            $('#productFormPrice').val(product.unitPrice);
+            $('#productFormBrand').val(product.brand);
+            $('#productFormQuantity').val(product.quantity);
+            $('#productFormLowStockLimit').val(product.lowStockLimit);
 
-        $('#productImagesInput').prop('disabled', true);
+            $('#productImagesInput').prop('disabled', true);
 
-        $('#btnSubmitProduct')
-            .text("Update Product")
-            .css({background: "var(--c-sky)"});
+            $('#btnSubmitProduct')
+                .text("Update Product")
+                .css({background: "var(--c-sky)"});
+        }
+
+    } catch (error) {
+        Alert.error("Something went wrong. Please try again.");
     }
 }
 
