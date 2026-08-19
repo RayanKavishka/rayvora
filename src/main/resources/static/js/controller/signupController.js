@@ -56,14 +56,17 @@ $(document).on('click', '#btnSubmitCustomerSignup', async function () {
 
         if (response.status === 400) {
             Alert.error(response.message);
+            return;
         }
 
         if (response.status === 409) {
             Alert.error(response.message);
+            return;
         }
 
         if (response.status === 500) {
             Alert.error(response.message);
+            return;
         }
 
         if (response.status === 0) {
@@ -80,6 +83,7 @@ $(document).on('click', '#btnSubmitCustomerSignup', async function () {
 
     } catch (error) {
         Alert.error("Something went wrong. Please try again.");
+        return;
     }
 });
 
@@ -151,14 +155,17 @@ $(document).on('click', '#btnSubmitSellerSignup', async function () {
 
         if (response.status === 400) {
             Alert.error(response.message);
+            return;
         }
 
         if (response.status === 409) {
             Alert.error(response.message);
+            return;
         }
 
         if (response.status === 500) {
             Alert.error(response.message);
+            return;
         }
 
         if (response.status === 0) {
@@ -184,6 +191,7 @@ $(document).on('click', '#btnSubmitSellerSignup', async function () {
 
     } catch (error) {
         Alert.error("Something went wrong. Please try again.");
+        return;
     }
 });
 

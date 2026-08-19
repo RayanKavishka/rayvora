@@ -37,6 +37,7 @@ const loadAdminsTable = async () => {
 
         if (response.status === 500) {
             Alert.error(response.message);
+            return;
         }
 
         if (response.status === 0) {
@@ -74,6 +75,7 @@ const loadAdminsTable = async () => {
 
     } catch (error) {
         Alert.error("Something went wrong. Please try again.");
+        return;
     }
 };
 
@@ -92,6 +94,7 @@ $(document).on('input', '#adminSearchInput', async function () {
 
         if (response.status === 500) {
             Alert.error(response.message);
+            return;
         }
 
         if (response.status === 0) {
@@ -129,6 +132,7 @@ $(document).on('input', '#adminSearchInput', async function () {
 
     } catch (error) {
         Alert.error("Something went wrong. Please try again.");
+        return;
     }
 });
 
@@ -155,6 +159,7 @@ window.handleUpdateAdmin = async function (userId) {
 
         if (response.status === 500) {
             Alert.error(response.message);
+            return;
         }
 
         if (response.status === 0) {
@@ -171,6 +176,7 @@ window.handleUpdateAdmin = async function (userId) {
 
     } catch (error) {
         Alert.error("Something went wrong. Please try again.");
+        return;
     }
 }
 
@@ -204,14 +210,17 @@ $(document).on('click', '#updateAdminBtn', async function () {
 
         if (response.status === 400) {
             Alert.error(response.message);
+            return;
         }
 
         if (response.status === 409) {
             Alert.error(response.message);
+            return;
         }
 
         if (response.status === 500) {
             Alert.error(response.message);
+            return;
         }
 
         if (response.status === 0) {
@@ -229,6 +238,7 @@ $(document).on('click', '#updateAdminBtn', async function () {
 
     } catch (error) {
         Alert.error("Something went wrong. Please try again.");
+        return;
     }
 
     await loadAdminsTable();
@@ -248,10 +258,12 @@ window.handleSetInactiveUser = function (userId) {
 
             if (response.status === 404) {
                 Alert.error(response.message);
+                return;
             }
 
             if (response.status === 500) {
                 Alert.error(response.message);
+                return;
             }
 
             if (response.status === 0) {
@@ -260,6 +272,7 @@ window.handleSetInactiveUser = function (userId) {
 
         } catch (error) {
             Alert.error("Something went wrong. Please try again.");
+            return;
         }
 
         try {
@@ -267,10 +280,12 @@ window.handleSetInactiveUser = function (userId) {
 
             if (response.status === 404) {
                 Alert.error(response.message);
+                return;
             }
 
             if (response.status === 500) {
                 Alert.error(response.message);
+                return;
             }
 
             if (response.status === 0) {
@@ -288,6 +303,7 @@ window.handleSetInactiveUser = function (userId) {
 
         } catch (error) {
             Alert.error("Something went wrong. Please try again.");
+            return;
         }
     });
 };
@@ -332,14 +348,17 @@ $(document).on('click', '#btnSubmitAdminRegister', async function (e) {
 
         if (response.status === 400) {
             Alert.error(response.message);
+            return;
         }
 
         if (response.status === 409) {
             Alert.error(response.message);
+            return;
         }
 
         if (response.status === 500) {
             Alert.error(response.message);
+            return;
         }
 
         if (response.status === 0) {
@@ -355,6 +374,7 @@ $(document).on('click', '#btnSubmitAdminRegister', async function (e) {
 
     } catch (error) {
         Alert.error("Something went wrong. Please try again.");
+        return;
     }
 
     await loadAdminsTable();
@@ -381,6 +401,7 @@ const loadCustomersTable = async () => {
 
         if (response.status === 500) {
             Alert.error(response.message);
+            return;
         }
 
         if (response.status === 0) {
@@ -413,6 +434,7 @@ const loadCustomersTable = async () => {
 
     } catch (error) {
         Alert.error("Something went wrong. Please try again.");
+        return;
     }
 };
 
@@ -431,6 +453,7 @@ $(document).on('input', '#customerSearchInput', async function () {
 
         if (response.status === 500) {
             Alert.error(response.message);
+            return;
         }
 
         if (response.status === 0) {
@@ -463,6 +486,7 @@ $(document).on('input', '#customerSearchInput', async function () {
 
     } catch (error) {
         Alert.error("Something went wrong. Please try again.");
+        return;
     }
 });
 
@@ -494,6 +518,7 @@ const loadSellersTable = async () => {
 
         if (response.status === 500) {
             Alert.error(response.message);
+            return;
         }
 
         if (response.status === 0) {
@@ -526,6 +551,7 @@ const loadSellersTable = async () => {
 
     } catch (error) {
         Alert.error("Something went wrong. Please try again.");
+        return;
     }
 };
 
@@ -544,6 +570,7 @@ $(document).on('input', '#sellerSearchInput', async function () {
 
         if (response.status === 500) {
             Alert.error(response.message);
+            return;
         }
 
         if (response.status === 0) {
@@ -576,6 +603,7 @@ $(document).on('input', '#sellerSearchInput', async function () {
 
     } catch (error) {
         Alert.error("Something went wrong. Please try again.");
+        return;
     }
 });
 
@@ -607,6 +635,7 @@ const loadAllCategories = async () => {
 
         if (response.status === 500) {
             Alert.error(response.message);
+            return;
         }
 
         if (response.status === 0) {
@@ -634,6 +663,7 @@ const loadAllCategories = async () => {
 
     } catch (error) {
         Alert.error("Something went wrong. Please try again.");
+        return;
     }
 };
 
@@ -661,10 +691,12 @@ $(document).on('click', '#btnSubmitCategory', async function (e) {
 
         if (response.status === 400) {
             Alert.error(response.message);
+            return;
         }
 
         if (response.status === 500) {
             Alert.error(response.message);
+            return;
         }
 
         if (response.status === 0) {
@@ -681,6 +713,7 @@ $(document).on('click', '#btnSubmitCategory', async function (e) {
 
     } catch (error) {
         Alert.error("Something went wrong. Please try again.");
+        return;
     }
 
     await loadAllCategories();
@@ -724,10 +757,12 @@ window.handleDeleteCategory = function (categoryId) {
 
             if (response.status === 404) {
                 Alert.error(response.message);
+                return;
             }
 
             if (response.status === 500) {
                 Alert.error(response.message);
+                return;
             }
 
             if (response.status === 0) {
@@ -737,6 +772,7 @@ window.handleDeleteCategory = function (categoryId) {
 
         } catch (error) {
             Alert.error("Something went wrong. Please try again.");
+            return;
         }
 
 

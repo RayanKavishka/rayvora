@@ -125,6 +125,7 @@ const loadCategoriesIntoFilter = async () => {
 
         if (response.status === 500) {
             Alert.error(response.message);
+            return;
         }
 
         if (response.status === 0) {
@@ -141,6 +142,7 @@ const loadCategoriesIntoFilter = async () => {
 
     } catch (error) {
         Alert.error("Something went wrong. Please try again.");
+        return;
     }
 };
 
@@ -155,6 +157,7 @@ const loadAllProducts = async (page = 0) => {
 
     } catch (error) {
         Alert.error("Something went wrong. Please try again");
+        return;
     }
 };
 
@@ -175,6 +178,7 @@ const loadFilteredProducts = async (page = 0) => {
 
     } catch (error) {
         Alert.error("Something went wrong. Please try again");
+        return;
     }
 };
 
@@ -192,6 +196,7 @@ const loadSortedProducts = async (page = 0, direction = null) => {
 
     } catch (error) {
         Alert.error("Something went wrong. Please try again");
+        return;
     }
 };
 
@@ -210,6 +215,7 @@ const loadSearchResults = async (page = 0, term = null) => {
 
     } catch (error) {
         Alert.error("Something went wrong. Please try again");
+        return;
     }
 };
 
@@ -233,10 +239,12 @@ const reloadCurrentPage = async (page) => {
 const handleProductsPageResponse = (response) => {
     if (response.status === 404) {
         Alert.error(response.message);
+        return;
     }
 
     if (response.status === 500) {
         Alert.error(response.message);
+        return;
     }
 
     if (response.status === 0) {
@@ -668,6 +676,7 @@ const openProductDetailsModal = async (productId) => {
     } catch (error) {
         Alert.error("Something went wrong. Please try again");
         closeProductDetailsModal();
+        return;
     }
 };
 
@@ -740,10 +749,12 @@ const loadCartProductsAndCount = async () => {
 
         if (response.status === 404) {
             Alert.error(response.message);
+            return;
         }
 
         if (response.status === 500) {
             Alert.error(response.message);
+            return;
         }
 
         if (response.status === 0) {
@@ -812,6 +823,7 @@ const loadCartProductsAndCount = async () => {
 
     } catch (error) {
         Alert.error("Something went wrong. Please try again.")
+        return;
     }
 }
 
@@ -829,10 +841,12 @@ window.addToCart = async function (productId) {
 
         if (response.status === 404) {
             Alert.error(response.message);
+            return;
         }
 
         if (response.status === 500) {
             Alert.error(response.message)
+            return;
         }
 
         if (response.status === 0) {
@@ -844,6 +858,7 @@ window.addToCart = async function (productId) {
 
     } catch (error) {
         Alert.error("Something went wrong. Please try again.")
+        return;
     }
 };
 

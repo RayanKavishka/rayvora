@@ -18,18 +18,22 @@ $(document).on('click', '#btnSubmitLogin', async function () {
 
         if (response.status === 400) {
             Alert.error(response.message);
+            return;
         }
 
         if (response.status === 401) {
             Alert.error(response.message);
+            return;
         }
 
         if (response.status === 404) {
             Alert.error(response.message);
+            return;
         }
 
         if (response.status === 500) {
             Alert.error(response.message);
+            return;
         }
 
         if (response.status === 0) {
@@ -42,6 +46,7 @@ $(document).on('click', '#btnSubmitLogin', async function () {
 
     } catch (error) {
         Alert.error("Something went wrong. Please try again.");
+        return;
     }
 });
 

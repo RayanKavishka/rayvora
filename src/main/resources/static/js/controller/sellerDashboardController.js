@@ -47,6 +47,7 @@ $(document).on('click', '#manageProducts', async function (e) {
 
         if (response.status === 500) {
             Alert.error(response.message);
+            return;
         }
 
         if (response.status === 0) {
@@ -63,6 +64,7 @@ $(document).on('click', '#manageProducts', async function (e) {
 
     } catch (error) {
         Alert.error("Something went wrong. Please try again.");
+        return;
     }
 
 
@@ -73,6 +75,7 @@ $(document).on('click', '#manageProducts', async function (e) {
 
         if (response.status === 500) {
             Alert.error(response.message);
+            return;
         }
 
         if (response.status === 0) {
@@ -89,6 +92,7 @@ $(document).on('click', '#manageProducts', async function (e) {
 
     } catch (error) {
         Alert.error("Something went wrong. Please try again.");
+        return;
     }
 
     await loadProductsBySellerAndCategory();
@@ -118,18 +122,20 @@ const loadProductsBySellerAndCategory = async (page = 0) => {
         const categoryName = getSelectedCategory();
 
         const response = await getProductsBySellerAndCategory(
-                sellerId,
-                categoryName,
-                page,
-                PRODUCTS_PER_PAGE
-            );
+            sellerId,
+            categoryName,
+            page,
+            PRODUCTS_PER_PAGE
+        );
 
         if (response.status === 404) {
             Alert.error(response.message);
+            return;
         }
 
         if (response.status === 500) {
             Alert.error(response.message);
+            return;
         }
 
         if (response.status === 0) {
@@ -147,6 +153,7 @@ const loadProductsBySellerAndCategory = async (page = 0) => {
 
     } catch (error) {
         Alert.error("Something went wrong. Please try again");
+        return;
     }
 };
 
@@ -249,6 +256,7 @@ const loadLowStockProducts = async () => {
 
     if (response.status === 500) {
         Alert.error(response.message);
+        return;
     }
 
     if (response.status === 0) {
@@ -307,10 +315,12 @@ window.loadProductIntoForm = async function (productId) {
 
         if (response.status === 404) {
             Alert.error(response.message);
+            return;
         }
 
         if (response.status === 500) {
             Alert.error(response.message);
+            return;
         }
 
         if (response.status === 0) {
@@ -339,6 +349,7 @@ window.loadProductIntoForm = async function (productId) {
 
     } catch (error) {
         Alert.error("Something went wrong. Please try again.");
+        return;
     }
 }
 
@@ -351,10 +362,12 @@ window.removeProduct = async (productId) => {
 
             if (response.status === 404) {
                 Alert.error(response.message);
+                return;
             }
 
             if (response.status === 500) {
                 Alert.error(response.message);
+                return;
             }
 
             if (response.status === 0) {
@@ -365,6 +378,7 @@ window.removeProduct = async (productId) => {
 
         } catch (error) {
             Alert.error("Something went wrong. Please try again.");
+            return;
         }
     });
 }
@@ -389,14 +403,17 @@ $(document).on('click', '#btnSubmitProduct', async function (e) {
 
         if (response.status === 400) {
             Alert.error(response.message);
+            return;
         }
 
         if (response.status === 404) {
             Alert.error(response.message);
+            return;
         }
 
         if (response.status === 500) {
             Alert.error(response.message);
+            return;
         }
 
         if (response.status === 0) {
@@ -457,14 +474,17 @@ $(document).on('click', '#btnSubmitProduct', async function (e) {
 
         if (response.status === 400) {
             Alert.error(response.message);
+            return;
         }
 
         if (response.status === 404) {
             Alert.error(response.message);
+            return;
         }
 
         if (response.status === 500) {
             Alert.error(response.message);
+            return;
         }
 
         if (response.status === 0) {
@@ -565,10 +585,12 @@ const loadSearchedProducts = async (page = 0) => {
 
         if (response.status === 404) {
             Alert.error(response.message);
+            return;
         }
 
         if (response.status === 500) {
             Alert.error(response.message);
+            return;
         }
 
         if (response.status === 0) {
@@ -586,6 +608,7 @@ const loadSearchedProducts = async (page = 0) => {
 
     } catch (error) {
         Alert.error("Something went wrong. Please try again");
+        return;
     }
 };
 
@@ -630,10 +653,12 @@ const fillSellerDetails = async () => {
 
         if (response.status === 404) {
             Alert.error(response.message);
+            return;
         }
 
         if (response.status === 500) {
             Alert.error(response.message);
+            return;
         }
 
         if (response.status === 0) {
@@ -658,6 +683,7 @@ const fillSellerDetails = async () => {
 
     } catch (error) {
         Alert.error("Something went wrong. Please try again.");
+        return;
     }
 };
 
@@ -715,14 +741,17 @@ $(document).on('click', '#btnSaveSellerProfile', async function () {
 
         if (response.status === 400) {
             Alert.error(response.message);
+            return;
         }
 
         if (response.status === 409) {
             Alert.error(response.message);
+            return;
         }
 
         if (response.status === 500) {
             Alert.error(response.message);
+            return;
         }
 
         if (response.status === 0) {
@@ -748,6 +777,7 @@ $(document).on('click', '#btnSaveSellerProfile', async function () {
 
     } catch (error) {
         Alert.error("Something went wrong. Please try again.");
+        return;
     }
 });
 
