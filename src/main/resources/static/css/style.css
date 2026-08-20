@@ -522,6 +522,7 @@ img {
 .badge-sky { background-color: var(--c-sky); color: var(--c-brown); }
 .badge-primary { background-color: var(--c-primary); color: var(--c-brown); }
 .badge-brown { background-color: var(--c-brown); color: #FFF; }
+.badge-danger { background-color: var(--c-danger); color: #FFF; }
 
 /* Section Titles */
 .section-header {

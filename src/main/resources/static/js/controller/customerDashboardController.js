@@ -5,7 +5,8 @@ import {
     getSearchedProducts,
     filterProducts,
     filterProductsByPriceDirection,
-    getProductById, addProductToCart, getAllCartProducts, updateCartProductQty, removeProductFromCartItems, getUserById
+    getProductById, addProductToCart, getAllCartProducts, updateCartProductQty, removeProductFromCartItems, getUserById,
+    saveOrder
 } from "../api.js";
 import {checkRole} from "../app.js";
 import {auth} from "../auth.js";
@@ -748,7 +749,7 @@ const loadCartProductsAndCount = async () => {
         const response = await getAllCartProducts(auth.getUserId());
 
         if (response.status === 404) {
-            Alert.error(response.message);
+            Alert.warning(response.message);
             return;
         }
 
@@ -1000,4 +1001,60 @@ $(document).on('click', '#customerProfileNav', function (e) {
 
     router("customer/account/customer-account.html");
     fillCustomerDetails();
+});
+
+
+
+// ====================================================================================================================
+
+
+
+// Manage Palace order
+$(document).on('click', '#btnPlaceOrder', async function (e) {
+    e.preventDefault();
+
+    let totalText = $('#cartTotal').text();
+
+    let total = Number(
+        totalText.replace(/[^\d.-]/g, "")
+    );
+
+    let object = {
+        "customerId": auth.getUserId(),
+        "total": total
+    };
+
+    console.log(object.total)
+    try {
+        const response = await saveOrder(object);
+
+        if (response.status === 400) {
+            Alert.error(response.message);
+            return;
+        }
+
+        if (response.status === 404) {
+            Alert.error(response.message);
+            return;
+        }
+
+        if (response.status === 409) {
+            Alert.error(response.message);
+            return;
+        }
+
+        if (response.status === 500) {
+            Alert.error(response.message);
+            return;
+        }
+
+        if (response.status === 0) {
+            Alert.success("Order has been placed successfully!");
+            loadCartProductsAndCount();
+        }
+
+    } catch (error) {
+        Alert.error("Something went wrong. Please try again.");
+        return;
+    }
 });
