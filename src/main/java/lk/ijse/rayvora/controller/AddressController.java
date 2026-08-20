@@ -11,7 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/addresses")
+@RequestMapping(value = "/api/v1/addresses")
 @RequiredArgsConstructor
 public class AddressController {
     private final AddressService addressService;

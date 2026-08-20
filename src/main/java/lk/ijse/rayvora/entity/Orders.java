@@ -65,4 +65,11 @@ public class Orders {
             fetch = FetchType.LAZY
     )
     private List<OrderProducts> orderProducts;
+
+    @OneToMany(
+            mappedBy = "order",
+            cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY
+    )
+    private List<Email> emails;
 }
