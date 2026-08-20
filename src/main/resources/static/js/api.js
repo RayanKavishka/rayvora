@@ -444,6 +444,20 @@ const removeProductFromCartItems = (updateCartDTO) => {
 
 
 
+// Orders
+const saveOrder = (object) => {
+    return $.ajax({
+        url: API_BASE_URL + "/orders",
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(object),
+        headers: {
+            'Authorization': 'Bearer ' + auth.getJWT()
+        }
+    });
+};
+
+
 
 
 export {
@@ -477,5 +491,6 @@ export {
     addProductToCart,
     getAllCartProducts,
     updateCartProductQty,
-    removeProductFromCartItems
+    removeProductFromCartItems,
+    saveOrder
 }

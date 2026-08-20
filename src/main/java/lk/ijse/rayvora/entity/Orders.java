@@ -20,15 +20,12 @@ public class Orders {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long orderId;
 
-    @Column(nullable = false, unique = true, updatable = false, length = 50)
+    @Column(nullable = true, unique = true, length = 50)
     private String trackingNumber;
 
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
     private LocalDateTime orderDate;
-
-    @Column(nullable = false, precision = 10, scale = 2)
-    private BigDecimal discountAmount;
 
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal totalAmount;

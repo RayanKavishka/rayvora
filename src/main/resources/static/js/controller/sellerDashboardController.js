@@ -16,7 +16,13 @@ $(document).on('click', '#saleAndEarnings', function (e) {
     e.preventDefault();
 
     router("seller-dashboard.html");
+    loadOrderTables();
 });
+
+
+const loadOrderTables = () => {
+
+};
 
 
 // ======================================================================================================================

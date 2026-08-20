@@ -4,6 +4,7 @@ import lk.ijse.rayvora.dto.ReceiverDTO;
 import lk.ijse.rayvora.dto.SenderDTO;
 import lk.ijse.rayvora.dto.request.BrevoEmailRequestDTO;
 import lk.ijse.rayvora.entity.Email;
+import lk.ijse.rayvora.entity.Orders;
 import lk.ijse.rayvora.enumeration.EmailStatus;
 import lk.ijse.rayvora.repository.EmailRepository;
 import lk.ijse.rayvora.service.EmailService;
@@ -33,7 +34,7 @@ public class EmailServiceImpl implements EmailService {
     private String senderName;
 
     @Override
-    public void sendEmail(String receiverName, String receiverEmail, String subject, String htmlContent) {
+    public void sendEmail(Orders order, String receiverName, String receiverEmail, String subject, String htmlContent) {
         log.info("Execute sendEmail() receiverEmail {}, receiverName {}", receiverEmail, receiverName);
 
         Email email = new Email();
@@ -68,6 +69,8 @@ public class EmailServiceImpl implements EmailService {
                     .toBodilessEntity();
 
             email.setEmailStatus(EmailStatus.SENT);
+            email.setOrder(order);
+
             email = emailRepository.save(email);
 
         } catch (Exception e) {

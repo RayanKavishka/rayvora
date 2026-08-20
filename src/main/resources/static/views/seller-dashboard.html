@@ -18,7 +18,7 @@
         <div class="section-header">
             <div>
                 <h1 class="section-title"><i class="fa-solid fa-shop" style="color: var(--c-orange);"></i> Merchant Control Center</h1>
-                <p style="color: var(--text-muted); font-size: 0.9rem;">Manage inventory, process orders & reply to customer reviews</p>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">Manage inventory, process orders & track order status</p>
             </div>
             <div style="display: flex; gap: 0.5rem; align-items: center;">
                 <button type="button" id="logoutBtn" class="btn btn-outline btn-sm" style="color: var(--c-orange); border-color: var(--c-orange);">
@@ -62,97 +62,173 @@
             </div>
         </div>
 
-        <!-- Seller Products Inventory & Order Processing Section -->
+        <!-- Confirmed Orders Section (Action: Ship only) -->
         <div class="data-table-card" style="margin-bottom: 2rem;">
             <div class="section-header">
-                <h3 style="font-size: 1.1rem; font-weight: 800;">Pending Customer Orders (Shipment Processing)</h3>
+                <h3 style="font-size: 1.1rem; font-weight: 800;">Confirmed Orders (Ready to Ship)</h3>
             </div>
             <div class="table-responsive">
-                <table class="custom-table">
+                <table class="custom-table" style="table-layout: fixed; width: 100%;">
+                    <colgroup>
+                        <col style="width: 11%;">
+                        <col style="width: 24%;">
+                        <col style="width: 24%;">
+                        <col style="width: 12%;">
+                        <col style="width: 11%;">
+                        <col style="width: 18%;">
+                    </colgroup>
                     <thead>
-                        <tr>
-                            <th>Order ID</th>
-                            <th>Customer & Shipping Address</th>
-                            <th>Product Ordered</th>
-                            <th>Total Price</th>
-                            <th>Status</th>
-                            <th>Action</th>
-                        </tr>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Customer & Shipping Address</th>
+                        <th>Product Ordered</th>
+                        <th>Total Price</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td>#ORD-88192</td>
-                            <td>
-                                <strong>John Doe</strong><br>
-                                <span style="font-size: 0.8rem; color: var(--text-muted);">452 Pine St, Apt 2B, Seattle WA</span>
-                            </td>
-                            <td>Rayvora SonicPro Headphones (x1)</td>
-                            <td>LKR 26,990</td>
-                            <td><span class="badge badge-sky">Accepted</span></td>
-                            <td>
-                                <div style="display: flex; gap: 0.65rem; flex-wrap: wrap; margin: 0.25rem 0;">
-                                    <button class="btn btn-sm btn-orange" style="margin-right: 0.35rem;"><i class="fa-solid fa-truck"></i> Ship Order</button>
-                                    <button class="btn btn-sm btn-mint"><i class="fa-solid fa-circle-check"></i> Mark Delivered</button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>#ORD-88195</td>
-                            <td>
-                                <strong>Sophia Martinez</strong><br>
-                                <span style="font-size: 0.8rem; color: var(--text-muted);">789 Sunset Blvd, Los Angeles CA</span>
-                            </td>
-                            <td>Smart Watch Series 9 (x2)</td>
-                            <td>LKR 104,850</td>
-                            <td><span class="badge badge-orange">Processing</span></td>
-                            <td>
-                                <div style="display: flex; gap: 0.65rem; flex-wrap: wrap; margin: 0.25rem 0;">
-                                    <button class="btn btn-sm btn-orange" style="margin-right: 0.35rem;"><i class="fa-solid fa-truck"></i> Ship Order</button>
-                                    <button class="btn btn-sm btn-mint"><i class="fa-solid fa-circle-check"></i> Mark Delivered</button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>#ORD-88201</td>
-                            <td>
-                                <strong>Michael Chen</strong><br>
-                                <span style="font-size: 0.8rem; color: var(--text-muted);">104 Innovation Way, Austin TX</span>
-                            </td>
-                            <td>Ergonomic Wireless Mouse (x1)</td>
-                            <td>LKR 13,500</td>
-                            <td><span class="badge badge-mint">Shipped</span></td>
-                            <td>
-                                <div style="display: flex; gap: 0.65rem; flex-wrap: wrap; margin: 0.25rem 0;">
-                                    <button class="btn btn-sm btn-mint"><i class="fa-solid fa-circle-check"></i> Mark Delivered</button>
-                                </div>
-                            </td>
-                        </tr>
+                    <tbody id="confirmedOrdersTBody">
+                    <tr>
+                        <td style="word-break: break-word;">#ORD-88192</td>
+                        <td style="word-break: break-word;">
+                            <strong>John Doe</strong><br>
+                            <span style="font-size: 0.8rem; color: var(--text-muted);">452 Pine St, Apt 2B, Seattle WA</span>
+                        </td>
+                        <td style="word-break: break-word;">Rayvora SonicPro Headphones (x1)</td>
+                        <td style="white-space: nowrap;">LKR 26,990</td>
+                        <td><span class="badge badge-sky">Confirmed</span></td>
+                        <td>
+                            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                                <button class="btn btn-sm btn-orange"><i class="fa-solid fa-truck"></i> Ship</button>
+                            </div>
+                        </td>
+                    </tr>
                     </tbody>
                 </table>
             </div>
         </div>
 
-        <!-- Customer Review Response Section -->
+        <!-- Shipped Orders Section (Action: Delivered only) -->
+        <div class="data-table-card" style="margin-bottom: 2rem;">
+            <div class="section-header">
+                <h3 style="font-size: 1.1rem; font-weight: 800;">Shipped Orders (In Transit)</h3>
+            </div>
+            <div class="table-responsive">
+                <table class="custom-table" style="table-layout: fixed; width: 100%;">
+                    <colgroup>
+                        <col style="width: 11%;">
+                        <col style="width: 24%;">
+                        <col style="width: 24%;">
+                        <col style="width: 12%;">
+                        <col style="width: 11%;">
+                        <col style="width: 18%;">
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Customer & Shipping Address</th>
+                        <th>Product Ordered</th>
+                        <th>Total Price</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody id="shippedOrdersTBody">
+                    <tr>
+                        <td style="word-break: break-word;">#ORD-88201</td>
+                        <td style="word-break: break-word;">
+                            <strong>Michael Chen</strong><br>
+                            <span style="font-size: 0.8rem; color: var(--text-muted);">104 Innovation Way, Austin TX</span>
+                        </td>
+                        <td style="word-break: break-word;">Ergonomic Wireless Mouse (x1)</td>
+                        <td style="white-space: nowrap;">LKR 13,500</td>
+                        <td><span class="badge badge-mint">Shipped</span></td>
+                        <td>
+                            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                                <button class="btn btn-sm btn-mint"><i class="fa-solid fa-circle-check"></i> Delivered</button>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Cancelled Orders Section (No Action column) -->
+        <div class="data-table-card" style="margin-bottom: 2rem;">
+            <div class="section-header">
+                <h3 style="font-size: 1.1rem; font-weight: 800;">Cancelled Orders</h3>
+            </div>
+            <div class="table-responsive">
+                <table class="custom-table" style="table-layout: fixed; width: 100%;">
+                    <colgroup>
+                        <col style="width: 13%;">
+                        <col style="width: 27%;">
+                        <col style="width: 27%;">
+                        <col style="width: 15%;">
+                        <col style="width: 18%;">
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Customer & Shipping Address</th>
+                        <th>Product Ordered</th>
+                        <th>Total Price</th>
+                        <th>Status</th>
+                    </tr>
+                    </thead>
+                    <tbody id="cancelledOrdersTBody">
+                    <tr>
+                        <td style="word-break: break-word;">#ORD-88180</td>
+                        <td style="word-break: break-word;">
+                            <strong>David Park</strong><br>
+                            <span style="font-size: 0.8rem; color: var(--text-muted);">61 Lakeview Rd, Chicago IL</span>
+                        </td>
+                        <td style="word-break: break-word;">Smart Watch Series 9 (x1)</td>
+                        <td style="white-space: nowrap;">LKR 52,425</td>
+                        <td><span class="badge badge-danger">Cancelled</span></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Delivered Orders Section (No Action column) -->
         <div class="data-table-card">
             <div class="section-header">
-                <h3 style="font-size: 1.1rem; font-weight: 800;">Recent Customer Reviews & Seller Replies</h3>
+                <h3 style="font-size: 1.1rem; font-weight: 800;">Delivered Orders</h3>
             </div>
-            <div style="display: flex; flex-direction: column; gap: 1rem;">
-                <div style="background: var(--bg-subtle); padding: 1rem; border-radius: var(--border-radius-md);">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
-                        <div>
-                            <strong>Sarah M.</strong>
-                            <span style="color: #F59E0B; margin-left: 0.5rem;"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></span>
-                        </div>
-                        <span style="font-size: 0.8rem; color: var(--text-muted);">Ordered: Rayvora SonicPro</span>
-                    </div>
-                    <p style="font-size: 0.9rem; margin-bottom: 0.75rem;">"Super fast delivery and amazing audio clarity! Highly recommended store."</p>
-                    
-                    <div class="input-with-icon" style="gap: 0.5rem;">
-                        <input type="text" placeholder="Type reply to Sarah's review..." style="font-size: 0.85rem; padding: 0.5rem 0.75rem;">
-                        <button class="btn btn-sm btn-primary">Reply</button>
-                    </div>
-                </div>
+            <div class="table-responsive">
+                <table class="custom-table" style="table-layout: fixed; width: 100%;">
+                    <colgroup>
+                        <col style="width: 13%;">
+                        <col style="width: 27%;">
+                        <col style="width: 27%;">
+                        <col style="width: 15%;">
+                        <col style="width: 18%;">
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Customer & Shipping Address</th>
+                        <th>Product Ordered</th>
+                        <th>Total Price</th>
+                        <th>Status</th>
+                    </tr>
+                    </thead>
+                    <tbody id="deliveredOrdersTBody">
+                    <tr>
+                        <td style="word-break: break-word;">#ORD-88160</td>
+                        <td style="word-break: break-word;">
+                            <strong>Laura Bennett</strong><br>
+                            <span style="font-size: 0.8rem; color: var(--text-muted);">330 Cedar Ln, Boston MA</span>
+                        </td>
+                        <td style="word-break: break-word;">USB-C Fast Charger 65W (x1)</td>
+                        <td style="white-space: nowrap;">LKR 6,490</td>
+                        <td><span class="badge badge-primary">Delivered</span></td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </main>

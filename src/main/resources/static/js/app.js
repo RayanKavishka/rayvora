@@ -88,8 +88,7 @@ const loadCartProductsCount = async () => {
         const response = await getAllCartProducts(auth.getUserId());
 
         if (response.status === 404) {
-            Alert.warning(response.message);
-            return;
+            $('#cartProductsCountOnIcon').text(0);
         }
 
         if (response.status === 500) {

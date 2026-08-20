@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Order Delivered</title>
+<!--[if mso]>
+<noscript><xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml></noscript>
+<![endif]-->
+<style>
+  body, table, td, a { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+  table, td { mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+  img { -ms-interpolation-mode: bicubic; border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; }
+  body { margin: 0; padding: 0; width: 100% !important; height: 100% !important; background-color: #eafbf2; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+
+  .email-wrapper { width: 100%; background-color: #eafbf2; padding: 32px 12px; }
+  .email-container { max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 24px rgba(4, 120, 87, 0.08); }
+
+  .header { background: linear-gradient(135deg, #059669 0%, #047857 100%); padding: 40px 32px; text-align: center; }
+  .brand { color: #ffffff; font-size: 22px; font-weight: 700; letter-spacing: 0.5px; margin: 0 0 20px 0; }
+  .badge { display: inline-block; width: 56px; height: 56px; line-height: 56px; background-color: rgba(255,255,255,0.15); border-radius: 50%; font-size: 26px; color: #ffffff; margin-bottom: 16px; }
+  .header-title { color: #ffffff; font-size: 24px; font-weight: 700; margin: 0 0 6px 0; }
+  .header-sub { color: #A7F3D0; font-size: 14px; margin: 0; }
+
+  .section { padding: 32px; }
+  .section-top { padding-top: 28px; }
+  .divider { border: none; border-top: 1px solid #E5FAEF; margin: 0; }
+
+  .meta-table td { padding: 6px 0; font-size: 14px; color: #4B5563; }
+  .meta-label { color: #9CA3AF; width: 45%; }
+  .meta-value { font-weight: 600; color: #1F2937; text-align: right; }
+
+  .section-heading { font-size: 15px; font-weight: 700; color: #1F2937; margin: 0 0 16px 0; }
+
+  .items-table { width: 100%; border-collapse: collapse; }
+  .items-table thead th { text-align: left; font-size: 12px; text-transform: uppercase; letter-spacing: 0.4px; color: #9CA3AF; padding: 0 0 12px 0; border-bottom: 2px solid #E5FAEF; font-weight: 600; }
+  .items-table tbody td { padding: 14px 0; border-bottom: 1px solid #E5FAEF; font-size: 14px; color: #1F2937; vertical-align: middle; }
+  .item-name { font-weight: 600; color: #1F2937; }
+  .qty-pill { display: inline-block; background-color: #E5FAEF; color: #059669; font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 999px; }
+
+  .address-card { background-color: #F3FDF8; border: 1px solid #DCF6E8; border-radius: 12px; padding: 18px 20px; }
+  .address-card p { margin: 0; font-size: 14px; line-height: 1.7; color: #374151; }
+
+  .status-note { background-color: #E5FAEF; border-radius: 12px; padding: 20px; text-align: center; }
+  .status-note p { margin: 0; font-size: 14px; color: #047857; line-height: 1.6; }
+  .status-note .delivered-date { font-size: 16px; font-weight: 700; color: #047857; margin-bottom: 4px; }
+
+  .review-card { text-align: center; padding: 8px 0 4px 0; }
+  .review-stars { font-size: 22px; letter-spacing: 4px; margin-bottom: 14px; color: #F59E0B; }
+  .cta-button { display: inline-block; background-color: #059669; color: #ffffff !important; text-decoration: none; font-size: 14px; font-weight: 700; padding: 13px 32px; border-radius: 999px; }
+
+  .footer { padding: 28px 32px 36px 32px; text-align: center; }
+  .footer p { margin: 0 0 4px 0; font-size: 13px; color: #9CA3AF; }
+  .footer .thanks { font-size: 14px; color: #4B5563; margin-bottom: 10px; }
+  .footer .brand-name { color: #059669; font-weight: 700; }
+  .footer .tagline { font-size: 12px; color: #6EE7B7; margin-top: 6px; }
+
+  @media only screen and (max-width: 600px) {
+    .section { padding: 24px 20px !important; }
+    .header { padding: 32px 20px !important; }
+    .header-title { font-size: 20px !important; }
+    .footer { padding: 24px 20px 32px 20px !important; }
+  }
+</style>
+</head>
+<body>
+<div class="email-wrapper">
+  <div class="email-container">
+
+    <div class="header">
+      <p class="brand">RAYVORA</p>
+      <div class="badge">&#128230;</div>
+      <p class="header-title">Delivered!</p>
+      <p class="header-sub">Order #{{orderNumber}}</p>
+    </div>
+
+    <div class="section section-top">
+      <div class="status-note">
+        <p class="delivered-date">{{deliveredDate}} · {{deliveredTime}}</p>
+        <p>Your order was delivered successfully.<br>We hope you love it!</p>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <div class="section">
+      <p class="section-heading">🛍️ What You Received</p>
+      <table class="items-table" width="100%" cellpadding="0" cellspacing="0">
+        <thead>
+          <tr><th align="left">Product</th><th align="right">Qty</th></tr>
+        </thead>
+        <tbody>
+          {{orderItems}}
+        </tbody>
+      </table>
+    </div>
+
+    <hr class="divider">
+
+    <div class="section">
+      <p class="section-heading">📍 Delivered To</p>
+      <div class="address-card">
+        <p><strong>{{customerName}}</strong><br>{{addressLine}}<br>{{city}}, {{postalCode}}<br>{{country}}</p>
+      </div>
+    </div>
+
+    <div class="section" style="padding-top: 0;">
+      <div class="review-card">
+        <p style="font-size: 15px; font-weight: 700; color: #1F2937; margin: 0 0 10px 0;">How was your experience?</p>
+        <div class="review-stars">★★★★★</div>
+        <a href="{{reviewUrl}}" class="cta-button" target="_blank">Leave a Review</a>
+      </div>
+    </div>
+
+    <div class="footer">
+      <p class="thanks">Thank you for choosing <span class="brand-name">Rayvora</span>! 💚</p>
+      <p><strong>Rayvora Team</strong></p>
+      <p class="tagline">Your style. Your choice. Your way.</p>
+    </div>
+
+  </div>
+</div>
+</body>
+</html>
