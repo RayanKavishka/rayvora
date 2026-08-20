@@ -1,7 +1,11 @@
 package lk.ijse.rayvora.service.impl;
 
+import lk.ijse.rayvora.dto.AddressDTO;
 import lk.ijse.rayvora.dto.OrdersDTO;
+import lk.ijse.rayvora.dto.ReviewDTO;
+import lk.ijse.rayvora.dto.UserDTO;
 import lk.ijse.rayvora.dto.request.OrderRequestDTO;
+import lk.ijse.rayvora.dto.response.ResponseProductDTO;
 import lk.ijse.rayvora.entity.*;
 import lk.ijse.rayvora.enumeration.OrderStatus;
 import lk.ijse.rayvora.enumeration.PayMethod;
@@ -14,6 +18,7 @@ import lk.ijse.rayvora.service.OrderService;
 import lk.ijse.rayvora.util.OrderEmailBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -188,17 +193,17 @@ public class OrderServiceImpl implements OrderService {
     public List<OrdersDTO> getAllOrdersBySeller(Long sellerId) {
         log.info("Execute getAllOrdersBySeller() id {}", sellerId);
         try {
-            List<Orders> allOrdersBySellerId = orderRepository.getAllOrdersBySellerId(sellerId);
-            for (Orders order : allOrdersBySellerId) {
+            Optional<User> optionalUser = userRepository.findById(sellerId);
+            if (optionalUser.isEmpty())
+                throw new RayvoraException(404, "Sorry, related seller is not found!");
 
-            }
+            List<Orders> allOrdersBySellerId = orderRepository.getAllOrdersBySellerId(sellerId);
+            return getOrdersDTOsList(allOrdersBySellerId, sellerId);
 
         } catch (Exception e) {
             log.error("Error in getAllOrdersBySeller() : " + e.getMessage());
             throw e;
         }
-
-        return null;
     }
 
     @Override
@@ -225,5 +230,109 @@ public class OrderServiceImpl implements OrderService {
             log.error("Error in updateOrderShippedOrDeliveredStatusAndTime() : " + e.getMessage());
             throw e;
         }
+    }
+
+    private @NonNull List<OrdersDTO> getOrdersDTOsList(List<Orders> orders, Long sellerId) {
+        List<OrdersDTO> ordersDTOList = new ArrayList<>();
+        for (Orders order : orders) {
+            OrdersDTO ordersDTO = new OrdersDTO();
+            ordersDTO.setOrderId(order.getOrderId());
+            ordersDTO.setTrackingNumber(order.getTrackingNumber());
+            ordersDTO.setOrderDate(order.getOrderDate());
+            ordersDTO.setTotalAmount(order.getTotalAmount());
+            ordersDTO.setOrderStatus(order.getOrderStatus());
+            ordersDTO.setEstimatedDeliveryFrom(order.getEstimatedDeliveryFrom());
+            ordersDTO.setEstimatedDeliveryTo(order.getEstimatedDeliveryTo());
+            ordersDTO.setShippedAt(order.getShippedAt());
+            ordersDTO.setDeliveredAt(order.getDeliveredAt());
+
+            Optional<User> optionalUser = userRepository.findById(order.getUser().getUserId());
+            if (optionalUser.isEmpty())
+                throw new RayvoraException(404, "Sorry, related customer is not found!");
+            User user = optionalUser.get();
+
+            UserDTO userDTO = new UserDTO();
+            userDTO.setFirstName(user.getFirstName());
+            userDTO.setLastName(user.getLastName());
+            userDTO.setEmail(user.getEmail());
+            userDTO.setContact(user.getContact());
+
+            AddressDTO addressDTO = new AddressDTO();
+            addressDTO.setFullName(user.getAddress().getFullName());
+            addressDTO.setContact(user.getAddress().getContact());
+            addressDTO.setStreet(user.getAddress().getStreet());
+            addressDTO.setCity(user.getAddress().getCity());
+            addressDTO.setDistrict(user.getAddress().getDistrict());
+            addressDTO.setProvince(user.getAddress().getProvince());
+            addressDTO.setZipCode(user.getAddress().getZipCode());
+            addressDTO.setCountry(user.getAddress().getCountry());
+
+            userDTO.setAddressDTO(addressDTO);
+
+            ordersDTO.setUser(userDTO);
+
+
+            List<OrderProducts> orderProducts = order.getOrderProducts();
+
+            List<ResponseProductDTO> responseProductDTOS =  new ArrayList<>();
+            for (OrderProducts orderProduct : orderProducts) {
+                if (orderProduct.getProduct().getStock().getUser().getUserId().equals(sellerId)) {
+                    ResponseProductDTO responseProductDTO = getResponseProductDTO(orderProduct.getProduct(), orderProduct.getQuantity());
+                    responseProductDTOS.add(responseProductDTO);
+                }
+            }
+
+            ordersDTO.setProducts(responseProductDTOS);
+
+            ordersDTOList.add(ordersDTO);
+        }
+
+        return ordersDTOList;
+    }
+
+    private @NonNull ResponseProductDTO getResponseProductDTO(Product product, Integer orderedQty) {
+        ResponseProductDTO responseProductDTO = new ResponseProductDTO();
+        responseProductDTO.setProductId(product.getProductId());
+        responseProductDTO.setProductName(product.getProductName());
+        responseProductDTO.setDescription(product.getDescription());
+        responseProductDTO.setUnitPrice(product.getUnitPrice());
+        responseProductDTO.setBrand(product.getBrand());
+
+        responseProductDTO.setCategoryName(product.getCategory().getCategoryName());
+        responseProductDTO.setShopName(product.getStock().getUser().getAddress().getFullName());
+
+        responseProductDTO.setQuantity(orderedQty);
+        responseProductDTO.setLowStockLimit(product.getStock().getLowStockLimit());
+
+        int soldCount = 0;
+        List<OrderProducts> orderProducts = product.getOrderProducts();
+        for (OrderProducts orderProduct : orderProducts) {
+            if (orderProduct.getOrder().getOrderStatus() == OrderStatus.COMPLETED) {
+                soldCount += orderProduct.getQuantity();
+            }
+        }
+        responseProductDTO.setSoldCount(soldCount);
+
+        List<ReviewDTO> reviewDTOS = new ArrayList<>();
+        for (Review review : product.getReviews()) {
+            if (review.getStatus().equals(Status.ACTIVE)) {
+                ReviewDTO reviewDTO = new ReviewDTO();
+                reviewDTO.setReviewId(review.getReviewId());
+                reviewDTO.setRating(review.getRating());
+                reviewDTO.setComment(review.getComment());
+
+                reviewDTOS.add(reviewDTO);
+            }
+        }
+        responseProductDTO.setReviews(reviewDTOS);
+
+        List<ProductImage> productImages = product.getProductImages();
+        List<String> imageUrls = new ArrayList<>();
+        for (ProductImage productImage : productImages) {
+            imageUrls.add(productImage.getImageUrl());
+        }
+        responseProductDTO.setImageUrls(imageUrls);
+
+        return responseProductDTO;
     }
 }

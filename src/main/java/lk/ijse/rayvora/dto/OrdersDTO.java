@@ -23,5 +23,6 @@ public class OrdersDTO {
     private LocalDate estimatedDeliveryTo;
     private LocalDateTime shippedAt;
     private LocalDateTime deliveredAt;
+    private UserDTO user;
     private List<ResponseProductDTO> products;
 }

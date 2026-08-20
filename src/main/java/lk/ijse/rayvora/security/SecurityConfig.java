@@ -33,15 +33,19 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
+
+                        // Users
                         .requestMatchers(HttpMethod.POST, "/api/v1/users/signin").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/v1/users/signup").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/users").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/v1/users/*").hasRole("ADMIN")
 
+                        // Categories
                         .requestMatchers(HttpMethod.POST, "/api/v1/categories").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/v1/categories").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/v1/categories/*").hasRole("ADMIN")
 
+                        // Products
                         .requestMatchers(HttpMethod.GET, "/api/v1/products/all-products").permitAll()
 
                         .requestMatchers(HttpMethod.GET,
@@ -57,6 +61,9 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.DELETE, "/api/v1/products/*").hasRole("SELLER")
                         .requestMatchers(HttpMethod.GET, "/api/v1/products/*/*").hasRole("SELLER")
                         .requestMatchers(HttpMethod.GET, "/api/v1/products").hasRole("SELLER")
+
+                        // Orders
+                        .requestMatchers(HttpMethod.GET, "/api/v1/orders/sellers-orders/*").hasRole("SELLER")
 
                         .anyRequest().authenticated()
                 )
