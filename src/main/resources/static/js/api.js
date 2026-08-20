@@ -458,6 +458,18 @@ const saveOrder = (object) => {
 };
 
 
+const getAllOrdersBySeller = (sellerId) => {
+    return $.ajax({
+        url: API_BASE_URL + "/orders/sellers-orders/"+sellerId,
+        type: 'GET',
+        contentType: 'application/json',
+        headers: {
+            'Authorization': 'Bearer ' + auth.getJWT()
+        }
+    });
+};
+
+
 
 
 export {
@@ -492,5 +504,6 @@ export {
     getAllCartProducts,
     updateCartProductQty,
     removeProductFromCartItems,
-    saveOrder
+    saveOrder,
+    getAllOrdersBySeller
 }

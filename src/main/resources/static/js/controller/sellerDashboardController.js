@@ -5,7 +5,7 @@ import {
     getProductsBySellerAndCategory,
     getUserById,
     saveProduct, removeProduct, updateProduct,
-    updateUser, getLowStockProducts, getSearchedProductsForSeller
+    updateUser, getLowStockProducts, getSearchedProductsForSeller, getAllOrdersBySeller
 } from "../api.js";
 import {auth} from "../auth.js";
 import {isValidContact, isValidEmail} from "../util/regex.js";
@@ -21,7 +21,127 @@ $(document).on('click', '#saleAndEarnings', function (e) {
 
 
 const loadOrderTables = () => {
+    try {
+        const response = getAllOrdersBySeller(auth.getUserId());
 
+        if (response.status === 404) {
+            Alert.error(response.message);
+            return;
+        }
+
+        if (response.status === 500) {
+            Alert.error(response.message);
+            return;
+        }
+
+        if (response.status === 0) {
+            $('#confirmedOrdersTBody').empty();
+            $('#shippedOrdersTBody').empty();
+            $('#cancelledOrdersTBody').empty();
+            $('#deliveredOrdersTBody').empty();
+
+            const orders = response.body;
+
+            let confirmHtml = '';
+            let shipHtml = '';
+            let cancelHtml = '';
+            let deliverHtml = '';
+            orders.forEach((order) => {
+                order.products.forEach((product) => {
+                    switch (order.orderStatus) {
+                        case "CONFIRMED":
+                            confirmHtml += `
+                        <tr>
+                            <td style="word-break: break-word;">#${order.orderId}</td>
+                            <td style="word-break: break-word;">
+                                <strong>${order.user.firstName} ${order.user.lastName}</strong><br>
+                                <span style="font-size: 0.8rem; color: var(--text-muted);">
+                                    ${order.user.addressDTO.street}, ${order.user.addressDTO.city}, ${order.user.addressDTO.district}, ${order.user.addressDTO.district}, ${order.user.addressDTO.country}
+                                </span>
+                            </td>
+                            <td style="word-break: break-word;">${product.brand} ${product.productName} (x${product.quantity})</td>
+                            <td style="white-space: nowrap;">LKR ${product.unitPrice}</td>
+                            <td><span class="badge badge-sky">Confirmed</span></td>
+                            <td>
+                                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                                    <button class="btn btn-sm btn-orange"><i class="fa-solid fa-truck"></i> Ship</button>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                            break;
+
+                        case "SHIPPED":
+                            shipHtml += `
+                        <tr>
+                            <td style="word-break: break-word;">#${order.orderId}</td>
+                            <td style="word-break: break-word;">
+                                <strong>${order.user.firstName} ${order.user.lastName}</strong><br>
+                                <span style="font-size: 0.8rem; color: var(--text-muted);">
+                                    ${order.user.addressDTO.street}, ${order.user.addressDTO.city}, ${order.user.addressDTO.district}, ${order.user.addressDTO.district}, ${order.user.addressDTO.country}
+                                </span>
+                            </td>
+                            <td style="word-break: break-word;">${product.brand} ${product.productName} (x${product.quantity})</td>
+                            <td style="white-space: nowrap;">LKR ${product.unitPrice}</td>
+                            <td><span class="badge badge-mint">Shipped</span></td>
+                            <td>
+                                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                                    <button class="btn btn-sm btn-primary"><i class="fa-solid fa-box-open"></i> Delivered</button>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                            break;
+
+                        case "CANCELLED":
+                            cancelHtml += `
+                        <tr>
+                            <td style="word-break: break-word;">#${order.orderId}</td>
+                            <td style="word-break: break-word;">
+                                <strong>${order.user.firstName} ${order.user.lastName}</strong><br>
+                                <span style="font-size: 0.8rem; color: var(--text-muted);">
+                                    ${order.user.addressDTO.street}, ${order.user.addressDTO.city}, ${order.user.addressDTO.district}, ${order.user.addressDTO.district}, ${order.user.addressDTO.country}
+                                </span>
+                            </td>
+                            <td style="word-break: break-word;">${product.brand} ${product.productName} (x${product.quantity})</td>
+                            <td style="white-space: nowrap;">LKR ${product.unitPrice}</td>
+                            <td><span class="badge badge-danger">Cancelled</span></td>
+                        </tr>
+                    `;
+                            break;
+
+                        case "COMPLETED":
+                            deliverHtml += `
+                        <tr>
+                            <td style="word-break: break-word;">#${order.orderId}</td>
+                            <td style="word-break: break-word;">
+                                <strong>${order.user.firstName} ${order.user.lastName}</strong><br>
+                                <span style="font-size: 0.8rem; color: var(--text-muted);">
+                                    ${order.user.addressDTO.street}, ${order.user.addressDTO.city}, ${order.user.addressDTO.district}, ${order.user.addressDTO.district}, ${order.user.addressDTO.country}
+                                </span>
+                            </td>
+                            <td style="word-break: break-word;">${product.brand} ${product.productName} (x${product.quantity})</td>
+                            <td style="white-space: nowrap;">LKR ${product.unitPrice}</td>
+                            <td><span class="badge badge-primary">Delivered</span></td>
+                        </tr>
+                    `;
+                            break;
+
+                        default:
+                    }
+                });
+            });
+
+            $('#confirmedOrdersTBody').append(confirmHtml);
+            $('#shippedOrdersTBody').append(shipHtml);
+            $('#cancelledOrdersTBody').append(cancelHtml);
+            $('#deliveredOrdersTBody').append(deliverHtml);
+        }
+
+    } catch (error) {
+        Alert.error("Something went wrong. Please try again.");
+        return;
+    }
 };
 
 

@@ -8,10 +8,7 @@ import lk.ijse.rayvora.dto.request.OrderRequestDTO;
 import lk.ijse.rayvora.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "/api/v1/orders")
@@ -24,6 +21,15 @@ public class OrderController {
         orderService.saveOrder(orderRequestDTO);
         return new CommonResponse(
                 ResponseCode.OPERATION_SUCCESS,
+                ResponseMessage.SUCCESS_MESSAGE
+        );
+    }
+
+    @GetMapping(value = "/sellers-orders/{sellerId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public CommonResponse getAllOrdersBySeller(@PathVariable long sellerId) {
+        return new CommonResponse(
+                ResponseCode.OPERATION_SUCCESS,
+                orderService.getAllOrdersBySeller(sellerId),
                 ResponseMessage.SUCCESS_MESSAGE
         );
     }
