@@ -1,5 +1,6 @@
 package lk.ijse.rayvora.controller;
 
+import jakarta.validation.Valid;
 import lk.ijse.rayvora.constant.CommonResponse;
 import lk.ijse.rayvora.constant.ResponseCode;
 import lk.ijse.rayvora.constant.ResponseMessage;
@@ -12,14 +13,14 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/carts")
+@RequestMapping(value = "/api/v1/carts")
 @RequiredArgsConstructor
 public class CartController {
     private final CategoryService categoryService;
     private final CartService cartService;
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public CommonResponse saveCart(@RequestBody CartDTO cartDTO) {
+    public CommonResponse saveCart(@Valid @RequestBody CartDTO cartDTO) {
         cartService.saveCart(cartDTO);
         return new CommonResponse(
                 ResponseCode.OPERATION_SUCCESS,
@@ -28,7 +29,7 @@ public class CartController {
     }
 
     @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public CommonResponse updateCart(@RequestBody UpdateCartRequestDTO updateCartRequestDTO) {
+    public CommonResponse updateCart(@Valid @RequestBody UpdateCartRequestDTO updateCartRequestDTO) {
         cartService.updateCart(updateCartRequestDTO);
         return new CommonResponse(
                 ResponseCode.OPERATION_SUCCESS,
@@ -37,7 +38,7 @@ public class CartController {
     }
 
     @DeleteMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public CommonResponse removeProductFromCart(@RequestBody UpdateCartRequestDTO updateCartRequestDTO) {
+    public CommonResponse removeProductFromCart(@Valid @RequestBody UpdateCartRequestDTO updateCartRequestDTO) {
         cartService.removeProductFromCart(updateCartRequestDTO);
         return new CommonResponse(
                 ResponseCode.OPERATION_SUCCESS,
