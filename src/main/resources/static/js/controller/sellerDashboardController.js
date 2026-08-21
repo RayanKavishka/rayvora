@@ -12,17 +12,18 @@ import {isValidContact, isValidEmail} from "../util/regex.js";
 
 
 // Sales & Earnings
-$(document).on('click', '#saleAndEarnings', function (e) {
+$(document).on('click', '#saleAndEarnings', async function (e) {
     e.preventDefault();
 
-    router("seller-dashboard.html");
-    loadOrderTables();
+    await router("seller-dashboard.html");
+    await loadOrderTables();
 });
 
 
-const loadOrderTables = () => {
+const loadOrderTables = async () => {
+
     try {
-        const response = getAllOrdersBySeller(auth.getUserId());
+        const response = await getAllOrdersBySeller(auth.getUserId());
 
         if (response.status === 404) {
             Alert.error(response.message);
@@ -52,7 +53,11 @@ const loadOrderTables = () => {
                         case "CONFIRMED":
                             confirmHtml += `
                         <tr>
-                            <td style="word-break: break-word;">#${order.orderId}</td>
+                            <td>
+                                <div class="order-id-badge">
+                                    <span class="order-id-hash">#</span>${order.orderId}
+                                </div>
+                            </td>
                             <td style="word-break: break-word;">
                                 <strong>${order.user.firstName} ${order.user.lastName}</strong><br>
                                 <span style="font-size: 0.8rem; color: var(--text-muted);">
@@ -62,11 +67,6 @@ const loadOrderTables = () => {
                             <td style="word-break: break-word;">${product.brand} ${product.productName} (x${product.quantity})</td>
                             <td style="white-space: nowrap;">LKR ${product.unitPrice}</td>
                             <td><span class="badge badge-sky">Confirmed</span></td>
-                            <td>
-                                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-                                    <button class="btn btn-sm btn-orange"><i class="fa-solid fa-truck"></i> Ship</button>
-                                </div>
-                            </td>
                         </tr>
                     `;
                             break;
@@ -74,7 +74,11 @@ const loadOrderTables = () => {
                         case "SHIPPED":
                             shipHtml += `
                         <tr>
-                            <td style="word-break: break-word;">#${order.orderId}</td>
+                            <td>
+                                <div class="order-id-badge">
+                                    <span class="order-id-hash">#</span>${order.orderId}
+                                </div>
+                            </td>
                             <td style="word-break: break-word;">
                                 <strong>${order.user.firstName} ${order.user.lastName}</strong><br>
                                 <span style="font-size: 0.8rem; color: var(--text-muted);">
@@ -84,11 +88,6 @@ const loadOrderTables = () => {
                             <td style="word-break: break-word;">${product.brand} ${product.productName} (x${product.quantity})</td>
                             <td style="white-space: nowrap;">LKR ${product.unitPrice}</td>
                             <td><span class="badge badge-mint">Shipped</span></td>
-                            <td>
-                                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-                                    <button class="btn btn-sm btn-primary"><i class="fa-solid fa-box-open"></i> Delivered</button>
-                                </div>
-                            </td>
                         </tr>
                     `;
                             break;
@@ -96,7 +95,11 @@ const loadOrderTables = () => {
                         case "CANCELLED":
                             cancelHtml += `
                         <tr>
-                            <td style="word-break: break-word;">#${order.orderId}</td>
+                            <td>
+                                <div class="order-id-badge">
+                                    <span class="order-id-hash">#</span>${order.orderId}
+                                </div>
+                            </td>
                             <td style="word-break: break-word;">
                                 <strong>${order.user.firstName} ${order.user.lastName}</strong><br>
                                 <span style="font-size: 0.8rem; color: var(--text-muted);">
@@ -113,7 +116,11 @@ const loadOrderTables = () => {
                         case "COMPLETED":
                             deliverHtml += `
                         <tr>
-                            <td style="word-break: break-word;">#${order.orderId}</td>
+                            <td>
+                                <div class="order-id-badge">
+                                    <span class="order-id-hash">#</span>${order.orderId}
+                                </div>
+                            </td>
                             <td style="word-break: break-word;">
                                 <strong>${order.user.firstName} ${order.user.lastName}</strong><br>
                                 <span style="font-size: 0.8rem; color: var(--text-muted);">
@@ -977,3 +984,10 @@ $(document).on('click', '#btnCancelPasswordChange', function (e) {
     $('#currentPassword').val("");
     $('#newPassword').val("");
 });
+
+
+
+
+export {
+    loadOrderTables
+}
