@@ -16,6 +16,7 @@ import lk.ijse.rayvora.repository.*;
 import lk.ijse.rayvora.service.EmailService;
 import lk.ijse.rayvora.service.OrderService;
 import lk.ijse.rayvora.util.OrderEmailBuilder;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jspecify.annotations.NonNull;
@@ -177,16 +178,27 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<OrdersDTO> getAllOrdersByCustomer(Long customerId) {
+    public List<OrdersDTO> getAllOrdersByCustomer(Long customerId, String orderStatus) {
         log.info("Execute getAllOrdersByCustomer() id {}", customerId);
         try {
+            Optional<User> optionalUser = userRepository.findById(customerId);
+            if (optionalUser.isEmpty())
+                throw new RayvoraException(404, "Sorry, related customer is not found!");
+
+            if (orderStatus.equalsIgnoreCase("ALL")) {
+                List<Orders> allOrdersByCustomer = orderRepository.getAllOrdersByCustomer(customerId);
+                return getOrdersDTOsList(allOrdersByCustomer, customerId);
+            }
+
+            OrderStatus passingStatus = OrderStatus.valueOf(orderStatus);
+            List<Orders> allOrdersByCustomerAndOrderStatus = orderRepository.getAllOrdersByCustomerAndStatus(customerId, passingStatus);
+            return getOrdersDTOsList(allOrdersByCustomerAndOrderStatus, customerId);
 
 
         } catch (Exception e) {
             log.error("Error in getAllOrdersByCustomer() : " + e.getMessage());
             throw e;
         }
-        return null;
     }
 
     @Override
@@ -232,7 +244,7 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
-    private @NonNull List<OrdersDTO> getOrdersDTOsList(List<Orders> orders, Long sellerId) {
+    private @NonNull List<OrdersDTO> getOrdersDTOsList(List<Orders> orders, Long userId) {
         List<OrdersDTO> ordersDTOList = new ArrayList<>();
         for (Orders order : orders) {
             OrdersDTO ordersDTO = new OrdersDTO();
@@ -272,14 +284,32 @@ public class OrderServiceImpl implements OrderService {
             ordersDTO.setUser(userDTO);
 
 
-            List<OrderProducts> orderProducts = order.getOrderProducts();
+            Optional<User> optionalUser1 = userRepository.findById(userId);
+            if (optionalUser1.isEmpty())
+                throw new RayvoraException(404, "Sorry, related user is not found!");
+            User user1 = optionalUser1.get();
 
+            List<OrderProducts> orderProducts = order.getOrderProducts();
             List<ResponseProductDTO> responseProductDTOS =  new ArrayList<>();
-            for (OrderProducts orderProduct : orderProducts) {
-                if (orderProduct.getProduct().getStock().getUser().getUserId().equals(sellerId)) {
-                    ResponseProductDTO responseProductDTO = getResponseProductDTO(orderProduct.getProduct(), orderProduct.getQuantity());
-                    responseProductDTOS.add(responseProductDTO);
+
+            if (user1.getUserRoles().equals("CUSTOMER")) {
+                for (OrderProducts orderProductsByCus : orderProducts) {
+                    ResponseProductDTO productDTO =
+                            getResponseProductDTO(orderProductsByCus.getProduct(), orderProductsByCus.getQuantity());
+                    responseProductDTOS.add(productDTO);
                 }
+
+            } else if (user1.getUserRoles().equals("SELLER")) {
+                for (OrderProducts orderProduct : orderProducts) {
+                    ResponseProductDTO sellersProductDTO = getSellersProductDTO(orderProduct, userId);
+
+                    if (sellersProductDTO.getProductId() != null) {
+                        responseProductDTOS.add(sellersProductDTO);
+                    }
+                }
+
+            } else {
+                throw new RayvoraException(409, "Oops! something went wrong");
             }
 
             ordersDTO.setProducts(responseProductDTOS);
@@ -288,6 +318,15 @@ public class OrderServiceImpl implements OrderService {
         }
 
         return ordersDTOList;
+    }
+
+    private @NonNull ResponseProductDTO getSellersProductDTO(OrderProducts orderProduct, Long sellerId) {
+        ResponseProductDTO responseProductDTO = new ResponseProductDTO();
+        if (orderProduct.getProduct().getStock().getUser().getUserId().equals(sellerId)) {
+            return responseProductDTO = getResponseProductDTO(orderProduct.getProduct(), orderProduct.getQuantity());
+        }
+
+        return responseProductDTO;
     }
 
     private @NonNull ResponseProductDTO getResponseProductDTO(Product product, Integer orderedQty) {

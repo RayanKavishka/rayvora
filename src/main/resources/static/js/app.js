@@ -1,6 +1,7 @@
 import {auth} from "./auth.js";
 import {router} from "./router.js";
 import {getAllCartProducts, getAllCategories, getUserById} from "./api.js";
+import {loadOrderTables} from "./controller/sellerDashboardController.js";
 
 $(document).ready(function () {
     if (!auth.isLoggedIn()) {
@@ -20,6 +21,8 @@ export async function checkRole()  {
 
     if (role === "SELLER") {
         router("seller-dashboard.html");
+        loadOrderTables();
+
     }
 
     if (role === "CUSTOMER") {
