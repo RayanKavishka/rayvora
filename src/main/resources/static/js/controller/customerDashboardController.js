@@ -6,7 +6,7 @@ import {
     filterProducts,
     filterProductsByPriceDirection,
     getProductById, addProductToCart, getAllCartProducts, updateCartProductQty, removeProductFromCartItems, getUserById,
-    saveOrder
+    saveOrder, removeProduct
 } from "../api.js";
 import {checkRole} from "../app.js";
 import {auth} from "../auth.js";
@@ -1024,37 +1024,38 @@ $(document).on('click', '#btnPlaceOrder', async function (e) {
         "total": total
     };
 
-    console.log(object.total)
-    try {
-        const response = await saveOrder(object);
+    Alert.confirm("Do you want to place order ?", async () => {
+        try {
+            const response = await saveOrder(object);
 
-        if (response.status === 400) {
-            Alert.error(response.message);
+            if (response.status === 400) {
+                Alert.error(response.message);
+                return;
+            }
+
+            if (response.status === 404) {
+                Alert.error(response.message);
+                return;
+            }
+
+            if (response.status === 409) {
+                Alert.error(response.message);
+                return;
+            }
+
+            if (response.status === 500) {
+                Alert.error(response.message);
+                return;
+            }
+
+            if (response.status === 0) {
+                Alert.success("Order has been placed successfully!");
+                loadCartProductsAndCount();
+            }
+
+        } catch (error) {
+            Alert.error("Something went wrong. Please try again.");
             return;
         }
-
-        if (response.status === 404) {
-            Alert.error(response.message);
-            return;
-        }
-
-        if (response.status === 409) {
-            Alert.error(response.message);
-            return;
-        }
-
-        if (response.status === 500) {
-            Alert.error(response.message);
-            return;
-        }
-
-        if (response.status === 0) {
-            Alert.success("Order has been placed successfully!");
-            loadCartProductsAndCount();
-        }
-
-    } catch (error) {
-        Alert.error("Something went wrong. Please try again.");
-        return;
-    }
+    });
 });

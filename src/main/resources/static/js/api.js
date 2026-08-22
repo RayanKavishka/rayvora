@@ -470,6 +470,29 @@ const getAllOrdersBySeller = (sellerId) => {
 };
 
 
+const getAllOrdersByCustomer = (customerId, orderStatus) => {
+    return $.ajax({
+        url: API_BASE_URL + "/orders/customers-orders/"+customerId+"/"+orderStatus,
+        type: 'GET',
+        contentType: 'application/json',
+        headers: {
+            'Authorization': 'Bearer ' + auth.getJWT()
+        }
+    });
+};
+
+
+const updateOrderStatusWithTime = (orderId, orderStatus) => {
+    return $.ajax({
+        url: API_BASE_URL + "/orders/"+orderId+"/"+orderStatus,
+        type: 'PATCH',
+        contentType: 'application/json',
+        headers: {
+            'Authorization': 'Bearer ' + auth.getJWT()
+        }
+    });
+};
+
 
 
 export {
@@ -505,5 +528,7 @@ export {
     updateCartProductQty,
     removeProductFromCartItems,
     saveOrder,
-    getAllOrdersBySeller
+    getAllOrdersBySeller,
+    getAllOrdersByCustomer,
+    updateOrderStatusWithTime
 }

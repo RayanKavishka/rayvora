@@ -26,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -233,13 +234,78 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void updateOrderShippedOrDeliveredStatusAndTime(Long orderId, String type) {
-        log.info("Execute updateOrderShippedOrDeliveredStatusAndTime() orderId {}, type {}", orderId, type);
+    @Transactional(rollbackFor = {Exception.class}, propagation = Propagation.REQUIRED)
+    public void updateOrderStatusWithTime(Long orderId, OrderStatus orderStatus) {
+        log.info("Execute updateOrderStatusWithTime() orderId {}, orderStatus {}", orderId, orderStatus);
         try {
+            Optional<Orders> optionalOrders = orderRepository.findById(orderId);
+            if (optionalOrders.isEmpty())
+                throw new RayvoraException(404, "Sorry, related order is not found!");
 
+            Orders order = optionalOrders.get();
+
+            Payment payment = order.getPayment();
+
+            if (order.getOrderStatus() == OrderStatus.CANCELLED) {
+                throw new RayvoraException(409, "Order is already cancelled!");
+            }
+
+            if (orderStatus.equals(OrderStatus.SHIPPED)) {
+                order.setShippedAt(LocalDateTime.now());
+                order.setOrderStatus(OrderStatus.SHIPPED);
+
+                emailService.sendEmail(
+                        order,
+                        order.getUser().getFirstName() + " " + order.getUser().getLastName(),
+                        order.getUser().getEmail(),
+                        "Your Rayvora Order #" + order.getOrderId() + " Has Been Shipped",
+                        orderEmailBuilder.buildShipped(order, "Rayvora Carrier ", order.getTrackingNumber())
+                );
+
+            } else if (orderStatus.equals(OrderStatus.COMPLETED)) {
+                order.setDeliveredAt(LocalDateTime.now());
+                order.setOrderStatus(OrderStatus.COMPLETED);
+                payment.setPayStatus(PayStatus.COMPLETED);
+
+                emailService.sendEmail(
+                        order,
+                        order.getUser().getFirstName() + " " + order.getUser().getLastName(),
+                        order.getUser().getEmail(),
+                        "Your Rayvora Order #" + order.getOrderId() + " Has Been Delivered",
+                        orderEmailBuilder.buildDelivered(order)
+                );
+
+            } else if (orderStatus.equals(OrderStatus.CANCELLED)) {
+                order.setOrderStatus(OrderStatus.CANCELLED);
+                payment.setPayStatus(PayStatus.REFUNDED);
+
+                List<OrderProducts> orderProducts = order.getOrderProducts();
+                    for (OrderProducts orderProduct : orderProducts) {
+                        orderProduct.getProduct().getStock().setQuantity(
+                        orderProduct.getProduct().getStock().getQuantity() + orderProduct.getQuantity()
+                    );
+
+                    stockRepository.save(orderProduct.getProduct().getStock());
+                }
+
+                emailService.sendEmail(
+                        order,
+                        order.getUser().getFirstName() + " " + order.getUser().getLastName(),
+                        order.getUser().getEmail(),
+                        "Your Rayvora Order #" + order.getOrderId() + " Has Been Cancelled",
+                        orderEmailBuilder.buildCancelled(order, "Other Reason", order.getTotalAmount())
+                );
+
+            } else {
+                throw new RayvoraException(409, "Oops! Something went wrong.");
+            }
+
+            orderRepository.save(order);
+
+            paymentRepository.save(payment);
 
         } catch (Exception e) {
-            log.error("Error in updateOrderShippedOrDeliveredStatusAndTime() : " + e.getMessage());
+            log.error("Error in updateOrderStatusWithTime() : " + e.getMessage());
             throw e;
         }
     }

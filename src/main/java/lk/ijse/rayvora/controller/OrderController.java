@@ -46,4 +46,14 @@ public class OrderController {
                 ResponseMessage.SUCCESS_MESSAGE
         );
     }
+
+    // Only admin and customer
+    @PatchMapping(value = "/{orderId}/{orderStatus}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public CommonResponse updateOrderStatus(@PathVariable long orderId, @PathVariable OrderStatus orderStatus) {
+        orderService.updateOrderStatusWithTime(orderId, orderStatus);
+        return new CommonResponse(
+                ResponseCode.OPERATION_SUCCESS,
+                ResponseMessage.SUCCESS_MESSAGE
+        );
+    }
 }
