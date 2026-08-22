@@ -3242,7 +3242,7 @@ body.modal-open-lock {
   letter-spacing: 0.4px;
 }
 
-.order-status-badge.status-processing { background: rgba(159, 161, 255, 0.2); color: var(--c-primary-dark); }
+.order-status-badge.status-confirmed { background: rgba(159, 161, 255, 0.2); color: var(--c-primary-dark); }
 .order-status-badge.status-shipped { background: rgba(174, 226, 255, 0.35); color: #0284C7; }
 .order-status-badge.status-delivered { background: var(--c-mint); color: var(--c-mint-dark); }
 .order-status-badge.status-cancelled { background: rgba(239, 68, 68, 0.15); color: var(--c-danger); }

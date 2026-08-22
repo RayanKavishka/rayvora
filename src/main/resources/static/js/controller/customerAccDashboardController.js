@@ -1,6 +1,9 @@
 import {router} from "../router.js";
 import {auth} from "../auth.js";
-import {changePassword, getAddressByCustomerId, getUserById, saveAddress, updateAddress, updateUser} from "../api.js";
+import {
+    changePassword, getAddressByCustomerId,
+    getAllOrdersByCustomer, getUserById, saveAddress, updateAddress, updateOrderStatusWithTime, updateUser
+} from "../api.js";
 import {isValidContact, isValidEmail} from "../util/regex.js";
 import {checkRole} from "../app.js";
 
@@ -404,14 +407,152 @@ $(document).on('click', '#navMyOrders a', async function(e) {
     await router("customer/account/your-orders.html");
 
     await fillCustomerDetails();
+    await loadOrdersByCustomer("ALL");
 });
+
+
+// Create Html for each order
+const createOrderCardHtml = (order) => {
+
+    const productsHtml = order.products.map((product) => `
+        <div class="order-item-row">
+            <div class="order-item-thumb"><img src="${product.imageUrls[0]}" alt="image-${product.productName}"></div>
+            <div>
+                <div class="order-item-name">${product.productName}</div>
+                <div class="order-item-qty">Qty: ${product.quantity}</div>
+            </div>
+        </div>
+    `).join('');
+
+    return `
+        <div class="order-card" data-order-id="${order.orderId}" data-status="${order.orderStatus.toLowerCase()}">
+            <div class="order-card-header">
+                <div>
+                    <div class="order-card-id">Order #${order.orderId}</div>
+                    <div class="order-card-date">Placed on ${order.orderDate.split("T")[0]}</div>
+                    <div class="order-card-date">Estimated delivery on ${order.estimatedDeliveryTo}</div>
+                </div>
+                <span class="order-status-badge status-${order.orderStatus.toLowerCase()}">
+                    <i class="fa-solid fa-rotate"></i> ${order.orderStatus}
+                </span>
+            </div>
+            <div class="order-card-items">
+                ${productsHtml}
+            </div>
+            <div class="order-card-footer">
+                <div class="order-total-amount"><span>Total:</span> LKR ${order.totalAmount}</div>
+                <div class="order-card-actions">
+                    <button type="button" class="btn btn-sm btn-outline">View Details</button>
+                    ${order.orderStatus === 'CONFIRMED'
+                        ? `<button onclick="cancelOrder(${order.orderId})" type="button" class="btn btn-sm btn-outline">Cancel Order</button>`
+                        : ''}
+                </div>
+            </div>
+        </div>
+    `;
+};
+
+
+// Load orders by order status
+const loadOrdersByCustomer = async (orderStatus) => {
+    try {
+        const response = await getAllOrdersByCustomer(auth.getUserId(), orderStatus);
+
+        if (response.status === 404) {
+            Alert.error(response.message);
+            return;
+        }
+
+        if (response.status === 500) {
+            Alert.error(response.message);
+            return;
+        }
+
+        if (response.status === 0) {
+            $('#ordersList').html('');
+
+            let finalHtml = response.body.map((order) => createOrderCardHtml(order)).join('');
+
+            $('#ordersList').html(finalHtml);
+        }
+
+    } catch (error) {
+        Alert.error("Something went wrong. Please try again");
+        return;
+    }
+};
+
+
+// Handle filter btn clicks
+$(document).on('click', '.order-filter-tab', function (e) {
+    e.preventDefault();
+
+    $('.order-filter-tab').removeClass("active");
+
+    if ($(this).text() === "All Orders") {
+        $(this).addClass("active");
+        loadOrdersByCustomer("ALL");
+
+    } else if ($(this).text() === "Confirmed") {
+        $(this).addClass("active");
+        loadOrdersByCustomer("CONFIRMED");
+
+    } else if ($(this).text() === "Shipped") {
+        $(this).addClass("active");
+        loadOrdersByCustomer("SHIPPED");
+
+    } else if ($(this).text() === "Delivered") {
+        $(this).addClass("active");
+        loadOrdersByCustomer("COMPLETED");
+
+    } else {
+        $(this).addClass("active");
+        loadOrdersByCustomer("CANCELLED");
+    }
+});
+
+
+// Handle cancel order
+window.cancelOrder = function (orderId) {
+    Alert.confirm(`Do you want to cancel order - #${orderId} ? `, async () => {
+        try {
+            const response = await updateOrderStatusWithTime(orderId, "CANCELLED");
+
+            if (response.status === 404) {
+                Alert.error(response.message);
+                return;
+            }
+
+            if (response.status === 409) {
+                Alert.error(response.message);
+                return;
+            }
+
+            if (response.status === 500) {
+                Alert.error(response.message);
+                return;
+            }
+
+            if (response.status === 0) {
+                Alert.info(`Order - #${orderId} is cancelled.`);
+                await router("customer/account/your-orders.html");
+                await fillCustomerDetails();
+                await loadOrdersByCustomer("ALL");
+            }
+
+        } catch (error) {
+            Alert.error("Something went wrong. Please try again.");
+            return;
+        }
+    });
+};
 
 
 // =====================================================================================================================
 
 
 // Manage customer reviews
-$(document).on('click', '#navMyReviews a', async function(e) {
+$(document).on('click', '#navMyReviews a', async function (e) {
     e.preventDefault();
     await router("customer/account/your-reviews.html");
 
